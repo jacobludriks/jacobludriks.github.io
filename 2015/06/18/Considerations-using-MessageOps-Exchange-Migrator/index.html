@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Considerations using MessageOps Exchange Migrator - Jacob Ludriks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="I’ve been using MessageOps Exchange Migrator for a while now and while it is an amzing product, it isn’t without its quirks. Here are some I came across whilst migrating a small org (80 users) to Offi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Considerations using MessageOps Exchange Migrator">
+<meta property="og:url" content="http://jacob.ludriks.com/2015/06/18/Considerations-using-MessageOps-Exchange-Migrator/index.html">
+<meta property="og:site_name" content="Jacob Ludriks">
+<meta property="og:description" content="I’ve been using MessageOps Exchange Migrator for a while now and while it is an amzing product, it isn’t without its quirks. Here are some I came across whilst migrating a small org (80 users) to Offi">
+<meta property="og:updated_time" content="2016-05-12T03:35:07.857Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Considerations using MessageOps Exchange Migrator">
+<meta name="twitter:description" content="I’ve been using MessageOps Exchange Migrator for a while now and while it is an amzing product, it isn’t without its quirks. Here are some I came across whilst migrating a small org (80 users) to Offi">
+  
+  
+  <link href="/j/j/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/j/j/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/j/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/j/"></a>
+      <nav id="main-nav">
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-Considerations-using-MessageOps-Exchange-Migrator" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Considerations using MessageOps Exchange Migrator
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/j/2015/06/18/Considerations-using-MessageOps-Exchange-Migrator/" class="article-date">
+  <time datetime="2015-06-18T03:32:00.000Z" itemprop="datePublished">2015-06-18</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I’ve been using MessageOps Exchange Migrator for a while now and while it is an amzing product, it isn’t without its quirks. Here are some I came across whilst migrating a small org (80 users) to Office365</p>
+<ol>
+<li>Make sure that the account you’re migrating isn’t disabled. If it is disabled, it doesn’t show up in the source mailbox list.</li>
+<li>Ensure the mailbox isn’t hidden from the GAL. If it is, the migration will fail with a <code>MAIL_E_NAMEN</code> error and then <code>WSAECONNRESET</code>.</li>
+<li>Ensure you have proper rights on the mailbox you are migrating from.</li>
+<li>Ensure the mailbox you are migrating to has an Exchange license assigned. This can be E1, E2, E3, whatever.</li>
+<li>If you change change any permissions or disable/enable accounts, hit back in the tool and let it rescan everything. This saves you restarting the app and having to type all your credentials again.</li>
+</ol>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/j/tags/office365/">office365</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/j/2015/10/08/HP-ProLiant-SPP-2015-10-0-released/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-title"><span>&lt;</span>&nbsp;
+        
+          HP ProLiant SPP 2015.10.0 released
+        
+      </div>
+    </a>
+  
+  
+    <a href="/j/2015/06/04/BitLocker-AD-ACE-s/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">BitLocker AD ACE&#39;s&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Jacob Ludriks&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/j/j/js/jquery.min.js"></script>
+
+
+
+<script src="/j/js/script.js"></script>
+  </div>
+</body>
+</html>

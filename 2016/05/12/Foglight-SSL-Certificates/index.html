@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Foglight SSL Certificates - Jacob Ludriks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Foglight for Virtualization 7.0 Standard uses Tomcat under the covers to serve the web interface. To replace the SSL certificate, follow the instructions below. I started with a password-protected PFX">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Foglight SSL Certificates">
+<meta property="og:url" content="http://jacob.ludriks.com/2016/05/12/Foglight-SSL-Certificates/index.html">
+<meta property="og:site_name" content="Jacob Ludriks">
+<meta property="og:description" content="Foglight for Virtualization 7.0 Standard uses Tomcat under the covers to serve the web interface. To replace the SSL certificate, follow the instructions below. I started with a password-protected PFX">
+<meta property="og:updated_time" content="2016-05-12T01:49:48.815Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Foglight SSL Certificates">
+<meta name="twitter:description" content="Foglight for Virtualization 7.0 Standard uses Tomcat under the covers to serve the web interface. To replace the SSL certificate, follow the instructions below. I started with a password-protected PFX">
+  
+  
+  <link href="/j/j/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/j/j/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/j/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/j/"></a>
+      <nav id="main-nav">
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-Foglight-SSL-Certificates" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Foglight SSL Certificates
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/j/2016/05/12/Foglight-SSL-Certificates/" class="article-date">
+  <time datetime="2016-05-12T01:40:44.000Z" itemprop="datePublished">2016-05-12</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Foglight for Virtualization 7.0 Standard uses Tomcat under the covers to serve the web interface. To replace the SSL certificate, follow the instructions below. I started with a password-protected PFX file that had the password <code>foglight</code>.</p>
+<ol>
+<li>Copy the PFX file to the server to the <code>/usr/local/tomcat/conf</code> directory</li>
+<li>Run the following to convert the PFX in to a Java keystore file, entering <code>foglight</code> for all password prompts: <code>/usr/local/jre1.6.0_43/bin/keytool -importkeystore -srckeystore /usr/local/tomcat/conf/foglight.pfx -srcstoretype pkcs12 -destkeystore /usr/local/tomcat/conf/foglight.jks -deststoretype JKS</code></li>
+<li>Open <code>/usr/local/tomcat/conf/server.xml</code> in your favourite editor</li>
+<li><p>Replace the Connector section with SSL with the following:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;Connector server=&quot;VKernel&quot; port=&quot;443&quot; maxHttpHeaderSize=&quot;8192&quot;</span><br><span class="line">        maxThreads=&quot;150&quot; minSpareThreads=&quot;25&quot;</span><br><span class="line">        enableLookups=&quot;false&quot; disableUploadTimeout=&quot;true&quot;</span><br><span class="line">        acceptCount=&quot;100&quot; scheme=&quot;https&quot; secure=&quot;true&quot;</span><br><span class="line">        SSLEnabled=&quot;true&quot; keystoreFile=&quot;conf/foglight.jks&quot;</span><br><span class="line">        keystorePass=&quot;foglight&quot; clientAuth=&quot;false&quot; sslProtocol=&quot;TLS&quot;</span><br><span class="line">        ciphers=&quot;TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,</span><br><span class="line">        TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,</span><br><span class="line">        TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA,</span><br><span class="line">        TLS_RSA_WITH_AES_256_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA&quot; /&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Restart Tomcat with <code>service tomcat restart</code></p>
+</li>
+</ol>
+<p>After a restart, the web interface will now be using the new certificate.</p>
+<p>For reference, the username and password for the appliance is <code>vkernel/vkernel</code> and the <code>su</code> password is <code>password</code>.</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/j/tags/foglight/">foglight</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/j/tags/ssl/">ssl</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/j/tags/tomcat/">tomcat</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/j/2016/02/15/Password-expiry-notification/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Password expiry notification&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Jacob Ludriks&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/j/j/js/jquery.min.js"></script>
+
+
+
+<script src="/j/js/script.js"></script>
+  </div>
+</body>
+</html>

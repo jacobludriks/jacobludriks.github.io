@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Updating ciphers for Foglight for Virtualization Standard - Jacob Ludriks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="As of v45, Chrome is now blocking HTTPS sites with weak Diffie-Hellman public keys. Whilst this is good for everyone, it does cause certain things to stop working. Our Foglight for Virtualization Stan">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Updating ciphers for Foglight for Virtualization Standard">
+<meta property="og:url" content="http://jacob.ludriks.com/2015/10/15/Updating-ciphers-for-Foglight-for-Virtualization-Standard/index.html">
+<meta property="og:site_name" content="Jacob Ludriks">
+<meta property="og:description" content="As of v45, Chrome is now blocking HTTPS sites with weak Diffie-Hellman public keys. Whilst this is good for everyone, it does cause certain things to stop working. Our Foglight for Virtualization Stan">
+<meta property="og:updated_time" content="2016-05-12T03:30:36.226Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Updating ciphers for Foglight for Virtualization Standard">
+<meta name="twitter:description" content="As of v45, Chrome is now blocking HTTPS sites with weak Diffie-Hellman public keys. Whilst this is good for everyone, it does cause certain things to stop working. Our Foglight for Virtualization Stan">
+  
+  
+  <link href="/j/j/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/j/j/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/j/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/j/"></a>
+      <nav id="main-nav">
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-Updating-ciphers-for-Foglight-for-Virtualization-Standard" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Updating ciphers for Foglight for Virtualization Standard
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/j/2015/10/15/Updating-ciphers-for-Foglight-for-Virtualization-Standard/" class="article-date">
+  <time datetime="2015-10-15T03:23:00.000Z" itemprop="datePublished">2015-10-15</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>As of v45, Chrome is now blocking HTTPS sites with weak Diffie-Hellman public keys. Whilst this is good for everyone, it does cause certain things to stop working. Our Foglight for Virtualization Standard instance stopped working with Chrome and had to be fixed. Although this applies for Foglight, it can be used for any Tomcat 7 instance.</p>
+<ol>
+<li>SSH in to the Foglight virtual machine. Default username is <code>vkernel</code> and password is <code>vkernel</code> also.</li>
+<li>Change to root by typing <code>su -</code>. Default password is <code>password</code>.</li>
+<li>Type <code>nano /usr/local/tomcat/conf/server.xml</code> to edit the Tomcat config file.</li>
+<li>Under the HTTPS config section (starts with <code>&lt;Connector server=&quot;VKernel&quot; port=&quot;443&quot; maxHttpHeaderSize=&quot;8192&quot; ....</code>), you will find a cipher list like <code>ciphers=&quot;TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA ....&quot;</code>. Replace this with: <code>ciphers=&quot;TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA&quot;</code></li>
+<li>Press <code>Ctrl + X</code> and then <code>y</code> to save the file.</li>
+<li>Type <code>service tomcat stop</code> then <code>service tomcat start</code> to reload the config file</li>
+</ol>
+<p>You should now be able to access the site properly with Chrome v45+.</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/j/tags/foglight/">foglight</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/j/tags/ssl/">ssl</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/j/tags/tomcat/">tomcat</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/j/2016/01/15/Set-Permissions/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-title"><span>&lt;</span>&nbsp;
+        
+          Set-Permissions
+        
+      </div>
+    </a>
+  
+  
+    <a href="/j/2015/10/08/HP-ProLiant-SPP-2015-10-0-released/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">HP ProLiant SPP 2015.10.0 released&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Jacob Ludriks&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/j/j/js/jquery.min.js"></script>
+
+
+
+<script src="/j/js/script.js"></script>
+  </div>
+</body>
+</html>
