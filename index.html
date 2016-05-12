@@ -42,86 +42,6 @@
   </div>
 </header>
     <section id="main" class="outer">
-      <article id="post-Switching-to-FreeNAS" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/05/12/Switching-to-FreeNAS/">Switching to FreeNAS</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      <a href="/2016/05/12/Switching-to-FreeNAS/" class="article-date">
-  <time datetime="2016-05-12T05:52:26.000Z" itemprop="datePublished">2016-05-12</time>
-</a>
-      
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>I’ve been running a little short on storage space lately, so I decided to take the plunge and order a new storage system. Previously I was using a Synology DS413 with four 3TB Hitachi disks and I was hoping to get a Synology again for my new system, however once you want a Synology unit with more than four bays the price goes up quite significantly.</p>
-<p>After a lot of research and reviewing of similar builds, I ended up with the following components.</p>
-<h3 id="Component-List"><a href="#Component-List" class="headerlink" title="Component List"></a>Component List</h3><ul>
-<li><p><strong>Case - Fractal Design Node 304</strong></p>
-<p>  This case fits six drives, a Mini-ITX motherboard and a standard ATX power supply. Cable management is quite difficult however the entire case is less than 20L in size which is only marginally larger than my existing Synology unit.</p>
-</li>
-<li><p><strong>Motherboard - ASRock E3C224D2I</strong></p>
-<p>  Unfortunately there isn’t much choice when it comes to server-grade Mini-ITX motherboards, however this one fits the specifications quite nicely. It has six SATA ports (2 x SATA2, 4 x SATA3), two ECC DDR3 slots, a BMC chip and two Intel GBe ports. The other option was an Atom Avoton C2550 motherboard however I wasn’t too keen on a non-upgradable CPU and using a Marvell storage controller over an Intel one.</p>
-</li>
-<li><p><strong>CPU - Intel Core i3-4160</strong></p>
-<p>  Surprisingly, the Core i3 supports ECC RAM! I was originally going to get the Core i3-4150 however this model was on sale and ended up being cheaper.</p>
-</li>
-<li><p><strong>Memory - Kingston KVR13E9K2/16I</strong></p>
-<p>  After reading lots of stories of incompatible memory, I decided to go with RAM sticks that somebody else had tested. </p>
-</li>
-<li><p><strong>Power Supply - Corsair CX600M Modular</strong></p>
-<p>  80+ Bronze certified and six SATA power connectors. I would have rathered an 80+ Gold certified power supply but the price difference was too great.</p>
-</li>
-<li><p><strong>OS Disk - SanDisk Cruzer Fit 16GB</strong></p>
-<p>  A nice and small USB key that can be installed directly on to the motherboard.</p>
-</li>
-<li><p><strong>Storage Disks - 6 x Western Digital Red 6TB WD60EFRX</strong></p>
-<p>  Originally I was going to order Western Digital Green 6TB WDEZRX drives and run WDIDLE3 on them to fix the LCC issue, however I found that the two models were fairly close in price and the Reds have a longer warranty.</p>
-</li>
-<li><p><strong>OS - FreeNAS</strong></p>
-<p>  For the OS, I chose FreeNAS after reading a lot about ZFS. The drives are configured in a RAID-Z2 configuration (similar to RAID6) which can tolerate two disk failures. This gives me 36TB of raw storage and 21.8TB of usable storage.</p>
-</li>
-</ul>
-<p><img src="IMG_20150115_173137.jpg" alt="Case 1"></p>
-<p><img src="IMG_20150115_173213.jpg" alt="Case 2"></p>
-<p><img src="IMG_20150115_173253.jpg" alt="Case 3"></p>
-<p><img src="IMG_20150115_173336.jpg" alt="Case 4"></p>
-<p><img src="IMG_20150115_173413.jpg" alt="Case 5"></p>
-<h3 id="Performance"><a href="#Performance" class="headerlink" title="Performance"></a>Performance</h3><p>To test performance, I had two panes open in <code>tmux</code> and ran one command in each window:</p>
-<ul>
-<li>Pane 1: <code>iozone -a -s 24g -r 4096 -+w 1 -+y 1 -+C 1</code></li>
-<li>Pane 2: <code>zpool iostat 1</code></li>
-</ul>
-<p>Watching the <code>zpool iostat</code> output whilst iozone was running, I saw that my maximum read speed was around 550-600 MB/s  and my maximum write speed was around 300-350 MB/s.</p>
-<h3 id="Thoughts"><a href="#Thoughts" class="headerlink" title="Thoughts"></a>Thoughts</h3><p>The next upgrade will be 10gbit networking, however this is a long way off and not really needed at the moment. With a switch upgrade I will be able to use teaming but there is generally only one client accessing the server at once which negates this.</p>
-
-      
-    </div>
-    
-    
-      <footer class="article-footer">
-        
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/freenas/">freenas</a></li></ul>
-
-      </footer>
-    
-  </div>
-  
-</article>
-
-
-    
       <article id="post-Foglight-SSL-Certificates" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -554,6 +474,47 @@
       <footer class="article-footer">
         
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/photon/">photon</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/">windows</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+</article>
+
+
+    
+      <article id="post-Matching-VM-disks-and-Windows-disks-with-PowerCLI" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/04/22/Matching-VM-disks-and-Windows-disks-with-PowerCLI/">Matching VM disks and Windows disks with PowerCLI</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2015/04/22/Matching-VM-disks-and-Windows-disks-with-PowerCLI/" class="article-date">
+  <time datetime="2015-04-22T02:18:00.000Z" itemprop="datePublished">2015-04-22</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Tweaked from <a href="http://www.van-lieshout.com/2009/12/match-vm-and-windows-harddisks-using-powercli/" target="_blank" rel="external">http://www.van-lieshout.com/2009/12/match-vm-and-windows-harddisks-using-powercli/</a> to be more modern and with more error checking.</p>
+<script src="https://gist.github.com/jacobludriks/a6356e89d54aad11cc4f.js"></script>
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/powercli/">powercli</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/powershell/">powershell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scsi/">scsi</a></li></ul>
 
       </footer>
     

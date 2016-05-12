@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Switching to FreeNAS - Jacob Ludriks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="I’ve been running a little short on storage space lately, so I decided to take the plunge and order a new storage system. Previously I was using a Synology DS413 with four 3TB Hitachi disks and I was">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Switching to FreeNAS">
+<meta property="og:url" content="http://jacob.ludriks.com/2015/01/15/Switching-to-FreeNAS/index.html">
+<meta property="og:site_name" content="Jacob Ludriks">
+<meta property="og:description" content="I’ve been running a little short on storage space lately, so I decided to take the plunge and order a new storage system. Previously I was using a Synology DS413 with four 3TB Hitachi disks and I was">
+<meta property="og:image" content="http://jacob.ludriks.com/2015/01/15/Switching-to-FreeNAS/IMG_20150115_173137.jpg">
+<meta property="og:image" content="http://jacob.ludriks.com/2015/01/15/Switching-to-FreeNAS/IMG_20150115_173213.jpg">
+<meta property="og:image" content="http://jacob.ludriks.com/2015/01/15/Switching-to-FreeNAS/IMG_20150115_173253.jpg">
+<meta property="og:image" content="http://jacob.ludriks.com/2015/01/15/Switching-to-FreeNAS/IMG_20150115_173336.jpg">
+<meta property="og:image" content="http://jacob.ludriks.com/2015/01/15/Switching-to-FreeNAS/IMG_20150115_173413.jpg">
+<meta property="og:updated_time" content="2016-05-12T06:21:54.408Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Switching to FreeNAS">
+<meta name="twitter:description" content="I’ve been running a little short on storage space lately, so I decided to take the plunge and order a new storage system. Previously I was using a Synology DS413 with four 3TB Hitachi disks and I was">
+<meta name="twitter:image" content="http://jacob.ludriks.com/2015/01/15/Switching-to-FreeNAS/IMG_20150115_173137.jpg">
+  
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-Switching-to-FreeNAS" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Switching to FreeNAS
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2015/01/15/Switching-to-FreeNAS/" class="article-date">
+  <time datetime="2015-01-15T06:56:00.000Z" itemprop="datePublished">2015-01-15</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I’ve been running a little short on storage space lately, so I decided to take the plunge and order a new storage system. Previously I was using a Synology DS413 with four 3TB Hitachi disks and I was hoping to get a Synology again for my new system, however once you want a Synology unit with more than four bays the price goes up quite significantly.</p>
+<p>After a lot of research and reviewing of similar builds, I ended up with the following components.</p>
+<h3 id="Component-List"><a href="#Component-List" class="headerlink" title="Component List"></a>Component List</h3><ul>
+<li><p><strong>Case - Fractal Design Node 304</strong></p>
+<p>  This case fits six drives, a Mini-ITX motherboard and a standard ATX power supply. Cable management is quite difficult however the entire case is less than 20L in size which is only marginally larger than my existing Synology unit.</p>
+</li>
+<li><p><strong>Motherboard - ASRock E3C224D2I</strong></p>
+<p>  Unfortunately there isn’t much choice when it comes to server-grade Mini-ITX motherboards, however this one fits the specifications quite nicely. It has six SATA ports (2 x SATA2, 4 x SATA3), two ECC DDR3 slots, a BMC chip and two Intel GBe ports. The other option was an Atom Avoton C2550 motherboard however I wasn’t too keen on a non-upgradable CPU and using a Marvell storage controller over an Intel one.</p>
+</li>
+<li><p><strong>CPU - Intel Core i3-4160</strong></p>
+<p>  Surprisingly, the Core i3 supports ECC RAM! I was originally going to get the Core i3-4150 however this model was on sale and ended up being cheaper.</p>
+</li>
+<li><p><strong>Memory - Kingston KVR13E9K2/16I</strong></p>
+<p>  After reading lots of stories of incompatible memory, I decided to go with RAM sticks that somebody else had tested. </p>
+</li>
+<li><p><strong>Power Supply - Corsair CX600M Modular</strong></p>
+<p>  80+ Bronze certified and six SATA power connectors. I would have rathered an 80+ Gold certified power supply but the price difference was too great.</p>
+</li>
+<li><p><strong>OS Disk - SanDisk Cruzer Fit 16GB</strong></p>
+<p>  A nice and small USB key that can be installed directly on to the motherboard.</p>
+</li>
+<li><p><strong>Storage Disks - 6 x Western Digital Red 6TB WD60EFRX</strong></p>
+<p>  Originally I was going to order Western Digital Green 6TB WDEZRX drives and run WDIDLE3 on them to fix the LCC issue, however I found that the two models were fairly close in price and the Reds have a longer warranty.</p>
+</li>
+<li><p><strong>OS - FreeNAS</strong></p>
+<p>  For the OS, I chose FreeNAS after reading a lot about ZFS. The drives are configured in a RAID-Z2 configuration (similar to RAID6) which can tolerate two disk failures. This gives me 36TB of raw storage and 21.8TB of usable storage.</p>
+</li>
+</ul>
+<img src="/2015/01/15/Switching-to-FreeNAS/IMG_20150115_173137.jpg" alt="IMG_20150115_173137.jpg" title="">
+<img src="/2015/01/15/Switching-to-FreeNAS/IMG_20150115_173213.jpg" alt="IMG_20150115_173213.jpg" title="">
+<img src="/2015/01/15/Switching-to-FreeNAS/IMG_20150115_173253.jpg" alt="IMG_20150115_173253.jpg" title="">
+<img src="/2015/01/15/Switching-to-FreeNAS/IMG_20150115_173336.jpg" alt="IMG_20150115_173336.jpg" title="">
+<img src="/2015/01/15/Switching-to-FreeNAS/IMG_20150115_173413.jpg" alt="IMG_20150115_173413.jpg" title="">
+<h3 id="Performance"><a href="#Performance" class="headerlink" title="Performance"></a>Performance</h3><p>To test performance, I had two panes open in <code>tmux</code> and ran one command in each window:</p>
+<ul>
+<li>Pane 1: <code>iozone -a -s 24g -r 4096 -+w 1 -+y 1 -+C 1</code></li>
+<li>Pane 2: <code>zpool iostat 1</code></li>
+</ul>
+<p>Watching the <code>zpool iostat</code> output whilst iozone was running, I saw that my maximum read speed was around 550-600 MB/s  and my maximum write speed was around 300-350 MB/s.</p>
+<h3 id="Thoughts"><a href="#Thoughts" class="headerlink" title="Thoughts"></a>Thoughts</h3><p>The next upgrade will be 10gbit networking, however this is a long way off and not really needed at the moment. With a switch upgrade I will be able to use teaming but there is generally only one client accessing the server at once which negates this.</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/freenas/">freenas</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/01/18/SickRage-not-working-in-a-FreeNAS-jail/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-title"><span>&lt;</span>&nbsp;
+        
+          SickRage not working in a FreeNAS jail
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/01/13/vSphere-multipathing-report/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">vSphere multipathing report&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Jacob Ludriks&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>
