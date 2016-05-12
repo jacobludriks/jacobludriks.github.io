@@ -412,9 +412,9 @@
 <p>You will be asked to set a password - this is your VNC password for later.</p>
 <p><strong>Setting up PuTTY</strong></p>
 <p>Download <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/" target="_blank" rel="external">PuTTY</a> and run. Enter your host details.</p>
-<p><img src="host.png" alt="Host details"></p>
+<img src="/2015/01/21/Installing-LinuxDC-in-a-FreeNAS-jail/host.png" alt="host.png" title="">
 <p>Go to <code>Connection &gt; SSH &gt; Tunnels</code> and create a tunnel on port 5901 for VNC. Don’t forget to press “Add”</p>
-<p><img src="tunnel.png" alt="Tunnel details"></p>
+<img src="/2015/01/21/Installing-LinuxDC-in-a-FreeNAS-jail/tunnel.png" alt="tunnel.png" title="">
 <p>Press “Open” to connect. Enter <code>root</code> for the username and then type the password you specified earlier with <code>passwd</code>.</p>
 <p>Now, download and install <a href="http://www.tightvnc.com/download.php" target="_blank" rel="external">TightVNC</a> and open the viewer. Connect to <code>localhost:5901</code>. Type the VNC password and press enter. You will now be connected to a remote desktop.</p>
 <p>Open LinuxDC++ with <code>linuxdcpp</code>.</p>

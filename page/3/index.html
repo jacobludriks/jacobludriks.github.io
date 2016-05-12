@@ -170,7 +170,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>A hosts management network interface somehow dropped off the network this afternoon. Fortunately I was still able to get in through iLO. It always pays to have an out-of-band interface active!</p>
-<p><img src="esxi-no-mgmt.png" alt="lost host"></p>
+<img src="/2014/11/27/Lost-Management-Interface-on-an-ESXi-Host/esxi-no-mgmt.png" alt="esxi-no-mgmt.png" title="">
 <p>From the DCUI screen, press <code>Alt + F1</code>. This will bring up the login screen. Log in as root then type <code>esxcli network ip interface list</code>. You will get an output similar to the one below.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">vmk2</span><br><span class="line">    Name: vmk2</span><br><span class="line">    MAC Address: 00:50:56:79:0c:de</span><br><span class="line">    Enabled: true</span><br><span class="line">    Portset: DvsPortset-0</span><br><span class="line">    Portgroup: N/A</span><br><span class="line">    VDS Name: dvSwitch-vMotion</span><br><span class="line">    VDS UUID: 0c 7d 1a 50 93 7b 86 3f-76 f8 74 80 73 7c 3d 0f</span><br><span class="line">    VDS Port: 101</span><br><span class="line">    VDS Connection: 1952632411</span><br><span class="line">    MTU: 1500</span><br><span class="line">    TSO MSS: 65535</span><br><span class="line">    Port ID: 33554436</span><br><span class="line"></span><br><span class="line">vmk0</span><br><span class="line">    Name: vmk0</span><br><span class="line">    MAC Address: 00:1c:c4:bd:d6:ee</span><br><span class="line">    Enabled: false</span><br><span class="line">    Portset: DvsPortset-2</span><br><span class="line">    Portgroup: N/A</span><br><span class="line">    VDS Name: dvSwitch</span><br><span class="line">    VDS UUID: 10 e1 1a 50 b1 22 19 a1-d4 33 10 dc 72 9a 92 db</span><br><span class="line">    VDS Port: 151</span><br><span class="line">    VDS Connection: 660732515</span><br><span class="line">    MTU: 1500</span><br><span class="line">    TSO MSS: 65535</span><br><span class="line">    Port ID: 67108871</span><br></pre></td></tr></table></figure>
 <p>Fortunately mine was an easy issue to solve; vmk0 had <code>Enabled: false</code>. An easy fix: <code>esxcli network ip interface set -i vmk0 -e true</code></p>
@@ -231,8 +231,7 @@
 <li>Create two new fields – one with the amount of work weeks per year (48.775 for mine) and the amount of hours per week (40 for mine).</li>
 <li>Create a new table for utilization percentages. Put the formula as <code>=C5/($E$5*$E$9*60)</code>.</li>
 </ol>
-<p><img src="meetingroom.png" alt="utilization"></p>
-
+<img src="/2014/11/27/Meeting-Room-Utilization/meetingroom.png" alt="meetingroom.png" title="">
       
     </div>
     
@@ -359,7 +358,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>I found a weird error in Citrix the other day.</p>
-<p><img src="/content/images/2014/Aug/citrix_online.png" alt="error"></p>
+<img src="/2014/08/14/Citrix-error-number-2320/citrix_online.png" alt="citrix_online.png" title="">
 <p>The fix:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Citrix\ICA Client\Engine\Lockdown Profiles\All Regions</span><br><span class="line"></span><br><span class="line">Change the DWORD value for EnableLockdown from 1 to 0.</span><br><span class="line"></span><br><span class="line">Close Registry Editor and try to launch the application again.</span><br></pre></td></tr></table></figure>
       
