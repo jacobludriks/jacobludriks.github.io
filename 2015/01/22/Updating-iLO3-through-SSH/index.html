@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Updating iLO3 through SSH - Jacob Ludriks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="The iLO interface on one of our servers complete broke and we had no way of accessing it, and it wasn’t updating through the HP SPP media. Fortunately I was able to update it through SSH.
+However, bec">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Updating iLO3 through SSH">
+<meta property="og:url" content="http://jacob.ludriks.com/2015/01/22/Updating-iLO3-through-SSH/index.html">
+<meta property="og:site_name" content="Jacob Ludriks">
+<meta property="og:description" content="The iLO interface on one of our servers complete broke and we had no way of accessing it, and it wasn’t updating through the HP SPP media. Fortunately I was able to update it through SSH.
+However, bec">
+<meta property="og:updated_time" content="2016-05-12T05:48:43.926Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Updating iLO3 through SSH">
+<meta name="twitter:description" content="The iLO interface on one of our servers complete broke and we had no way of accessing it, and it wasn’t updating through the HP SPP media. Fortunately I was able to update it through SSH.
+However, bec">
+  
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-Updating-iLO3-through-SSH" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Updating iLO3 through SSH
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2015/01/22/Updating-iLO3-through-SSH/" class="article-date">
+  <time datetime="2015-01-21T23:47:00.000Z" itemprop="datePublished">2015-01-22</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>The iLO interface on one of our servers complete broke and we had no way of accessing it, and it wasn’t updating through the HP SPP media. Fortunately I was able to update it through SSH.</p>
+<p>However, because the firmware on the iLO interface was so old, it needed to be upgraded to an earlier version first before updating to the latest. This is documented on the <a href="http://h20564.www2.hp.com/hpsc/doc/public/display?docId=mmr_kc-0107776" target="_blank" rel="external">HP Support Centre</a>.</p>
+<p>Download a iLO3 1.2x firmware. It will come with the filename <code>ilo3_12x.bin</code>, with x being the minor version number. Upload the file to a web server that can be accessed by the iLO interface. Now, open a SSH session and connect to the iLO IP address. Run the following commands, replacing <code>webserver</code> with your web server FQDN/IP and the filename with the file you downloaded:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd map1/firmware1</span><br><span class="line">load -source http://webserver/ilo3_12x.bin</span><br></pre></td></tr></table></figure>
+<p>The iLO will now update and reboot, disconnecting you from SSH in the process. Once it’s back up, it will be upgraded and ready for the final upgrade through the HP SPP.</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hp/">hp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ilo/">ilo</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/02/05/Installing-Pydio-through-Powershell-DSC/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-title"><span>&lt;</span>&nbsp;
+        
+          Installing Pydio through Powershell DSC
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/01/21/Installing-LinuxDC-in-a-FreeNAS-jail/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Installing LinuxDC++ in a FreeNAS jail&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Jacob Ludriks&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>

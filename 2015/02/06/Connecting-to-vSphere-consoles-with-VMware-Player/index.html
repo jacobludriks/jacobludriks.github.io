@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Connecting to vSphere consoles with VMware Player - Jacob Ludriks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="This isn’t really documented anywhere on the VMware website, but it comes in really handy if require certain users to have console access to machines without the complication of the vSphere Web Client">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Connecting to vSphere consoles with VMware Player">
+<meta property="og:url" content="http://jacob.ludriks.com/2015/02/06/Connecting-to-vSphere-consoles-with-VMware-Player/index.html">
+<meta property="og:site_name" content="Jacob Ludriks">
+<meta property="og:description" content="This isn’t really documented anywhere on the VMware website, but it comes in really handy if require certain users to have console access to machines without the complication of the vSphere Web Client">
+<meta property="og:updated_time" content="2016-05-12T05:46:49.376Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Connecting to vSphere consoles with VMware Player">
+<meta name="twitter:description" content="This isn’t really documented anywhere on the VMware website, but it comes in really handy if require certain users to have console access to machines without the complication of the vSphere Web Client">
+  
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-Connecting-to-vSphere-consoles-with-VMware-Player" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Connecting to vSphere consoles with VMware Player
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2015/02/06/Connecting-to-vSphere-consoles-with-VMware-Player/" class="article-date">
+  <time datetime="2015-02-06T00:48:00.000Z" itemprop="datePublished">2015-02-06</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>This isn’t really documented anywhere on the VMware website, but it comes in really handy if require certain users to have console access to machines without the complication of the vSphere Web Client.</p>
+<ul>
+<li><p>Install VMware Player from the <a href="https://my.vmware.com/web/vmware/downloads" target="_blank" rel="external">VMware website</a></p>
+</li>
+<li><p>Get the Managed Object ID of the VM. This can be done through PowerCLI with the following script:</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$vcenter = &quot;vcenter.domain.name&quot;</span><br><span class="line">$targetvm = &quot;targetvm&quot;</span><br><span class="line"></span><br><span class="line">Add-PSSnapin VMware.VimAutomation.Core</span><br><span class="line">Connect-VIServer -Server $vcenter -Force</span><br><span class="line">$vmid = (Get-VM $targetvm).id -replace &quot;VirtualMachine-&quot;,&quot;&quot;</span><br><span class="line">Disconnect-VIServer -Server $vcenter -Confirm:$false</span><br><span class="line"></span><br><span class="line">Write-Output &quot;VM MOID is $vmid&quot;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>Give the user access to the VM. The permission “Virtual Machine\Interaction\Console Interation” needs to be given on both the VM and the host. It doesn’t need to inherit to children so deselect “Propagate to children” in the permisisons screen”.</p>
+</li>
+<li><p>Create a shortcut to connect straight to the VM. The following PowerShell script can create the shortcut automatically.</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$desktop = [Environment]::GetFolderPath(&quot;Desktop&quot;)</span><br><span class="line">$vcenter = &quot;vcenter.domain.name&quot;</span><br><span class="line">$targetvm = &quot;targetvm&quot;</span><br><span class="line">$vmid = &quot;vm-moid&quot;</span><br><span class="line"></span><br><span class="line">$WshShell = New-Object -comObject WScript.Shell</span><br><span class="line">$Shortcut = $WshShell.CreateShortcut(&quot;$desktop\$targetvm.lnk&quot;)</span><br><span class="line">$Shortcut.TargetPath = &quot;vmrc://$vcenter/?moid=$vmid&quot;</span><br><span class="line">$Shortcut.Save()</span><br></pre></td></tr></table></figure>
+<p>Afterwards, double click on the shortcut on the desktop and enter appropriate credentials. You’ll be straight in to the console.</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/powercli/">powercli</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/powershell/">powershell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vmware/">vmware</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/02/11/Send-NexmoSMS/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-title"><span>&lt;</span>&nbsp;
+        
+          Send-NexmoSMS
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/02/05/Installing-Pydio-through-Powershell-DSC/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Installing Pydio through Powershell DSC&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Jacob Ludriks&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>

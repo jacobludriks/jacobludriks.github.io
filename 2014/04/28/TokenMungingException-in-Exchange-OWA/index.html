@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>TokenMungingException in Exchange OWA - Jacob Ludriks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="I’ve been busily rolling out Exchange 2013 SP1 at work and I’ve finally gotten to the stage where I can start migrating mailboxes over. Lo and behold, the fourth mailbox moved over had a strange issue">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TokenMungingException in Exchange OWA">
+<meta property="og:url" content="http://jacob.ludriks.com/2014/04/28/TokenMungingException-in-Exchange-OWA/index.html">
+<meta property="og:site_name" content="Jacob Ludriks">
+<meta property="og:description" content="I’ve been busily rolling out Exchange 2013 SP1 at work and I’ve finally gotten to the stage where I can start migrating mailboxes over. Lo and behold, the fourth mailbox moved over had a strange issue">
+<meta property="og:updated_time" content="2016-05-12T06:15:58.827Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TokenMungingException in Exchange OWA">
+<meta name="twitter:description" content="I’ve been busily rolling out Exchange 2013 SP1 at work and I’ve finally gotten to the stage where I can start migrating mailboxes over. Lo and behold, the fourth mailbox moved over had a strange issue">
+  
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-TokenMungingException-in-Exchange-OWA" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      TokenMungingException in Exchange OWA
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2014/04/28/TokenMungingException-in-Exchange-OWA/" class="article-date">
+  <time datetime="2014-04-28T03:48:00.000Z" itemprop="datePublished">2014-04-28</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I’ve been busily rolling out Exchange 2013 SP1 at work and I’ve finally gotten to the stage where I can start migrating mailboxes over. Lo and behold, the fourth mailbox moved over had a strange issue whilst trying to access OWA:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">something went wrong</span><br><span class="line"></span><br><span class="line">Sorry, we can&apos;t get that information right now. Please try again later. If the problem persists, contact your helpdesk.</span><br><span class="line"></span><br><span class="line">X-OWA-Error: Microsoft.Exchange.Security.Authentication.TokenMungingException</span><br><span class="line">X-OWA-Version: 15.0.847.32</span><br><span class="line">X-FEServer: MAIL2013-1</span><br><span class="line">X-BEServer: Mail2013-2</span><br><span class="line">Date: 28/04/2014 11:35:42 AM</span><br></pre></td></tr></table></figure>
+<p>It turns out that some users had a “LinkedMasterAccount” attribute set to “NT AUTHORITY\SELF” that didn’t need to be. The script to check all users with this attribute set:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Get-User -ResultSize unlimited | where &#123;$_.linkedmasteraccount -eq &quot;NT AUTHORITY\SELF&quot; -and $_.recipienttypedetails -ne &quot;RoomMailbox&quot; -and $_.recipienttypedetails -ne &quot;Equipmentmailbox&quot; -and $_.recipienttypedetails -ne &quot;DiscoveryMailbox&quot;&#125; | select name | ft</span><br></pre></td></tr></table></figure>
+<p>This will spit out all accounts that aren’t room, equipment or discovery mailboxes with the LinkedMasterAccount set to “NT AUTHORITY\SELF”. From there, you can change it to $null with:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-User -Identity &lt;user&gt; -LinkedMasterAccount $null</span><br></pre></td></tr></table></figure>
+<p>After setting this the user was able to log in.</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/exchange/">exchange</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/05/05/Manipulating-SDDL-s-through-PowerShell/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-title"><span>&lt;</span>&nbsp;
+        
+          Manipulating SDDL&#39;s through PowerShell
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/04/24/elasticsearch-trim/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">elasticsearch-trim&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Jacob Ludriks&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>

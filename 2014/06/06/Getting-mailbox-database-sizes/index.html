@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Getting mailbox database sizes - Jacob Ludriks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="I’m not too sure why this isn’t exposed through the Exchange cmdlets, but here we go.
+
+
+Run with Get-DatabaseSize -Database DatabaseName and it will return the database name, server, and database size">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Getting mailbox database sizes">
+<meta property="og:url" content="http://jacob.ludriks.com/2014/06/06/Getting-mailbox-database-sizes/index.html">
+<meta property="og:site_name" content="Jacob Ludriks">
+<meta property="og:description" content="I’m not too sure why this isn’t exposed through the Exchange cmdlets, but here we go.
+
+
+Run with Get-DatabaseSize -Database DatabaseName and it will return the database name, server, and database size">
+<meta property="og:updated_time" content="2016-05-12T06:08:30.187Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Getting mailbox database sizes">
+<meta name="twitter:description" content="I’m not too sure why this isn’t exposed through the Exchange cmdlets, but here we go.
+
+
+Run with Get-DatabaseSize -Database DatabaseName and it will return the database name, server, and database size">
+  
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-Getting-mailbox-database-sizes" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Getting mailbox database sizes
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2014/06/06/Getting-mailbox-database-sizes/" class="article-date">
+  <time datetime="2014-06-06T07:54:00.000Z" itemprop="datePublished">2014-06-06</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I’m not too sure why this isn’t exposed through the Exchange cmdlets, but here we go.</p>
+<script src="https://gist.github.com/jacobludriks/b35790b4fef45ad11b21.js"></script>
+
+<p>Run with <code>Get-DatabaseSize -Database DatabaseName</code> and it will return the database name, server, and database size in megabytes.</p>
+<p>EDIT: well, it turns out you can just use <code>Get-MailboxDatabase -Database DatabaseName -Status | select name,server,databasesize</code>. Rookie error on my part.</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/exchange/">exchange</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/powershell/">powershell</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/06/25/Get-MailboxSizes/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-title"><span>&lt;</span>&nbsp;
+        
+          Get-MailboxSizes
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/06/02/meetingroomhud/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">meetingroomhud&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Jacob Ludriks&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>

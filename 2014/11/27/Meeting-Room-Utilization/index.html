@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Meeting Room Utilization - Jacob Ludriks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="I had a request from a user to find out the meeting room utilization across our head office, but unfortunately I couldn’t find an easy way to do this with Exchange 2010 cmdlets. Here are some instruct">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Meeting Room Utilization">
+<meta property="og:url" content="http://jacob.ludriks.com/2014/11/27/Meeting-Room-Utilization/index.html">
+<meta property="og:site_name" content="Jacob Ludriks">
+<meta property="og:description" content="I had a request from a user to find out the meeting room utilization across our head office, but unfortunately I couldn’t find an easy way to do this with Exchange 2010 cmdlets. Here are some instruct">
+<meta property="og:image" content="http://jacob.ludriks.com/meetingroom.png">
+<meta property="og:updated_time" content="2016-05-12T05:58:40.534Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Meeting Room Utilization">
+<meta name="twitter:description" content="I had a request from a user to find out the meeting room utilization across our head office, but unfortunately I couldn’t find an easy way to do this with Exchange 2010 cmdlets. Here are some instruct">
+<meta name="twitter:image" content="http://jacob.ludriks.com/meetingroom.png">
+  
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-Meeting-Room-Utilization" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Meeting Room Utilization
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2014/11/27/Meeting-Room-Utilization/" class="article-date">
+  <time datetime="2014-11-27T11:30:00.000Z" itemprop="datePublished">2014-11-27</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I had a request from a user to find out the meeting room utilization across our head office, but unfortunately I couldn’t find an easy way to do this with Exchange 2010 cmdlets. Here are some instructions to do so with COM objects, PowerShell and Excel.</p>
+<p>First create a mailbox that will have the meeting room rights assigned to it, then grant the user access to the required mailboxes so that they show in Outlook:</p>
+<p><code>Get-Mailbox meetingroomprefix* | Add-MailboxPermission -AccessRights FullAccess -User temporarymailbox</code></p>
+<p>Open Outlook and add the meeting room mailboxes, then run the PowerShell script below with the appropriate date range. Mine shows the last financial year.</p>
+<script src="https://gist.github.com/jacobludriks/8cdd5c2a74d70fd35b3b.js"></script>
+
+<p>Next, open the CSV output file in Excel then:</p>
+<ol>
+<li>Create new sheet called Report</li>
+<li>Insert a pivot table containing all the data from the raw data sheet</li>
+<li>Drag “MeetingRoom” to Rows</li>
+<li>Drag “Duration” to Values. Edit the field settings to be “Count” and rename to “Number of Meetings”</li>
+<li>Drag “Duration” to Values. Edit the field settings to be “Sum” and rename to “Total Duration”</li>
+<li>Create two new fields – one with the amount of work weeks per year (48.775 for mine) and the amount of hours per week (40 for mine).</li>
+<li>Create a new table for utilization percentages. Put the formula as <code>=C5/($E$5*$E$9*60)</code>.</li>
+</ol>
+<p><img src="meetingroom.png" alt="utilization"></p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/exchange/">exchange</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/powershell/">powershell</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/11/27/Lost-Management-Interface-on-an-ESXi-Host/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-title"><span>&lt;</span>&nbsp;
+        
+          Lost Management Interface on an ESXi Host
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/11/27/Change-SMTP-settings-on-Xerox-machines-with-PowerShell/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Change SMTP settings on Xerox machines with PowerShell&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Jacob Ludriks&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>

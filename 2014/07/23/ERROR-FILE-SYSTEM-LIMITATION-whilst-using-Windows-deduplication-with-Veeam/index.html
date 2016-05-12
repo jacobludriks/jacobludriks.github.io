@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>ERROR_FILE_SYSTEM_LIMITATION whilst using Windows deduplication with Veeam - Jacob Ludriks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="This is a possible scenario that can happen with Veeam and Server 2012 deduplication:
+1You cannot write to a file anymore and you get the error &amp;quot;ERROR_FILE_SYSTEM_LIMITATION&amp;quot;. There is still">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ERROR_FILE_SYSTEM_LIMITATION whilst using Windows deduplication with Veeam">
+<meta property="og:url" content="http://jacob.ludriks.com/2014/07/23/ERROR-FILE-SYSTEM-LIMITATION-whilst-using-Windows-deduplication-with-Veeam/index.html">
+<meta property="og:site_name" content="Jacob Ludriks">
+<meta property="og:description" content="This is a possible scenario that can happen with Veeam and Server 2012 deduplication:
+1You cannot write to a file anymore and you get the error &amp;quot;ERROR_FILE_SYSTEM_LIMITATION&amp;quot;. There is still">
+<meta property="og:updated_time" content="2016-05-12T06:04:26.962Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ERROR_FILE_SYSTEM_LIMITATION whilst using Windows deduplication with Veeam">
+<meta name="twitter:description" content="This is a possible scenario that can happen with Veeam and Server 2012 deduplication:
+1You cannot write to a file anymore and you get the error &amp;quot;ERROR_FILE_SYSTEM_LIMITATION&amp;quot;. There is still">
+  
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-ERROR-FILE-SYSTEM-LIMITATION-whilst-using-Windows-deduplication-with-Veeam" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ERROR_FILE_SYSTEM_LIMITATION whilst using Windows deduplication with Veeam
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2014/07/23/ERROR-FILE-SYSTEM-LIMITATION-whilst-using-Windows-deduplication-with-Veeam/" class="article-date">
+  <time datetime="2014-07-23T03:12:00.000Z" itemprop="datePublished">2014-07-23</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>This is a possible scenario that can happen with Veeam and Server 2012 deduplication:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">You cannot write to a file anymore and you get the error &quot;ERROR_FILE_SYSTEM_LIMITATION&quot;. There is still plenty of space left on the volume however this file can&apos;t grow. This is a big issue wince you use rollback chains in Veeam.</span><br></pre></td></tr></table></figure>
+<p>To fix this unfortunately you need to start a whole new chain on a new volume. When formatting the volume, use <code>format drive: /fs:ntfs /v:volumelabel /Q /L</code>. The <code>/Q</code> switch does a quick format, and the <code>/L</code> switch enables large-size file records.</p>
+<p>Unfortunately this switch isn’t very well documented - it’s not even in the <code>format.exe</code> <a href="http://technet.microsoft.com/en-us/library/cc730730.aspx" target="_blank" rel="external">knowledgebase article</a>. You can however get some information from <code>format /?</code> in command prompt.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/L	NTFS Only: Use large size file records.</span><br><span class="line">	By default, the volume will be formatted with small size file records.</span><br></pre></td></tr></table></figure>
+<p>A Microsoft primer on how NTFS works (<a href="http://technet.microsoft.com/en-us/library/cc781134(v=ws.10" target="_blank" rel="external">Source</a>.aspx)) sheds some light but it doesn’t show you the limit of setting large-size file records.</p>
+<p>Reference: <a href="http://support.microsoft.com/kb/2891967" target="_blank" rel="external">Microsoft KB2891967</a></p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/deduplication/">deduplication</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/veeam/">veeam</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/">windows</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/07/24/Sign-PSScript/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-title"><span>&lt;</span>&nbsp;
+        
+          Sign-PSScript
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/07/10/IIS-logging-to-the-ELK-stack/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">IIS logging to the ELK stack&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Jacob Ludriks&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>

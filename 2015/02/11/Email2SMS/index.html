@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Email2SMS - Jacob Ludriks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="We’ve switched SMS providers at work to Nexmo, however they don’t have a SMTP API. I whipped up a quick EWS script to monitor a mailbox for emails in the correct format and to send SMS’ based off it.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Email2SMS">
+<meta property="og:url" content="http://jacob.ludriks.com/2015/02/11/Email2SMS/index.html">
+<meta property="og:site_name" content="Jacob Ludriks">
+<meta property="og:description" content="We’ve switched SMS providers at work to Nexmo, however they don’t have a SMTP API. I whipped up a quick EWS script to monitor a mailbox for emails in the correct format and to send SMS’ based off it.">
+<meta property="og:updated_time" content="2016-05-12T05:44:57.011Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Email2SMS">
+<meta name="twitter:description" content="We’ve switched SMS providers at work to Nexmo, however they don’t have a SMTP API. I whipped up a quick EWS script to monitor a mailbox for emails in the correct format and to send SMS’ based off it.">
+  
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-Email2SMS" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Email2SMS
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2015/02/11/Email2SMS/" class="article-date">
+  <time datetime="2015-02-11T06:27:00.000Z" itemprop="datePublished">2015-02-11</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>We’ve switched SMS providers at work to <a href="http://www.nexmo.com" target="_blank" rel="external">Nexmo</a>, however they don’t have a SMTP API. I whipped up a quick EWS script to monitor a mailbox for emails in the correct format and to send SMS’ based off it. Script below.</p>
+<script src="https://gist.github.com/jacobludriks/849ed52a7987e407cc2d.js"></script>
+
+<p>The script should be run as the user whos mailbox will be monitored (ours is set up as a scheduled task). Next, it should have to subfolders called “Error” and “Processed”. Successful emails get marked as read and send to “Processed”, and unsuccessful emails get kept as unread and moved to “Error”. Because we send from some systems that don’t have SMTP authentication, there is a field called “Secret” that should be defined at the top of the PowerShell script and put in each email.</p>
+<p>The format for the email is:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">From: fromuser</span><br><span class="line">To: number in international format (ie. +61404040404)</span><br><span class="line">Text: any text here</span><br><span class="line">Secret: secret code defined in script</span><br></pre></td></tr></table></figure>
+<p>The script is set to run every 20 seconds.</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/powershell/">powershell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sms/">sms</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/04/20/Deploying-Node-js-with-Powershell-DSC/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-title"><span>&lt;</span>&nbsp;
+        
+          Deploying Node.js with Powershell DSC
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/02/11/Send-NexmoSMS/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Send-NexmoSMS&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Jacob Ludriks&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>

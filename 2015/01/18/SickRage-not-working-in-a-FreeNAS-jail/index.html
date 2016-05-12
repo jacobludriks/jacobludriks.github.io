@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>SickRage not working in a FreeNAS jail - Jacob Ludriks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="I ran in to an issue where SickRage wasn’t downloading torrents due to a Unicode decode failure. The error I was getting:
+123452015-01-17 14:57:12 WARNING  SEARCHQUEUE-MANUAL-272644 :: Failed to downl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SickRage not working in a FreeNAS jail">
+<meta property="og:url" content="http://jacob.ludriks.com/2015/01/18/SickRage-not-working-in-a-FreeNAS-jail/index.html">
+<meta property="og:site_name" content="Jacob Ludriks">
+<meta property="og:description" content="I ran in to an issue where SickRage wasn’t downloading torrents due to a Unicode decode failure. The error I was getting:
+123452015-01-17 14:57:12 WARNING  SEARCHQUEUE-MANUAL-272644 :: Failed to downl">
+<meta property="og:updated_time" content="2016-05-12T05:52:01.122Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SickRage not working in a FreeNAS jail">
+<meta name="twitter:description" content="I ran in to an issue where SickRage wasn’t downloading torrents due to a Unicode decode failure. The error I was getting:
+123452015-01-17 14:57:12 WARNING  SEARCHQUEUE-MANUAL-272644 :: Failed to downl">
+  
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-SickRage-not-working-in-a-FreeNAS-jail" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      SickRage not working in a FreeNAS jail
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2015/01/18/SickRage-not-working-in-a-FreeNAS-jail/" class="article-date">
+  <time datetime="2015-01-17T23:05:00.000Z" itemprop="datePublished">2015-01-18</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I ran in to an issue where SickRage wasn’t downloading torrents due to a Unicode decode failure. The error I was getting:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">2015-01-17 14:57:12 WARNING  SEARCHQUEUE-MANUAL-272644 :: Failed to download result</span><br><span class="line">AA</span><br><span class="line">AAUnicodeEncodeError: &apos;ascii&apos; codec can&apos;t encode characters in position 56-57: ordinal not in range(128)</span><br><span class="line">AA    with open(filename, &apos;wb&apos;) as fp:</span><br><span class="line">AA  File &quot;/usr/pbi/sickrage-amd64/share/sickrage/SickRage/sickbeard/helpers.py&quot;, line 1209, in download_file</span><br></pre></td></tr></table></figure>
+<p>To fix this, I ssh’ed in to the jail and ran <code>edit /usr/local/etc/rc.d/sickrage</code>. After the line <code>load_rc_config ${name}</code>, I pasted the following lines:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export LC_ALL=en_US.UTF-8</span><br><span class="line">export LANG=en_US.UTF-8</span><br><span class="line">export LANGUAGE=en_US.UTF-8</span><br></pre></td></tr></table></figure>
+<p>After saving the file and restarting the <code>sickrage</code> service, everything worked again.</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/freenas/">freenas</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sickrage/">sickrage</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/01/21/Installing-LinuxDC-in-a-FreeNAS-jail/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-title"><span>&lt;</span>&nbsp;
+        
+          Installing LinuxDC++ in a FreeNAS jail
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/01/13/vSphere-multipathing-report/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">vSphere multipathing report&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Jacob Ludriks&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>

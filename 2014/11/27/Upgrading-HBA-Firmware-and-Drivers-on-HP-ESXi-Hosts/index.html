@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Upgrading HBA Firmware and Drivers on HP ESXi Hosts - Jacob Ludriks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="I’m guilty of only updating firmware and drivers on my devices when problems arise. I’m sure most of us do this. Bad practice! The guide in this post shows how to update a ProLiant system (blade, pede">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Upgrading HBA Firmware and Drivers on HP ESXi Hosts">
+<meta property="og:url" content="http://jacob.ludriks.com/2014/11/27/Upgrading-HBA-Firmware-and-Drivers-on-HP-ESXi-Hosts/index.html">
+<meta property="og:site_name" content="Jacob Ludriks">
+<meta property="og:description" content="I’m guilty of only updating firmware and drivers on my devices when problems arise. I’m sure most of us do this. Bad practice! The guide in this post shows how to update a ProLiant system (blade, pede">
+<meta property="og:updated_time" content="2016-05-12T05:56:13.609Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Upgrading HBA Firmware and Drivers on HP ESXi Hosts">
+<meta name="twitter:description" content="I’m guilty of only updating firmware and drivers on my devices when problems arise. I’m sure most of us do this. Bad practice! The guide in this post shows how to update a ProLiant system (blade, pede">
+  
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-Upgrading-HBA-Firmware-and-Drivers-on-HP-ESXi-Hosts" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Upgrading HBA Firmware and Drivers on HP ESXi Hosts
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2014/11/27/Upgrading-HBA-Firmware-and-Drivers-on-HP-ESXi-Hosts/" class="article-date">
+  <time datetime="2014-11-27T11:37:00.000Z" itemprop="datePublished">2014-11-27</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I’m guilty of only updating firmware and drivers on my devices when problems arise. I’m sure most of us do this. Bad practice! The guide in this post shows how to update a ProLiant system (blade, pedestal or rackmount) with the HP SPP and latest drivers.</p>
+<p><strong>BEFORE YOU DO ANYTHING</strong>: Put the host in maintenance mode and move the virtual machines off! This probably doesn’t need to be said, but hey.</p>
+<p><a href="http://vibsdepot.hp.com/" target="_blank" rel="external">HP VibsDepot</a> is a great resource for the currently supported firmware and driver recipe for ESXi as well as links to the required files. The most current support recipe document is located at <a href="http://vibsdepot.hp.com/hpq/recipes/HP-VMware-Recipe.pdf" target="_blank" rel="external">http://vibsdepot.hp.com/hpq/recipes/HP-VMware-Recipe.pdf</a> (pdf). First things first; you need to get the model of your HBA and which driver it uses. You can do this by connecting to the host with SSH.</p>
+<p>If you don’t have SSH enabled, press F2 at the ESXi screen and login with the root credentials. Then, go down to <code>Troubleshooting Options</code> and select <code>Enable SSH</code>. You can then exit out of the menu by hitting the escape key a few times.</p>
+<p>Open up your SSH client and connect to the host, then:</p>
+<p><code># ls /proc/scsi</code></p>
+<p>You will see possibly two or three devices. My HBA’s are Emulex branded, so mine shows as <code>lpfc820</code>.</p>
+<p><code># cat /proc/scsi/lpfc820/1</code></p>
+<p>I used tab complete after the final slash to get the HBA number put in automatically. The info received:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Emulex OneConnect FCoE SCSI 8.2.1.90.28</span><br><span class="line">HP FlexFabric 10Gb 2-port 554FLB Adapter on PCI bus 0000:04 device 02 irq 184 Logical Link Speed: 4000 Mbps</span><br><span class="line">BoardNum: 0</span><br><span class="line">ESX Adapter: vmhba0</span><br><span class="line">Firmware Version: 4.1.450.16</span><br><span class="line">Portname: 50:06:0b:00:00:c2:62:10   Nodename: 50:06:0b:00:00:c2:62:11</span><br><span class="line">SLI Rev: 4</span><br><span class="line">    MQ: Enabled with 0x2 queues</span><br><span class="line">    NPIV Supported: VPIs max 255  VPIs used 0</span><br><span class="line">    RPIs max 1024  RPIs used 4   IOCBs inuse 0  IOCB max 8   txq cnt 0  txq max 0  txcmplq 0</span><br><span class="line">    Vport List:</span><br><span class="line">Link Up - Ready:</span><br><span class="line">    PortID 0x10e05</span><br><span class="line">    Fabric</span><br><span class="line">    Current speed 10G</span><br><span class="line">Port Discovered Nodes: Count 2</span><br><span class="line">t0000 DID 010c00 WWPN 50:01:43:80:02:5d:bb:e8 WWNN 50:01:43:80:02:5d:bb:e0 qdepth 8192 max 2 active 0 busy 0</span><br><span class="line">t0001 DID 010d00 WWPN 50:01:43:80:02:5d:bb:ec WWNN 50:01:43:80:02:5d:bb:e0 qdepth 8192 max 2 active 0 busy 0</span><br></pre></td></tr></table></figure>
+<p>The most relevant information above is that the driver version currently installed is <code>8.2.1.90.28</code>, the firmware version is <code>4.1.450.16</code> and that the card is a <code>HP FlexFabric 10Gb 2-port 554FLB</code>. Within the recipe PDF linked to earlier, I can see that the most recent driver version is <code>8.2.4.141.55</code> and the most recent firmware version is <code>4.2.401.2215</code>, so I’m behind quite a few versions.</p>
+<p>From the recipe PDF, click on the required driver link for your card, which will take you to the VMWare website. A zip file will be downloaded, and inside is another zip file with the word <strong>offline_bundle</strong> in its filename. This is the driver package we need. Set it aside for the next step. For the firmware, download the latest <a href="http://h18004.www1.hp.com/products/servers/service_packs/en/index.html" target="_blank" rel="external">Service Pack for ProLiant</a>. It’s a big ISO that includes firmware updates for all ProLiant servers and it works quite well. It’s normally updated every 3-4 months.</p>
+<p>If you’re like me and have some old blades in your environment (like the BL460c G1) with iLO 2, you might find the virtual media function a bit flaky when you mount the SPP ISO. As a workaround, use the <a href="http://h20565.www2.hp.com/portal/site/hpsc/template.PAGE/public/psi/swdDetails/?javax.portlet.begCacheTok=com.vignette.cachetoken&amp;javax.portlet.endCacheTok=com.vignette.cachetoken&amp;javax.portlet.prp_bd9b6997fbc7fc515f4cf4626f5c8d01=wsrp-navigationalState%3Didx%3D%7CswItem%3DMTX_40e268a99cc243a299352b7b20%7CitemLocale%3D%7Cmode%3D%7Caction%3DdriverDocument&amp;javax.portlet.tpst=bd9b6997fbc7fc515f4cf4626f5c8d01&amp;ac.admitted=1374043405767.876444892.492883150" target="_blank" rel="external">HP USB Key Utility</a> (version 1.7!) to put the SPP on a USB drive and use a direct connection to the blade to boot. Don’t forget, the boot menu key is <strong>F11</strong>.</p>
+<p>There is some excellent documentation available on the <a href="http://h18004.www1.hp.com/products/servers/service_packs/en/index.html" target="_blank" rel="external">HP SPP portal</a> for how to use the SPP. The latest version from when this post was written is <a href="http://bizsupport2.austin.hp.com/bc/docs/support/SupportManual/c03673114/c03673114.pdf" target="_blank" rel="external">here</a>.</p>
+<p>Use an SCP client (I use <a href="http://winscp.net/" target="_blank" rel="external">WinSCP</a>) to transfer the offline_bundle driver to a temporary directory on the host (I use <code>/var/log/vmware/</code>). Then, SSH in to the host and execute the following command:</p>
+<p><code># esxcli software vib install --maintenance-mode --no-sig-check -d /var/log/vmware/name_of_offline_bundle.zip</code></p>
+<p>Be aware that this can take quite a while, so don’t worry if there is still no output after 10 minutes. You should get an output similar to:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Installation Result</span><br><span class="line">    Message: The update completed successfully, but the system needs to be rebooted for the changes to be effective.</span><br><span class="line">    Reboot Required: true</span><br><span class="line">    VIBs Installed: Emulex_bootbank_scsi-lpfc820_8.2.4.151.65-1OEM.500.0.0.472560</span><br><span class="line">    VIBs Removed: Emulex_bootbank_scsi-lpfc820_8.2.4.141.55-1OEM.500.0.0.472560</span><br><span class="line">    VIBs Skipped:</span><br></pre></td></tr></table></figure>
+<p>Issue a reboot to the system with <code>reboot</code>. Once it comes back up, take it out of maintenance mode. Done!</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/firmware/">firmware</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hp/">hp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/patches/">patches</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/01/13/vSphere-multipathing-report/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-title"><span>&lt;</span>&nbsp;
+        
+          vSphere multipathing report
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/11/27/Lost-Management-Interface-on-an-ESXi-Host/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Lost Management Interface on an ESXi Host&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Jacob Ludriks&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>

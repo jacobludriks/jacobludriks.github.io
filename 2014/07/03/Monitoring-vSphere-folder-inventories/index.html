@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Monitoring vSphere folder inventories - Jacob Ludriks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Backups in my work environment are done on the folder level through Veeam (excellent product), and sometimes virtual machines are moved around and get loosed from backups without us noticing. This lit">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Monitoring vSphere folder inventories">
+<meta property="og:url" content="http://jacob.ludriks.com/2014/07/03/Monitoring-vSphere-folder-inventories/index.html">
+<meta property="og:site_name" content="Jacob Ludriks">
+<meta property="og:description" content="Backups in my work environment are done on the folder level through Veeam (excellent product), and sometimes virtual machines are moved around and get loosed from backups without us noticing. This lit">
+<meta property="og:updated_time" content="2016-05-12T06:06:45.709Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Monitoring vSphere folder inventories">
+<meta name="twitter:description" content="Backups in my work environment are done on the folder level through Veeam (excellent product), and sometimes virtual machines are moved around and get loosed from backups without us noticing. This lit">
+  
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-Monitoring-vSphere-folder-inventories" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Monitoring vSphere folder inventories
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2014/07/03/Monitoring-vSphere-folder-inventories/" class="article-date">
+  <time datetime="2014-07-03T06:36:00.000Z" itemprop="datePublished">2014-07-03</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Backups in my work environment are done on the folder level through Veeam (excellent product), and sometimes virtual machines are moved around and get loosed from backups without us noticing. This little script monitors the folder and alerts on any changes when combined with Task Scheduler.</p>
+<script src="https://gist.github.com/jacobludriks/c6550276db05fc3a7991.js"></script>
+
+<p>A few things:</p>
+<ul>
+<li>Make sure the account you run it under can send email</li>
+<li>Make sure the account has vSphere read permissions</li>
+</ul>
+<p>Enjoy.</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vmware/">vmware</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vsphere/">vsphere</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/07/10/IIS-logging-to-the-ELK-stack/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-title"><span>&lt;</span>&nbsp;
+        
+          IIS logging to the ELK stack
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/06/25/Get-MailboxSizes/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Get-MailboxSizes&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Jacob Ludriks&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>

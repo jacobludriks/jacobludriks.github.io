@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Getting Kerberos token size with Powershell - Jacob Ludriks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="I ran in to an issue with a user getting a 400 error on an IIS server. Turns out it was related to a large Kerberos token size due to being in too many groups. Here is a little script to enumerate the">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Getting Kerberos token size with Powershell">
+<meta property="og:url" content="http://jacob.ludriks.com/2014/05/27/Getting-Kerberos-token-size-with-Powershell/index.html">
+<meta property="og:site_name" content="Jacob Ludriks">
+<meta property="og:description" content="I ran in to an issue with a user getting a 400 error on an IIS server. Turns out it was related to a large Kerberos token size due to being in too many groups. Here is a little script to enumerate the">
+<meta property="og:updated_time" content="2016-05-12T06:09:56.318Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Getting Kerberos token size with Powershell">
+<meta name="twitter:description" content="I ran in to an issue with a user getting a 400 error on an IIS server. Turns out it was related to a large Kerberos token size due to being in too many groups. Here is a little script to enumerate the">
+  
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-Getting-Kerberos-token-size-with-Powershell" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Getting Kerberos token size with Powershell
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2014/05/27/Getting-Kerberos-token-size-with-Powershell/" class="article-date">
+  <time datetime="2014-05-26T23:25:00.000Z" itemprop="datePublished">2014-05-27</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I ran in to an issue with a user getting a 400 error on an IIS server. Turns out it was related to a large Kerberos token size due to being in too many groups. Here is a little script to enumerate the information you need to determine the token size:</p>
+<script src="https://gist.github.com/jacobludriks/d69abf71597f7aaf4167.js"></script>
+
+<p>This is all outlined in <a href="http://support.microsoft.com/kb/327825" target="_blank" rel="external">Microsoft KB327825</a> and relates to <a href="http://support.microsoft.com/kb/2020943" target="_blank" rel="external">Microsoft KB2020943</a>.</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kerberos/">kerberos</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/powershell/">powershell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/">windows</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/06/02/meetingroomhud/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-title"><span>&lt;</span>&nbsp;
+        
+          meetingroomhud
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/05/21/Downloading-from-YouTube-using-Powershell/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Downloading from YouTube using Powershell&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Jacob Ludriks&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>
