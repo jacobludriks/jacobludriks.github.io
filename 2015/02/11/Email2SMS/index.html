@@ -6,6 +6,7 @@
   <title>Email2SMS - Jacob Ludriks</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="We’ve switched SMS providers at work to Nexmo, however they don’t have a SMTP API. I whipped up a quick EWS script to monitor a mailbox for emails in the correct format and to send SMS’ based off it.">
+<meta name="keywords" content="powershell,sms">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Email2SMS">
 <meta property="og:url" content="http://jacob.ludriks.com/2015/02/11/Email2SMS/index.html">
@@ -36,7 +37,7 @@
       </nav>
       <nav id="sub-nav">
         <div id="search-form-wrap">
-          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
         </div>
       </nav>
     </div>
@@ -70,7 +71,7 @@
 
 <p>The script should be run as the user whos mailbox will be monitored (ours is set up as a scheduled task). Next, it should have to subfolders called “Error” and “Processed”. Successful emails get marked as read and send to “Processed”, and unsuccessful emails get kept as unread and moved to “Error”. Because we send from some systems that don’t have SMTP authentication, there is a field called “Secret” that should be defined at the top of the PowerShell script and put in each email.</p>
 <p>The format for the email is:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">From: fromuser</span><br><span class="line">To: number in international format (ie. +61404040404)</span><br><span class="line">Text: any text here</span><br><span class="line">Secret: secret code defined in script</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">From: fromuser</div><div class="line">To: number in international format (ie. +61404040404)</div><div class="line">Text: any text here</div><div class="line">Secret: secret code defined in script</div></pre></td></tr></table></figure>
 <p>The script is set to run every 20 seconds.</p>
 
       
@@ -111,7 +112,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2016 Jacob Ludriks&nbsp;
+      &copy; 2017 Jacob Ludriks&nbsp;
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
     </div>
   </div>

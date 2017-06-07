@@ -5,19 +5,17 @@
   
   <title>Getting Office365 license information - Jacob Ludriks</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="A nice little one-liner. This assumes you have already ran Connect-MsolService.
-1Get-MsolUser | select firstname,lastname,userprincipalname,islicensed,@&amp;#123;N=&amp;quot;License&amp;quot;;E=&amp;#123;switch -rege">
+  <meta name="description" content="A nice little one-liner. This assumes you have already ran Connect-MsolService. 1Get-MsolUser | select firstname,lastname,userprincipalname,islicensed,@&amp;#123;N=&amp;quot;License&amp;quot;;E=&amp;#123;switch -rege">
+<meta name="keywords" content="powershell,office365,oneliner">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Getting Office365 license information">
 <meta property="og:url" content="http://jacob.ludriks.com/2015/04/21/Getting-Office365-license-information/index.html">
 <meta property="og:site_name" content="Jacob Ludriks">
-<meta property="og:description" content="A nice little one-liner. This assumes you have already ran Connect-MsolService.
-1Get-MsolUser | select firstname,lastname,userprincipalname,islicensed,@&amp;#123;N=&amp;quot;License&amp;quot;;E=&amp;#123;switch -rege">
+<meta property="og:description" content="A nice little one-liner. This assumes you have already ran Connect-MsolService. 1Get-MsolUser | select firstname,lastname,userprincipalname,islicensed,@&amp;#123;N=&amp;quot;License&amp;quot;;E=&amp;#123;switch -rege">
 <meta property="og:updated_time" content="2016-05-12T05:43:07.075Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Getting Office365 license information">
-<meta name="twitter:description" content="A nice little one-liner. This assumes you have already ran Connect-MsolService.
-1Get-MsolUser | select firstname,lastname,userprincipalname,islicensed,@&amp;#123;N=&amp;quot;License&amp;quot;;E=&amp;#123;switch -rege">
+<meta name="twitter:description" content="A nice little one-liner. This assumes you have already ran Connect-MsolService. 1Get-MsolUser | select firstname,lastname,userprincipalname,islicensed,@&amp;#123;N=&amp;quot;License&amp;quot;;E=&amp;#123;switch -rege">
   
   
   <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
@@ -39,7 +37,7 @@
       </nav>
       <nav id="sub-nav">
         <div id="search-form-wrap">
-          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
         </div>
       </nav>
     </div>
@@ -69,9 +67,9 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>A nice little one-liner. This assumes you have already ran <code>Connect-MsolService</code>.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Get-MsolUser | select firstname,lastname,userprincipalname,islicensed,@&#123;N=&quot;License&quot;;E=&#123;switch -regex ($_.licenses.accountskuid) &#123; (&quot;ENTERPRISEPACK&quot;) &#123; &quot;E3&quot; &#125; (&quot;STANDARDPACK&quot;) &#123; &quot;E1&quot; &#125; &#125;&#125;&#125; | ft</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Get-MsolUser | select firstname,lastname,userprincipalname,islicensed,@&#123;N=&quot;License&quot;;E=&#123;switch -regex ($_.licenses.accountskuid) &#123; (&quot;ENTERPRISEPACK&quot;) &#123; &quot;E3&quot; &#125; (&quot;STANDARDPACK&quot;) &#123; &quot;E1&quot; &#125; &#125;&#125;&#125; | ft</div></pre></td></tr></table></figure>
 <p>You can add more switches for more license types but we only use E3 and E1. Types are:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&quot;DESKLESSPACK&quot; = &quot;Office 365 (Plan K1)&quot;</span><br><span class="line">&quot;DESKLESSWOFFPACK&quot; = &quot;Office 365 (Plan K2)&quot;</span><br><span class="line">&quot;LITEPACK&quot; = &quot;Office 365 (Plan P1)&quot;</span><br><span class="line">&quot;EXCHANGESTANDARD&quot; = &quot;Office 365 Exchange Online Only&quot;</span><br><span class="line">&quot;STANDARDPACK&quot; = &quot;Office 365 (Plan E1)&quot;</span><br><span class="line">&quot;STANDARDWOFFPACK&quot; = &quot;Office 365 (Plan E2)&quot;</span><br><span class="line">&quot;ENTERPRISEPACK&quot; = &quot;Office 365 (Plan E3)&quot;</span><br><span class="line">&quot;ENTERPRISEPACKLRG&quot; = &quot;Office 365 (Plan E3)&quot;</span><br><span class="line">&quot;ENTERPRISEWITHSCAL&quot; = &quot;Office 365 (Plan E4)&quot;</span><br><span class="line">&quot;STANDARDPACK_STUDENT&quot; = &quot;Office 365 (Plan A1) for Students&quot;</span><br><span class="line">&quot;STANDARDWOFFPACKPACK_STUDENT&quot; = &quot;Office 365 (Plan A2) for Students&quot;</span><br><span class="line">&quot;ENTERPRISEPACK_STUDENT&quot; = &quot;Office 365 (Plan A3) for Students&quot;</span><br><span class="line">&quot;ENTERPRISEWITHSCAL_STUDENT&quot; = &quot;Office 365 (Plan A4) for Students&quot;</span><br><span class="line">&quot;STANDARDPACK_FACULTY&quot; = &quot;Office 365 (Plan A1) for Faculty&quot;</span><br><span class="line">&quot;STANDARDWOFFPACKPACK_FACULTY&quot; = &quot;Office 365 (Plan A2) for Faculty&quot;</span><br><span class="line">&quot;ENTERPRISEPACK_FACULTY&quot; = &quot;Office 365 (Plan A3) for Faculty&quot;</span><br><span class="line">&quot;ENTERPRISEWITHSCAL_FACULTY&quot; = &quot;Office 365 (Plan A4) for Faculty&quot;</span><br><span class="line">&quot;ENTERPRISEPACK_B_PILOT&quot; = &quot;Office 365 (Enterprise Preview)&quot;</span><br><span class="line">&quot;STANDARD_B_PILOT&quot; = &quot;Office 365 (Small Business Preview)&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&quot;DESKLESSPACK&quot; = &quot;Office 365 (Plan K1)&quot;</div><div class="line">&quot;DESKLESSWOFFPACK&quot; = &quot;Office 365 (Plan K2)&quot;</div><div class="line">&quot;LITEPACK&quot; = &quot;Office 365 (Plan P1)&quot;</div><div class="line">&quot;EXCHANGESTANDARD&quot; = &quot;Office 365 Exchange Online Only&quot;</div><div class="line">&quot;STANDARDPACK&quot; = &quot;Office 365 (Plan E1)&quot;</div><div class="line">&quot;STANDARDWOFFPACK&quot; = &quot;Office 365 (Plan E2)&quot;</div><div class="line">&quot;ENTERPRISEPACK&quot; = &quot;Office 365 (Plan E3)&quot;</div><div class="line">&quot;ENTERPRISEPACKLRG&quot; = &quot;Office 365 (Plan E3)&quot;</div><div class="line">&quot;ENTERPRISEWITHSCAL&quot; = &quot;Office 365 (Plan E4)&quot;</div><div class="line">&quot;STANDARDPACK_STUDENT&quot; = &quot;Office 365 (Plan A1) for Students&quot;</div><div class="line">&quot;STANDARDWOFFPACKPACK_STUDENT&quot; = &quot;Office 365 (Plan A2) for Students&quot;</div><div class="line">&quot;ENTERPRISEPACK_STUDENT&quot; = &quot;Office 365 (Plan A3) for Students&quot;</div><div class="line">&quot;ENTERPRISEWITHSCAL_STUDENT&quot; = &quot;Office 365 (Plan A4) for Students&quot;</div><div class="line">&quot;STANDARDPACK_FACULTY&quot; = &quot;Office 365 (Plan A1) for Faculty&quot;</div><div class="line">&quot;STANDARDWOFFPACKPACK_FACULTY&quot; = &quot;Office 365 (Plan A2) for Faculty&quot;</div><div class="line">&quot;ENTERPRISEPACK_FACULTY&quot; = &quot;Office 365 (Plan A3) for Faculty&quot;</div><div class="line">&quot;ENTERPRISEWITHSCAL_FACULTY&quot; = &quot;Office 365 (Plan A4) for Faculty&quot;</div><div class="line">&quot;ENTERPRISEPACK_B_PILOT&quot; = &quot;Office 365 (Enterprise Preview)&quot;</div><div class="line">&quot;STANDARD_B_PILOT&quot; = &quot;Office 365 (Small Business Preview)&quot;</div></pre></td></tr></table></figure>
       
     </div>
     
@@ -110,7 +108,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2016 Jacob Ludriks&nbsp;
+      &copy; 2017 Jacob Ludriks&nbsp;
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
     </div>
   </div>

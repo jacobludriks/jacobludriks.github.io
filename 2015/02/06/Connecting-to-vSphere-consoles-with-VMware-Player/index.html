@@ -6,6 +6,7 @@
   <title>Connecting to vSphere consoles with VMware Player - Jacob Ludriks</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="This isn’t really documented anywhere on the VMware website, but it comes in really handy if require certain users to have console access to machines without the complication of the vSphere Web Client">
+<meta name="keywords" content="powershell,powercli,vmware">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Connecting to vSphere consoles with VMware Player">
 <meta property="og:url" content="http://jacob.ludriks.com/2015/02/06/Connecting-to-vSphere-consoles-with-VMware-Player/index.html">
@@ -36,7 +37,7 @@
       </nav>
       <nav id="sub-nav">
         <div id="search-form-wrap">
-          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
         </div>
       </nav>
     </div>
@@ -72,14 +73,14 @@
 <li><p>Get the Managed Object ID of the VM. This can be done through PowerCLI with the following script:</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$vcenter = &quot;vcenter.domain.name&quot;</span><br><span class="line">$targetvm = &quot;targetvm&quot;</span><br><span class="line"></span><br><span class="line">Add-PSSnapin VMware.VimAutomation.Core</span><br><span class="line">Connect-VIServer -Server $vcenter -Force</span><br><span class="line">$vmid = (Get-VM $targetvm).id -replace &quot;VirtualMachine-&quot;,&quot;&quot;</span><br><span class="line">Disconnect-VIServer -Server $vcenter -Confirm:$false</span><br><span class="line"></span><br><span class="line">Write-Output &quot;VM MOID is $vmid&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$vcenter = &quot;vcenter.domain.name&quot;</div><div class="line">$targetvm = &quot;targetvm&quot;</div><div class="line"></div><div class="line">Add-PSSnapin VMware.VimAutomation.Core</div><div class="line">Connect-VIServer -Server $vcenter -Force</div><div class="line">$vmid = (Get-VM $targetvm).id -replace &quot;VirtualMachine-&quot;,&quot;&quot;</div><div class="line">Disconnect-VIServer -Server $vcenter -Confirm:$false</div><div class="line"></div><div class="line">Write-Output &quot;VM MOID is $vmid&quot;</div></pre></td></tr></table></figure>
 <ul>
 <li><p>Give the user access to the VM. The permission “Virtual Machine\Interaction\Console Interation” needs to be given on both the VM and the host. It doesn’t need to inherit to children so deselect “Propagate to children” in the permisisons screen”.</p>
 </li>
 <li><p>Create a shortcut to connect straight to the VM. The following PowerShell script can create the shortcut automatically.</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$desktop = [Environment]::GetFolderPath(&quot;Desktop&quot;)</span><br><span class="line">$vcenter = &quot;vcenter.domain.name&quot;</span><br><span class="line">$targetvm = &quot;targetvm&quot;</span><br><span class="line">$vmid = &quot;vm-moid&quot;</span><br><span class="line"></span><br><span class="line">$WshShell = New-Object -comObject WScript.Shell</span><br><span class="line">$Shortcut = $WshShell.CreateShortcut(&quot;$desktop\$targetvm.lnk&quot;)</span><br><span class="line">$Shortcut.TargetPath = &quot;vmrc://$vcenter/?moid=$vmid&quot;</span><br><span class="line">$Shortcut.Save()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$desktop = [Environment]::GetFolderPath(&quot;Desktop&quot;)</div><div class="line">$vcenter = &quot;vcenter.domain.name&quot;</div><div class="line">$targetvm = &quot;targetvm&quot;</div><div class="line">$vmid = &quot;vm-moid&quot;</div><div class="line"></div><div class="line">$WshShell = New-Object -comObject WScript.Shell</div><div class="line">$Shortcut = $WshShell.CreateShortcut(&quot;$desktop\$targetvm.lnk&quot;)</div><div class="line">$Shortcut.TargetPath = &quot;vmrc://$vcenter/?moid=$vmid&quot;</div><div class="line">$Shortcut.Save()</div></pre></td></tr></table></figure>
 <p>Afterwards, double click on the shortcut on the desktop and enter appropriate credentials. You’ll be straight in to the console.</p>
 
       
@@ -120,7 +121,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2016 Jacob Ludriks&nbsp;
+      &copy; 2017 Jacob Ludriks&nbsp;
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
     </div>
   </div>

@@ -6,6 +6,7 @@
   <title>Foglight SSL Certificates - Jacob Ludriks</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="Foglight for Virtualization 7.0 Standard uses Tomcat under the covers to serve the web interface. To replace the SSL certificate, follow the instructions below. I started with a password-protected PFX">
+<meta name="keywords" content="foglight,tomcat,ssl">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Foglight SSL Certificates">
 <meta property="og:url" content="http://jacob.ludriks.com/2016/05/12/Foglight-SSL-Certificates/index.html">
@@ -36,7 +37,7 @@
       </nav>
       <nav id="sub-nav">
         <div id="search-form-wrap">
-          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
         </div>
       </nav>
     </div>
@@ -71,7 +72,7 @@
 <li>Run the following to convert the PFX in to a Java keystore file, entering <code>foglight</code> for all password prompts: <code>/usr/local/jre1.6.0_43/bin/keytool -importkeystore -srckeystore /usr/local/tomcat/conf/foglight.pfx -srcstoretype pkcs12 -destkeystore /usr/local/tomcat/conf/foglight.jks -deststoretype JKS</code></li>
 <li>Open <code>/usr/local/tomcat/conf/server.xml</code> in your favourite editor</li>
 <li><p>Replace the Connector section with SSL with the following:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;Connector server=&quot;VKernel&quot; port=&quot;443&quot; maxHttpHeaderSize=&quot;8192&quot;</span><br><span class="line">        maxThreads=&quot;150&quot; minSpareThreads=&quot;25&quot;</span><br><span class="line">        enableLookups=&quot;false&quot; disableUploadTimeout=&quot;true&quot;</span><br><span class="line">        acceptCount=&quot;100&quot; scheme=&quot;https&quot; secure=&quot;true&quot;</span><br><span class="line">        SSLEnabled=&quot;true&quot; keystoreFile=&quot;conf/foglight.jks&quot;</span><br><span class="line">        keystorePass=&quot;foglight&quot; clientAuth=&quot;false&quot; sslProtocol=&quot;TLS&quot;</span><br><span class="line">        ciphers=&quot;TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,</span><br><span class="line">        TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,</span><br><span class="line">        TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA,</span><br><span class="line">        TLS_RSA_WITH_AES_256_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA&quot; /&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;Connector server=&quot;VKernel&quot; port=&quot;443&quot; maxHttpHeaderSize=&quot;8192&quot;</div><div class="line">        maxThreads=&quot;150&quot; minSpareThreads=&quot;25&quot;</div><div class="line">        enableLookups=&quot;false&quot; disableUploadTimeout=&quot;true&quot;</div><div class="line">        acceptCount=&quot;100&quot; scheme=&quot;https&quot; secure=&quot;true&quot;</div><div class="line">        SSLEnabled=&quot;true&quot; keystoreFile=&quot;conf/foglight.jks&quot;</div><div class="line">        keystorePass=&quot;foglight&quot; clientAuth=&quot;false&quot; sslProtocol=&quot;TLS&quot;</div><div class="line">        ciphers=&quot;TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,</div><div class="line">        TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,</div><div class="line">        TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA,</div><div class="line">        TLS_RSA_WITH_AES_256_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA&quot; /&gt;</div></pre></td></tr></table></figure>
 </li>
 <li><p>Restart Tomcat with <code>service tomcat restart</code></p>
 </li>
@@ -94,6 +95,14 @@
     
 <nav id="article-nav">
   
+    <a href="/2017/06/07/FreeBSD-Thin-Jails/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-title"><span>&lt;</span>&nbsp;
+        
+          FreeBSD Thin Jails
+        
+      </div>
+    </a>
+  
   
     <a href="/2016/02/15/Password-expiry-notification/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">Password expiry notification&nbsp;<span>&gt;</span></div>
@@ -109,7 +118,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2016 Jacob Ludriks&nbsp;
+      &copy; 2017 Jacob Ludriks&nbsp;
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
     </div>
   </div>

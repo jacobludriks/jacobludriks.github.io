@@ -5,15 +5,12 @@
   
   <title>Jacob Ludriks</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
+  <meta property="og:type" content="website">
 <meta property="og:title" content="Jacob Ludriks">
 <meta property="og:url" content="http://jacob.ludriks.com/page/3/index.html">
 <meta property="og:site_name" content="Jacob Ludriks">
-<meta property="og:description">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jacob Ludriks">
-<meta name="twitter:description">
   
   
   <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
@@ -35,13 +32,93 @@
       </nav>
       <nav id="sub-nav">
         <div id="search-form-wrap">
-          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
         </div>
       </nav>
     </div>
   </div>
 </header>
     <section id="main" class="outer">
+      <article id="post-Switching-to-FreeNAS" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/15/Switching-to-FreeNAS/">Switching to FreeNAS</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2015/01/15/Switching-to-FreeNAS/" class="article-date">
+  <time datetime="2015-01-15T06:56:00.000Z" itemprop="datePublished">2015-01-15</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I’ve been running a little short on storage space lately, so I decided to take the plunge and order a new storage system. Previously I was using a Synology DS413 with four 3TB Hitachi disks and I was hoping to get a Synology again for my new system, however once you want a Synology unit with more than four bays the price goes up quite significantly.</p>
+<p>After a lot of research and reviewing of similar builds, I ended up with the following components.</p>
+<h3 id="Component-List"><a href="#Component-List" class="headerlink" title="Component List"></a>Component List</h3><ul>
+<li><p><strong>Case - Fractal Design Node 304</strong></p>
+<p>  This case fits six drives, a Mini-ITX motherboard and a standard ATX power supply. Cable management is quite difficult however the entire case is less than 20L in size which is only marginally larger than my existing Synology unit.</p>
+</li>
+<li><p><strong>Motherboard - ASRock E3C224D2I</strong></p>
+<p>  Unfortunately there isn’t much choice when it comes to server-grade Mini-ITX motherboards, however this one fits the specifications quite nicely. It has six SATA ports (2 x SATA2, 4 x SATA3), two ECC DDR3 slots, a BMC chip and two Intel GBe ports. The other option was an Atom Avoton C2550 motherboard however I wasn’t too keen on a non-upgradable CPU and using a Marvell storage controller over an Intel one.</p>
+</li>
+<li><p><strong>CPU - Intel Core i3-4160</strong></p>
+<p>  Surprisingly, the Core i3 supports ECC RAM! I was originally going to get the Core i3-4150 however this model was on sale and ended up being cheaper.</p>
+</li>
+<li><p><strong>Memory - Kingston KVR13E9K2/16I</strong></p>
+<p>  After reading lots of stories of incompatible memory, I decided to go with RAM sticks that somebody else had tested. </p>
+</li>
+<li><p><strong>Power Supply - Corsair CX600M Modular</strong></p>
+<p>  80+ Bronze certified and six SATA power connectors. I would have rathered an 80+ Gold certified power supply but the price difference was too great.</p>
+</li>
+<li><p><strong>OS Disk - SanDisk Cruzer Fit 16GB</strong></p>
+<p>  A nice and small USB key that can be installed directly on to the motherboard.</p>
+</li>
+<li><p><strong>Storage Disks - 6 x Western Digital Red 6TB WD60EFRX</strong></p>
+<p>  Originally I was going to order Western Digital Green 6TB WDEZRX drives and run WDIDLE3 on them to fix the LCC issue, however I found that the two models were fairly close in price and the Reds have a longer warranty.</p>
+</li>
+<li><p><strong>OS - FreeNAS</strong></p>
+<p>  For the OS, I chose FreeNAS after reading a lot about ZFS. The drives are configured in a RAID-Z2 configuration (similar to RAID6) which can tolerate two disk failures. This gives me 36TB of raw storage and 21.8TB of usable storage.</p>
+</li>
+</ul>
+<img src="/2015/01/15/Switching-to-FreeNAS/IMG_20150115_173137.jpg" alt="IMG_20150115_173137.jpg" title="">
+<img src="/2015/01/15/Switching-to-FreeNAS/IMG_20150115_173213.jpg" alt="IMG_20150115_173213.jpg" title="">
+<img src="/2015/01/15/Switching-to-FreeNAS/IMG_20150115_173253.jpg" alt="IMG_20150115_173253.jpg" title="">
+<img src="/2015/01/15/Switching-to-FreeNAS/IMG_20150115_173336.jpg" alt="IMG_20150115_173336.jpg" title="">
+<img src="/2015/01/15/Switching-to-FreeNAS/IMG_20150115_173413.jpg" alt="IMG_20150115_173413.jpg" title="">
+<h3 id="Performance"><a href="#Performance" class="headerlink" title="Performance"></a>Performance</h3><p>To test performance, I had two panes open in <code>tmux</code> and ran one command in each window:</p>
+<ul>
+<li>Pane 1: <code>iozone -a -s 24g -r 4096 -+w 1 -+y 1 -+C 1</code></li>
+<li>Pane 2: <code>zpool iostat 1</code></li>
+</ul>
+<p>Watching the <code>zpool iostat</code> output whilst iozone was running, I saw that my maximum read speed was around 550-600 MB/s  and my maximum write speed was around 300-350 MB/s.</p>
+<h3 id="Thoughts"><a href="#Thoughts" class="headerlink" title="Thoughts"></a>Thoughts</h3><p>The next upgrade will be 10gbit networking, however this is a long way off and not really needed at the moment. With a switch upgrade I will be able to use teaming but there is generally only one client accessing the server at once which negates this.</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/freenas/">freenas</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+</article>
+
+
+    
       <article id="post-vSphere-multipathing-report" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -119,7 +196,7 @@
 <p>You will see possibly two or three devices. My HBA’s are Emulex branded, so mine shows as <code>lpfc820</code>.</p>
 <p><code># cat /proc/scsi/lpfc820/1</code></p>
 <p>I used tab complete after the final slash to get the HBA number put in automatically. The info received:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Emulex OneConnect FCoE SCSI 8.2.1.90.28</span><br><span class="line">HP FlexFabric 10Gb 2-port 554FLB Adapter on PCI bus 0000:04 device 02 irq 184 Logical Link Speed: 4000 Mbps</span><br><span class="line">BoardNum: 0</span><br><span class="line">ESX Adapter: vmhba0</span><br><span class="line">Firmware Version: 4.1.450.16</span><br><span class="line">Portname: 50:06:0b:00:00:c2:62:10   Nodename: 50:06:0b:00:00:c2:62:11</span><br><span class="line">SLI Rev: 4</span><br><span class="line">    MQ: Enabled with 0x2 queues</span><br><span class="line">    NPIV Supported: VPIs max 255  VPIs used 0</span><br><span class="line">    RPIs max 1024  RPIs used 4   IOCBs inuse 0  IOCB max 8   txq cnt 0  txq max 0  txcmplq 0</span><br><span class="line">    Vport List:</span><br><span class="line">Link Up - Ready:</span><br><span class="line">    PortID 0x10e05</span><br><span class="line">    Fabric</span><br><span class="line">    Current speed 10G</span><br><span class="line">Port Discovered Nodes: Count 2</span><br><span class="line">t0000 DID 010c00 WWPN 50:01:43:80:02:5d:bb:e8 WWNN 50:01:43:80:02:5d:bb:e0 qdepth 8192 max 2 active 0 busy 0</span><br><span class="line">t0001 DID 010d00 WWPN 50:01:43:80:02:5d:bb:ec WWNN 50:01:43:80:02:5d:bb:e0 qdepth 8192 max 2 active 0 busy 0</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">Emulex OneConnect FCoE SCSI 8.2.1.90.28</div><div class="line">HP FlexFabric 10Gb 2-port 554FLB Adapter on PCI bus 0000:04 device 02 irq 184 Logical Link Speed: 4000 Mbps</div><div class="line">BoardNum: 0</div><div class="line">ESX Adapter: vmhba0</div><div class="line">Firmware Version: 4.1.450.16</div><div class="line">Portname: 50:06:0b:00:00:c2:62:10   Nodename: 50:06:0b:00:00:c2:62:11</div><div class="line">SLI Rev: 4</div><div class="line">    MQ: Enabled with 0x2 queues</div><div class="line">    NPIV Supported: VPIs max 255  VPIs used 0</div><div class="line">    RPIs max 1024  RPIs used 4   IOCBs inuse 0  IOCB max 8   txq cnt 0  txq max 0  txcmplq 0</div><div class="line">    Vport List:</div><div class="line">Link Up - Ready:</div><div class="line">    PortID 0x10e05</div><div class="line">    Fabric</div><div class="line">    Current speed 10G</div><div class="line">Port Discovered Nodes: Count 2</div><div class="line">t0000 DID 010c00 WWPN 50:01:43:80:02:5d:bb:e8 WWNN 50:01:43:80:02:5d:bb:e0 qdepth 8192 max 2 active 0 busy 0</div><div class="line">t0001 DID 010d00 WWPN 50:01:43:80:02:5d:bb:ec WWNN 50:01:43:80:02:5d:bb:e0 qdepth 8192 max 2 active 0 busy 0</div></pre></td></tr></table></figure>
 <p>The most relevant information above is that the driver version currently installed is <code>8.2.1.90.28</code>, the firmware version is <code>4.1.450.16</code> and that the card is a <code>HP FlexFabric 10Gb 2-port 554FLB</code>. Within the recipe PDF linked to earlier, I can see that the most recent driver version is <code>8.2.4.141.55</code> and the most recent firmware version is <code>4.2.401.2215</code>, so I’m behind quite a few versions.</p>
 <p>From the recipe PDF, click on the required driver link for your card, which will take you to the VMWare website. A zip file will be downloaded, and inside is another zip file with the word <strong>offline_bundle</strong> in its filename. This is the driver package we need. Set it aside for the next step. For the firmware, download the latest <a href="http://h18004.www1.hp.com/products/servers/service_packs/en/index.html" target="_blank" rel="external">Service Pack for ProLiant</a>. It’s a big ISO that includes firmware updates for all ProLiant servers and it works quite well. It’s normally updated every 3-4 months.</p>
 <p>If you’re like me and have some old blades in your environment (like the BL460c G1) with iLO 2, you might find the virtual media function a bit flaky when you mount the SPP ISO. As a workaround, use the <a href="http://h20565.www2.hp.com/portal/site/hpsc/template.PAGE/public/psi/swdDetails/?javax.portlet.begCacheTok=com.vignette.cachetoken&amp;javax.portlet.endCacheTok=com.vignette.cachetoken&amp;javax.portlet.prp_bd9b6997fbc7fc515f4cf4626f5c8d01=wsrp-navigationalState%3Didx%3D%7CswItem%3DMTX_40e268a99cc243a299352b7b20%7CitemLocale%3D%7Cmode%3D%7Caction%3DdriverDocument&amp;javax.portlet.tpst=bd9b6997fbc7fc515f4cf4626f5c8d01&amp;ac.admitted=1374043405767.876444892.492883150" target="_blank" rel="external">HP USB Key Utility</a> (version 1.7!) to put the SPP on a USB drive and use a direct connection to the blade to boot. Don’t forget, the boot menu key is <strong>F11</strong>.</p>
@@ -127,7 +204,7 @@
 <p>Use an SCP client (I use <a href="http://winscp.net/" target="_blank" rel="external">WinSCP</a>) to transfer the offline_bundle driver to a temporary directory on the host (I use <code>/var/log/vmware/</code>). Then, SSH in to the host and execute the following command:</p>
 <p><code># esxcli software vib install --maintenance-mode --no-sig-check -d /var/log/vmware/name_of_offline_bundle.zip</code></p>
 <p>Be aware that this can take quite a while, so don’t worry if there is still no output after 10 minutes. You should get an output similar to:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Installation Result</span><br><span class="line">    Message: The update completed successfully, but the system needs to be rebooted for the changes to be effective.</span><br><span class="line">    Reboot Required: true</span><br><span class="line">    VIBs Installed: Emulex_bootbank_scsi-lpfc820_8.2.4.151.65-1OEM.500.0.0.472560</span><br><span class="line">    VIBs Removed: Emulex_bootbank_scsi-lpfc820_8.2.4.141.55-1OEM.500.0.0.472560</span><br><span class="line">    VIBs Skipped:</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Installation Result</div><div class="line">    Message: The update completed successfully, but the system needs to be rebooted for the changes to be effective.</div><div class="line">    Reboot Required: true</div><div class="line">    VIBs Installed: Emulex_bootbank_scsi-lpfc820_8.2.4.151.65-1OEM.500.0.0.472560</div><div class="line">    VIBs Removed: Emulex_bootbank_scsi-lpfc820_8.2.4.141.55-1OEM.500.0.0.472560</div><div class="line">    VIBs Skipped:</div></pre></td></tr></table></figure>
 <p>Issue a reboot to the system with <code>reboot</code>. Once it comes back up, take it out of maintenance mode. Done!</p>
 
       
@@ -172,7 +249,7 @@
         <p>A hosts management network interface somehow dropped off the network this afternoon. Fortunately I was still able to get in through iLO. It always pays to have an out-of-band interface active!</p>
 <img src="/2014/11/27/Lost-Management-Interface-on-an-ESXi-Host/esxi-no-mgmt.png" alt="esxi-no-mgmt.png" title="">
 <p>From the DCUI screen, press <code>Alt + F1</code>. This will bring up the login screen. Log in as root then type <code>esxcli network ip interface list</code>. You will get an output similar to the one below.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">vmk2</span><br><span class="line">    Name: vmk2</span><br><span class="line">    MAC Address: 00:50:56:79:0c:de</span><br><span class="line">    Enabled: true</span><br><span class="line">    Portset: DvsPortset-0</span><br><span class="line">    Portgroup: N/A</span><br><span class="line">    VDS Name: dvSwitch-vMotion</span><br><span class="line">    VDS UUID: 0c 7d 1a 50 93 7b 86 3f-76 f8 74 80 73 7c 3d 0f</span><br><span class="line">    VDS Port: 101</span><br><span class="line">    VDS Connection: 1952632411</span><br><span class="line">    MTU: 1500</span><br><span class="line">    TSO MSS: 65535</span><br><span class="line">    Port ID: 33554436</span><br><span class="line"></span><br><span class="line">vmk0</span><br><span class="line">    Name: vmk0</span><br><span class="line">    MAC Address: 00:1c:c4:bd:d6:ee</span><br><span class="line">    Enabled: false</span><br><span class="line">    Portset: DvsPortset-2</span><br><span class="line">    Portgroup: N/A</span><br><span class="line">    VDS Name: dvSwitch</span><br><span class="line">    VDS UUID: 10 e1 1a 50 b1 22 19 a1-d4 33 10 dc 72 9a 92 db</span><br><span class="line">    VDS Port: 151</span><br><span class="line">    VDS Connection: 660732515</span><br><span class="line">    MTU: 1500</span><br><span class="line">    TSO MSS: 65535</span><br><span class="line">    Port ID: 67108871</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">vmk2</div><div class="line">    Name: vmk2</div><div class="line">    MAC Address: 00:50:56:79:0c:de</div><div class="line">    Enabled: true</div><div class="line">    Portset: DvsPortset-0</div><div class="line">    Portgroup: N/A</div><div class="line">    VDS Name: dvSwitch-vMotion</div><div class="line">    VDS UUID: 0c 7d 1a 50 93 7b 86 3f-76 f8 74 80 73 7c 3d 0f</div><div class="line">    VDS Port: 101</div><div class="line">    VDS Connection: 1952632411</div><div class="line">    MTU: 1500</div><div class="line">    TSO MSS: 65535</div><div class="line">    Port ID: 33554436</div><div class="line"></div><div class="line">vmk0</div><div class="line">    Name: vmk0</div><div class="line">    MAC Address: 00:1c:c4:bd:d6:ee</div><div class="line">    Enabled: false</div><div class="line">    Portset: DvsPortset-2</div><div class="line">    Portgroup: N/A</div><div class="line">    VDS Name: dvSwitch</div><div class="line">    VDS UUID: 10 e1 1a 50 b1 22 19 a1-d4 33 10 dc 72 9a 92 db</div><div class="line">    VDS Port: 151</div><div class="line">    VDS Connection: 660732515</div><div class="line">    MTU: 1500</div><div class="line">    TSO MSS: 65535</div><div class="line">    Port ID: 67108871</div></pre></td></tr></table></figure>
 <p>Fortunately mine was an easy issue to solve; vmk0 had <code>Enabled: false</code>. An easy fix: <code>esxcli network ip interface set -i vmk0 -e true</code></p>
 <p>After this I was able to reconnect to the host from within vCenter.</p>
 
@@ -317,7 +394,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Not sure if you have tried to download from adobe FTP site lately, however it is exceedingly slow (23kbps slow!). I have this afternoon, just worked out a small hack that makes it a lot faster… so far it seems to work (for the three adobe reader patches I’ve tried anyway).</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1. Find the file on ftp://ftp.adobe.com/</span><br><span class="line">2. Copy the url of the file (including the exe, zip, etc) that you want to download.</span><br><span class="line">3. Replace the first part of the URL (ftp://ftp.adobe.com/) with http://ardownload.adobe.com/</span><br><span class="line">E.g. ftp://ftp.adobe.com/pub/adobe/reader/win/11.x/11.0.07/misc/AdbeRdrUpd11007_incr.msp becomes http://ardownload.adobe.com/pub/adobe/reader/win/11.x/11.0.07/misc/AdbeRdrUpd11007_incr.msp </span><br><span class="line">5. Enjoy the much faster download speeds!</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">1. Find the file on ftp://ftp.adobe.com/</div><div class="line">2. Copy the url of the file (including the exe, zip, etc) that you want to download.</div><div class="line">3. Replace the first part of the URL (ftp://ftp.adobe.com/) with http://ardownload.adobe.com/</div><div class="line">E.g. ftp://ftp.adobe.com/pub/adobe/reader/win/11.x/11.0.07/misc/AdbeRdrUpd11007_incr.msp becomes http://ardownload.adobe.com/pub/adobe/reader/win/11.x/11.0.07/misc/AdbeRdrUpd11007_incr.msp </div><div class="line">5. Enjoy the much faster download speeds!</div></pre></td></tr></table></figure>
       
     </div>
     
@@ -360,7 +437,7 @@
         <p>I found a weird error in Citrix the other day.</p>
 <img src="/2014/08/14/Citrix-error-number-2320/citrix_online.png" alt="citrix_online.png" title="">
 <p>The fix:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Citrix\ICA Client\Engine\Lockdown Profiles\All Regions</span><br><span class="line"></span><br><span class="line">Change the DWORD value for EnableLockdown from 1 to 0.</span><br><span class="line"></span><br><span class="line">Close Registry Editor and try to launch the application again.</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Citrix\ICA Client\Engine\Lockdown Profiles\All Regions</div><div class="line"></div><div class="line">Change the DWORD value for EnableLockdown from 1 to 0.</div><div class="line"></div><div class="line">Close Registry Editor and try to launch the application again.</div></pre></td></tr></table></figure>
       
     </div>
     
@@ -465,53 +542,6 @@
 
 
     
-      <article id="post-ERROR-FILE-SYSTEM-LIMITATION-whilst-using-Windows-deduplication-with-Veeam" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/07/23/ERROR-FILE-SYSTEM-LIMITATION-whilst-using-Windows-deduplication-with-Veeam/">ERROR_FILE_SYSTEM_LIMITATION whilst using Windows deduplication with Veeam</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      <a href="/2014/07/23/ERROR-FILE-SYSTEM-LIMITATION-whilst-using-Windows-deduplication-with-Veeam/" class="article-date">
-  <time datetime="2014-07-23T03:12:00.000Z" itemprop="datePublished">2014-07-23</time>
-</a>
-      
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>This is a possible scenario that can happen with Veeam and Server 2012 deduplication:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">You cannot write to a file anymore and you get the error &quot;ERROR_FILE_SYSTEM_LIMITATION&quot;. There is still plenty of space left on the volume however this file can&apos;t grow. This is a big issue wince you use rollback chains in Veeam.</span><br></pre></td></tr></table></figure>
-<p>To fix this unfortunately you need to start a whole new chain on a new volume. When formatting the volume, use <code>format drive: /fs:ntfs /v:volumelabel /Q /L</code>. The <code>/Q</code> switch does a quick format, and the <code>/L</code> switch enables large-size file records.</p>
-<p>Unfortunately this switch isn’t very well documented - it’s not even in the <code>format.exe</code> <a href="http://technet.microsoft.com/en-us/library/cc730730.aspx" target="_blank" rel="external">knowledgebase article</a>. You can however get some information from <code>format /?</code> in command prompt.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/L	NTFS Only: Use large size file records.</span><br><span class="line">	By default, the volume will be formatted with small size file records.</span><br></pre></td></tr></table></figure>
-<p>A Microsoft primer on how NTFS works (<a href="http://technet.microsoft.com/en-us/library/cc781134(v=ws.10" target="_blank" rel="external">Source</a>.aspx)) sheds some light but it doesn’t show you the limit of setting large-size file records.</p>
-<p>Reference: <a href="http://support.microsoft.com/kb/2891967" target="_blank" rel="external">Microsoft KB2891967</a></p>
-
-      
-    </div>
-    
-    
-      <footer class="article-footer">
-        
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/deduplication/">deduplication</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/veeam/">veeam</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/">windows</a></li></ul>
-
-      </footer>
-    
-  </div>
-  
-</article>
-
-
-    
       <nav id="page-nav">
         <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
       </nav>
@@ -520,7 +550,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2016 Jacob Ludriks&nbsp;
+      &copy; 2017 Jacob Ludriks&nbsp;
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
     </div>
   </div>

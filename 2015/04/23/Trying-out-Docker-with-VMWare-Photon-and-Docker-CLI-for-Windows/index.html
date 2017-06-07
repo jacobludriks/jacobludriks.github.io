@@ -6,6 +6,7 @@
   <title>Trying out Docker with VMWare Photon and Docker CLI for Windows - Jacob Ludriks</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="VMWare released “Photon” earlier this week, which is a lightweight Linux OS for hosting Docker containers. It’s amazingly slim like CoreOS and deploys in a matter of seconds. I gave it a spin today an">
+<meta name="keywords" content="windows,photon,docker">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Trying out Docker with VMWare Photon and Docker CLI for Windows">
 <meta property="og:url" content="http://jacob.ludriks.com/2015/04/23/Trying-out-Docker-with-VMWare-Photon-and-Docker-CLI-for-Windows/index.html">
@@ -36,7 +37,7 @@
       </nav>
       <nav id="sub-nav">
         <div id="search-form-wrap">
-          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
         </div>
       </nav>
     </div>
@@ -68,36 +69,36 @@
         <p>VMWare released “Photon” earlier this week, which is a lightweight Linux OS for hosting Docker containers. It’s amazingly slim like CoreOS and deploys in a matter of seconds. I gave it a spin today and it worked pretty well. Installing it on vSphere was pretty straightforward following <a href="https://vmware.github.io/photon/assets/files/getting_started_with_photon_on_vsphere.pdf" target="_blank" rel="external">documentation</a> on the Photon GitHub site. Once it was installed, I needed to make a few changes to get it working smoothly.</p>
 <h4 id="Setting-the-proxy"><a href="#Setting-the-proxy" class="headerlink" title="Setting the proxy"></a>Setting the proxy</h4><p>If your environment uses a proxy to connect to the internet, continue with this section. If not, skip.</p>
 <p>First, create a new directory to store the extra configuration.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /etc/systemd/system/docker.service.d</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir /etc/systemd/system/docker.service.d</div></pre></td></tr></table></figure>
 <p>Next, create a <code>http-proxy.conf</code> file in the directory and edit it.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">touch /etc/systemd/system/docker.service.d/http-proxy.conf</span><br><span class="line">nano /etc/systemd/system/docker.service.d/http-proxy.conf</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">touch /etc/systemd/system/docker.service.d/http-proxy.conf</div><div class="line">nano /etc/systemd/system/docker.service.d/http-proxy.conf</div></pre></td></tr></table></figure>
 <p>Add the following information to the file (substituting where necessary) and save with <code>Ctrl + X</code>.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[Service]</span><br><span class="line">Environment=&quot;HTTP_PROXY=http://username:password@proxy.example.com:8080/&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[Service]</div><div class="line">Environment=&quot;HTTP_PROXY=http://username:password@proxy.example.com:8080/&quot;</div></pre></td></tr></table></figure>
 <p>Reload the <code>systemd</code> daemon and restart Docker.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">systemctl daemon-reload</div><div class="line">systemctl restart docker</div></pre></td></tr></table></figure>
 <p>Docker now has access to the internet.</p>
 <h4 id="Allow-Docker-connection-via-TCP"><a href="#Allow-Docker-connection-via-TCP" class="headerlink" title="Allow Docker connection via TCP"></a>Allow Docker connection via TCP</h4><p>By default, Docker only allows connection through UNIX sockets. Since we will be controlling it via the Windows client, we need TCP access.</p>
 <p>Open up the Docker service file in nano</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano /etc/systemd/system/multi-user.target.wants/docker.service</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nano /etc/systemd/system/multi-user.target.wants/docker.service</div></pre></td></tr></table></figure>
 <p>Edit the <code>Service -&gt; ExecStart</code> line to allow TCP connections by changing:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ExecStart=/bin/docker -d -s overlay</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ExecStart=/bin/docker -d -s overlay</div></pre></td></tr></table></figure>
 <p>to</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ExecStart=/bin/docker -d -s overlay -H tcp://0.0.0.0:2375</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ExecStart=/bin/docker -d -s overlay -H tcp://0.0.0.0:2375</div></pre></td></tr></table></figure>
 <p>Reload the <code>systemd</code> daemon and restart Docker.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">systemctl daemon-reload</div><div class="line">systemctl restart docker</div></pre></td></tr></table></figure>
 <h4 id="Upgrade-the-Docker-binary"><a href="#Upgrade-the-Docker-binary" class="headerlink" title="Upgrade the Docker binary"></a>Upgrade the Docker binary</h4><p>Photon comes with Docker 1.5.0 but unfortunately the Windows client only works with 1.6.0 and above.</p>
 <p>If you are using a corporate proxy, you will first need to set the <code>http_proxy</code> environmental variable so <code>wget</code> works</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export https_proxy=&quot;http://username:password@proxy.example.com:8080/&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export https_proxy=&quot;http://username:password@proxy.example.com:8080/&quot;</div></pre></td></tr></table></figure>
 <p>Download the Docker 1.6.0 binary</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://get.docker.com/builds/Linux/x86_64/docker-1.6.0</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget https://get.docker.com/builds/Linux/x86_64/docker-1.6.0</div></pre></td></tr></table></figure>
 <p>Move the binary to <code>/bin/</code> and mark it as executable</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop docker</span><br><span class="line">rm -r /bin/docker</span><br><span class="line">mv docker-1.6.0 /bin/docker</span><br><span class="line">chmod +x /bin/docker</span><br><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">systemctl stop docker</div><div class="line">rm -r /bin/docker</div><div class="line">mv docker-1.6.0 /bin/docker</div><div class="line">chmod +x /bin/docker</div><div class="line">systemctl start docker</div></pre></td></tr></table></figure>
 <p>You will now have Docker 1.6.0 running.</p>
 <h4 id="Connecting-from-Windows"><a href="#Connecting-from-Windows" class="headerlink" title="Connecting from Windows"></a>Connecting from Windows</h4><p>Download Docker 1.6.0 for Windows from Docker.com - <a href="https://get.docker.com/builds/Windows/i386/docker-1.6.0.exe" target="_blank" rel="external">32-bit</a> or <a href="https://get.docker.com/builds/Windows/x86_64/docker-1.6.0.exe" target="_blank" rel="external">64-bit</a> and open PowerShell in that directory. At this point I recommend renaming the file to <code>docker.exe</code>.</p>
 <p>To connect to the Photon host, run the following:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\docker.exe -H=tcp://photon.ip.address.here:2375 info</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">.\docker.exe -H=tcp://photon.ip.address.here:2375 info</div></pre></td></tr></table></figure>
 <p>This will show information about the Docker host like so:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Containers: 12</span><br><span class="line">Images: 49</span><br><span class="line">Storage Driver: overlay</span><br><span class="line"> Backing Filesystem: extfs</span><br><span class="line">Execution Driver: native-0.2</span><br><span class="line">Kernel Version: 3.19.2</span><br><span class="line">Operating System: &lt;unknown&gt;</span><br><span class="line">CPUs: 2</span><br><span class="line">Total Memory: 489.7 MiB</span><br><span class="line">Name: bvdocker1</span><br><span class="line">ID: &lt;id here&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Containers: 12</div><div class="line">Images: 49</div><div class="line">Storage Driver: overlay</div><div class="line"> Backing Filesystem: extfs</div><div class="line">Execution Driver: native-0.2</div><div class="line">Kernel Version: 3.19.2</div><div class="line">Operating System: &lt;unknown&gt;</div><div class="line">CPUs: 2</div><div class="line">Total Memory: 489.7 MiB</div><div class="line">Name: bvdocker1</div><div class="line">ID: &lt;id here&gt;</div></pre></td></tr></table></figure>
 <p>You are now connected!</p>
 
       
@@ -138,7 +139,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2016 Jacob Ludriks&nbsp;
+      &copy; 2017 Jacob Ludriks&nbsp;
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
     </div>
   </div>

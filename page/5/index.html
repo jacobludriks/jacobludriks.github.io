@@ -5,15 +5,12 @@
   
   <title>Jacob Ludriks</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
+  <meta property="og:type" content="website">
 <meta property="og:title" content="Jacob Ludriks">
 <meta property="og:url" content="http://jacob.ludriks.com/page/5/index.html">
 <meta property="og:site_name" content="Jacob Ludriks">
-<meta property="og:description">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jacob Ludriks">
-<meta name="twitter:description">
   
   
   <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
@@ -35,13 +32,59 @@
       </nav>
       <nav id="sub-nav">
         <div id="search-form-wrap">
-          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
         </div>
       </nav>
     </div>
   </div>
 </header>
     <section id="main" class="outer">
+      <article id="post-Synology-update-URLs" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/05/06/Synology-update-URLs/">Synology update URLs</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2014/05/06/Synology-update-URLs/" class="article-date">
+  <time datetime="2014-05-06T05:09:00.000Z" itemprop="datePublished">2014-05-06</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>If you have a restrictive firewall, Synology devices need two URLs allowed outbound to update:</p>
+<ul>
+<li><code>download.synology.com</code></li>
+<li><code>update.synology.com</code></li>
+</ul>
+<p>I couldn’t really find this information anywhere else, so here you go.</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/synology/">synology</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+</article>
+
+
+    
       <article id="post-Setting-WMI-permissions-for-PRTG" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -160,11 +203,11 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>I’ve been busily rolling out Exchange 2013 SP1 at work and I’ve finally gotten to the stage where I can start migrating mailboxes over. Lo and behold, the fourth mailbox moved over had a strange issue whilst trying to access OWA:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">something went wrong</span><br><span class="line"></span><br><span class="line">Sorry, we can&apos;t get that information right now. Please try again later. If the problem persists, contact your helpdesk.</span><br><span class="line"></span><br><span class="line">X-OWA-Error: Microsoft.Exchange.Security.Authentication.TokenMungingException</span><br><span class="line">X-OWA-Version: 15.0.847.32</span><br><span class="line">X-FEServer: MAIL2013-1</span><br><span class="line">X-BEServer: Mail2013-2</span><br><span class="line">Date: 28/04/2014 11:35:42 AM</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">something went wrong</div><div class="line"></div><div class="line">Sorry, we can&apos;t get that information right now. Please try again later. If the problem persists, contact your helpdesk.</div><div class="line"></div><div class="line">X-OWA-Error: Microsoft.Exchange.Security.Authentication.TokenMungingException</div><div class="line">X-OWA-Version: 15.0.847.32</div><div class="line">X-FEServer: MAIL2013-1</div><div class="line">X-BEServer: Mail2013-2</div><div class="line">Date: 28/04/2014 11:35:42 AM</div></pre></td></tr></table></figure>
 <p>It turns out that some users had a “LinkedMasterAccount” attribute set to “NT AUTHORITY\SELF” that didn’t need to be. The script to check all users with this attribute set:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Get-User -ResultSize unlimited | where &#123;$_.linkedmasteraccount -eq &quot;NT AUTHORITY\SELF&quot; -and $_.recipienttypedetails -ne &quot;RoomMailbox&quot; -and $_.recipienttypedetails -ne &quot;Equipmentmailbox&quot; -and $_.recipienttypedetails -ne &quot;DiscoveryMailbox&quot;&#125; | select name | ft</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Get-User -ResultSize unlimited | where &#123;$_.linkedmasteraccount -eq &quot;NT AUTHORITY\SELF&quot; -and $_.recipienttypedetails -ne &quot;RoomMailbox&quot; -and $_.recipienttypedetails -ne &quot;Equipmentmailbox&quot; -and $_.recipienttypedetails -ne &quot;DiscoveryMailbox&quot;&#125; | select name | ft</div></pre></td></tr></table></figure>
 <p>This will spit out all accounts that aren’t room, equipment or discovery mailboxes with the LinkedMasterAccount set to “NT AUTHORITY\SELF”. From there, you can change it to $null with:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-User -Identity &lt;user&gt; -LinkedMasterAccount $null</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Set-User -Identity &lt;user&gt; -LinkedMasterAccount $null</div></pre></td></tr></table></figure>
 <p>After setting this the user was able to log in.</p>
 
       
@@ -207,7 +250,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>I got sick of having to trim my Logstash indices in Elasticsearch manually, so I created a PowerShell script and set it as a scheduled task. By default it keeps the last 60 days.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#Replace with the URL of your Elasticsearch instance</span><br><span class="line">$url = &quot;http://elasticsearch:9200/&quot;</span><br><span class="line">#Replace with how many days you want to keep, minus one (below means 60)</span><br><span class="line">$i = 59</span><br><span class="line">$request = (Invoke-WebRequest -Uri $url/_aliases).content | ConvertFrom-Json</span><br><span class="line">$indices = $request | Get-Member | where &#123;$_.name -like &quot;logstash*&quot;&#125; | select name | sort name -Descending</span><br><span class="line">$count = $indices.count</span><br><span class="line">do &#123;</span><br><span class="line">    $var = $indices[$i].name</span><br><span class="line">    Invoke-WebRequest -Uri $url/$var/ -Method Delete</span><br><span class="line">    $i++</span><br><span class="line">&#125;</span><br><span class="line">until ($i -eq $count)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">#Replace with the URL of your Elasticsearch instance</div><div class="line">$url = &quot;http://elasticsearch:9200/&quot;</div><div class="line">#Replace with how many days you want to keep, minus one (below means 60)</div><div class="line">$i = 59</div><div class="line">$request = (Invoke-WebRequest -Uri $url/_aliases).content | ConvertFrom-Json</div><div class="line">$indices = $request | Get-Member | where &#123;$_.name -like &quot;logstash*&quot;&#125; | select name | sort name -Descending</div><div class="line">$count = $indices.count</div><div class="line">do &#123;</div><div class="line">    $var = $indices[$i].name</div><div class="line">    Invoke-WebRequest -Uri $url/$var/ -Method Delete</div><div class="line">    $i++</div><div class="line">&#125;</div><div class="line">until ($i -eq $count)</div></pre></td></tr></table></figure>
 <p>Works well, but it doesn’t send a report or anything that it has been done.</p>
 
       
@@ -234,7 +277,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2016 Jacob Ludriks&nbsp;
+      &copy; 2017 Jacob Ludriks&nbsp;
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
     </div>
   </div>

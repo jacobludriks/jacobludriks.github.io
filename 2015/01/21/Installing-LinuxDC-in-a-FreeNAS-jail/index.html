@@ -5,24 +5,19 @@
   
   <title>Installing LinuxDC++ in a FreeNAS jail - Jacob Ludriks</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Set up SSH
-First, set up SSH by running the following in the tcsh session.
-1234echo &amp;apos;sshd_enable=&amp;quot;YES&amp;quot;&amp;apos; &amp;gt;&amp;gt; /etc/rc.confecho &amp;apos;ListenAddress 0.0.0.0&amp;apos; &amp;gt;&amp;gt; /etc/ss">
+  <meta name="description" content="Set up SSH First, set up SSH by running the following in the tcsh session. 1234echo &amp;apos;sshd_enable=&amp;quot;YES&amp;quot;&amp;apos; &amp;gt;&amp;gt; /etc/rc.confecho &amp;apos;ListenAddress 0.0.0.0&amp;apos; &amp;gt;&amp;gt; /etc/ss">
+<meta name="keywords" content="freenas,dcpp">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Installing LinuxDC++ in a FreeNAS jail">
 <meta property="og:url" content="http://jacob.ludriks.com/2015/01/21/Installing-LinuxDC-in-a-FreeNAS-jail/index.html">
 <meta property="og:site_name" content="Jacob Ludriks">
-<meta property="og:description" content="Set up SSH
-First, set up SSH by running the following in the tcsh session.
-1234echo &amp;apos;sshd_enable=&amp;quot;YES&amp;quot;&amp;apos; &amp;gt;&amp;gt; /etc/rc.confecho &amp;apos;ListenAddress 0.0.0.0&amp;apos; &amp;gt;&amp;gt; /etc/ss">
+<meta property="og:description" content="Set up SSH First, set up SSH by running the following in the tcsh session. 1234echo &amp;apos;sshd_enable=&amp;quot;YES&amp;quot;&amp;apos; &amp;gt;&amp;gt; /etc/rc.confecho &amp;apos;ListenAddress 0.0.0.0&amp;apos; &amp;gt;&amp;gt; /etc/ss">
 <meta property="og:image" content="http://jacob.ludriks.com/2015/01/21/Installing-LinuxDC-in-a-FreeNAS-jail/host.png">
 <meta property="og:image" content="http://jacob.ludriks.com/2015/01/21/Installing-LinuxDC-in-a-FreeNAS-jail/tunnel.png">
 <meta property="og:updated_time" content="2016-05-12T06:35:58.332Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Installing LinuxDC++ in a FreeNAS jail">
-<meta name="twitter:description" content="Set up SSH
-First, set up SSH by running the following in the tcsh session.
-1234echo &amp;apos;sshd_enable=&amp;quot;YES&amp;quot;&amp;apos; &amp;gt;&amp;gt; /etc/rc.confecho &amp;apos;ListenAddress 0.0.0.0&amp;apos; &amp;gt;&amp;gt; /etc/ss">
+<meta name="twitter:description" content="Set up SSH First, set up SSH by running the following in the tcsh session. 1234echo &amp;apos;sshd_enable=&amp;quot;YES&amp;quot;&amp;apos; &amp;gt;&amp;gt; /etc/rc.confecho &amp;apos;ListenAddress 0.0.0.0&amp;apos; &amp;gt;&amp;gt; /etc/ss">
 <meta name="twitter:image" content="http://jacob.ludriks.com/2015/01/21/Installing-LinuxDC-in-a-FreeNAS-jail/host.png">
   
   
@@ -45,7 +40,7 @@ First, set up SSH by running the following in the tcsh session.
       </nav>
       <nav id="sub-nav">
         <div id="search-form-wrap">
-          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
         </div>
       </nav>
     </div>
@@ -76,28 +71,28 @@ First, set up SSH by running the following in the tcsh session.
       
         <p><strong>Set up SSH</strong></p>
 <p>First, set up SSH by running the following in the tcsh session.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">echo &apos;sshd_enable=&quot;YES&quot;&apos; &gt;&gt; /etc/rc.conf</span><br><span class="line">echo &apos;ListenAddress 0.0.0.0&apos; &gt;&gt; /etc/ssh/sshd_config</span><br><span class="line">echo &apos;PermitRootLogin yes&apos; &gt;&gt; /etc/ssh/sshd_config</span><br><span class="line">echo &apos;PasswordAuthentication yes&apos; &gt;&gt; /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">echo &apos;sshd_enable=&quot;YES&quot;&apos; &gt;&gt; /etc/rc.conf</div><div class="line">echo &apos;ListenAddress 0.0.0.0&apos; &gt;&gt; /etc/ssh/sshd_config</div><div class="line">echo &apos;PermitRootLogin yes&apos; &gt;&gt; /etc/ssh/sshd_config</div><div class="line">echo &apos;PasswordAuthentication yes&apos; &gt;&gt; /etc/ssh/sshd_config</div></pre></td></tr></table></figure>
 <p>Create a host RSA key with <code>ssh-keygen -t rsa</code> and entering <code>/etc/ssh/ssh_host_rsa_key</code> as the directory. Do not worry about a passphrase. After this is done, start the SSHd service with <code>service sshd start</code>.</p>
 <p><strong>Note</strong>: This isn’t the most secure as you are logging in as root.</p>
 <p>Reset the root password with <code>passwd</code>.</p>
 <p><strong>Install packages and dependencies</strong></p>
 <p>Install the latest <code>pkg</code> package with <code>pkg bootstrap -f</code>. After this has installed, upgrade with <code>pkg2ng</code>. Next, install the packages:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pkg install xorg openbox tightvnc linuxdcpp</span><br><span class="line">pkg install libiconv expat</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">pkg install xorg openbox tightvnc linuxdcpp</div><div class="line">pkg install libiconv expat</div></pre></td></tr></table></figure>
 <p>For some reason Pango needs to be reinstalled, so reinstall with:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pkg install -f pango</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pkg install -f pango</div></pre></td></tr></table></figure>
 <p><strong>Set up VNC</strong></p>
 <p>Create a directory for the <code>xstartup</code> script and then edit the file.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir ~/.vnc</span><br><span class="line">edit ~/.vnc/xstartup</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir ~/.vnc</div><div class="line">edit ~/.vnc/xstartup</div></pre></td></tr></table></figure>
 <p>Place the following in the <code>xstartup</code> script and save:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/sh</span><br><span class="line">xrdb $HOME/.Xresources &amp;</span><br><span class="line">openbox &amp;</span><br><span class="line">xterm -bg black -fg gray &amp;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">#!/bin/sh</div><div class="line">xrdb $HOME/.Xresources &amp;</div><div class="line">openbox &amp;</div><div class="line">xterm -bg black -fg gray &amp;</div></pre></td></tr></table></figure>
 <p>Make the script executable:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x ~/.vnc/xstartup</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chmod +x ~/.vnc/xstartup</div></pre></td></tr></table></figure>
 <p><strong>Get rid of setup quirks</strong></p>
 <p>There are certain things that <code>linuxdcpp</code> doesn’t like, so run the following commands:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gdk-pixbuf-query-loaders &gt; /usr/local/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache</span><br><span class="line">mkdir -p /root/.local/share</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">gdk-pixbuf-query-loaders &gt; /usr/local/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache</div><div class="line">mkdir -p /root/.local/share</div></pre></td></tr></table></figure>
 <p><strong>Run VNC</strong></p>
 <p>Run the following to start <code>VNC</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vncserver -depth 24 -geometry 1280x800 -nolisten tcp :1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vncserver -depth 24 -geometry 1280x800 -nolisten tcp :1</div></pre></td></tr></table></figure>
 <p>You will be asked to set a password - this is your VNC password for later.</p>
 <p><strong>Setting up PuTTY</strong></p>
 <p>Download <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/" target="_blank" rel="external">PuTTY</a> and run. Enter your host details.</p>
@@ -147,7 +142,7 @@ First, set up SSH by running the following in the tcsh session.
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2016 Jacob Ludriks&nbsp;
+      &copy; 2017 Jacob Ludriks&nbsp;
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
     </div>
   </div>

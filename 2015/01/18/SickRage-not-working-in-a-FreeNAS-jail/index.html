@@ -5,19 +5,17 @@
   
   <title>SickRage not working in a FreeNAS jail - Jacob Ludriks</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="I ran in to an issue where SickRage wasn’t downloading torrents due to a Unicode decode failure. The error I was getting:
-123452015-01-17 14:57:12 WARNING  SEARCHQUEUE-MANUAL-272644 :: Failed to downl">
+  <meta name="description" content="I ran in to an issue where SickRage wasn’t downloading torrents due to a Unicode decode failure. The error I was getting: 123452015-01-17 14:57:12 WARNING  SEARCHQUEUE-MANUAL-272644 :: Failed to downl">
+<meta name="keywords" content="freenas,sickrage">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SickRage not working in a FreeNAS jail">
 <meta property="og:url" content="http://jacob.ludriks.com/2015/01/18/SickRage-not-working-in-a-FreeNAS-jail/index.html">
 <meta property="og:site_name" content="Jacob Ludriks">
-<meta property="og:description" content="I ran in to an issue where SickRage wasn’t downloading torrents due to a Unicode decode failure. The error I was getting:
-123452015-01-17 14:57:12 WARNING  SEARCHQUEUE-MANUAL-272644 :: Failed to downl">
+<meta property="og:description" content="I ran in to an issue where SickRage wasn’t downloading torrents due to a Unicode decode failure. The error I was getting: 123452015-01-17 14:57:12 WARNING  SEARCHQUEUE-MANUAL-272644 :: Failed to downl">
 <meta property="og:updated_time" content="2016-05-12T05:52:01.122Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SickRage not working in a FreeNAS jail">
-<meta name="twitter:description" content="I ran in to an issue where SickRage wasn’t downloading torrents due to a Unicode decode failure. The error I was getting:
-123452015-01-17 14:57:12 WARNING  SEARCHQUEUE-MANUAL-272644 :: Failed to downl">
+<meta name="twitter:description" content="I ran in to an issue where SickRage wasn’t downloading torrents due to a Unicode decode failure. The error I was getting: 123452015-01-17 14:57:12 WARNING  SEARCHQUEUE-MANUAL-272644 :: Failed to downl">
   
   
   <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
@@ -39,7 +37,7 @@
       </nav>
       <nav id="sub-nav">
         <div id="search-form-wrap">
-          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
         </div>
       </nav>
     </div>
@@ -69,9 +67,9 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>I ran in to an issue where SickRage wasn’t downloading torrents due to a Unicode decode failure. The error I was getting:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">2015-01-17 14:57:12 WARNING  SEARCHQUEUE-MANUAL-272644 :: Failed to download result</span><br><span class="line">AA</span><br><span class="line">AAUnicodeEncodeError: &apos;ascii&apos; codec can&apos;t encode characters in position 56-57: ordinal not in range(128)</span><br><span class="line">AA    with open(filename, &apos;wb&apos;) as fp:</span><br><span class="line">AA  File &quot;/usr/pbi/sickrage-amd64/share/sickrage/SickRage/sickbeard/helpers.py&quot;, line 1209, in download_file</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">2015-01-17 14:57:12 WARNING  SEARCHQUEUE-MANUAL-272644 :: Failed to download result</div><div class="line">AA</div><div class="line">AAUnicodeEncodeError: &apos;ascii&apos; codec can&apos;t encode characters in position 56-57: ordinal not in range(128)</div><div class="line">AA    with open(filename, &apos;wb&apos;) as fp:</div><div class="line">AA  File &quot;/usr/pbi/sickrage-amd64/share/sickrage/SickRage/sickbeard/helpers.py&quot;, line 1209, in download_file</div></pre></td></tr></table></figure>
 <p>To fix this, I ssh’ed in to the jail and ran <code>edit /usr/local/etc/rc.d/sickrage</code>. After the line <code>load_rc_config ${name}</code>, I pasted the following lines:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export LC_ALL=en_US.UTF-8</span><br><span class="line">export LANG=en_US.UTF-8</span><br><span class="line">export LANGUAGE=en_US.UTF-8</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export LC_ALL=en_US.UTF-8</div><div class="line">export LANG=en_US.UTF-8</div><div class="line">export LANGUAGE=en_US.UTF-8</div></pre></td></tr></table></figure>
 <p>After saving the file and restarting the <code>sickrage</code> service, everything worked again.</p>
 
       
@@ -112,7 +110,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2016 Jacob Ludriks&nbsp;
+      &copy; 2017 Jacob Ludriks&nbsp;
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
     </div>
   </div>

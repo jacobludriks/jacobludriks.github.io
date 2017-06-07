@@ -5,15 +5,12 @@
   
   <title>Jacob Ludriks</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
+  <meta property="og:type" content="website">
 <meta property="og:title" content="Jacob Ludriks">
 <meta property="og:url" content="http://jacob.ludriks.com/page/2/index.html">
 <meta property="og:site_name" content="Jacob Ludriks">
-<meta property="og:description">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jacob Ludriks">
-<meta name="twitter:description">
   
   
   <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
@@ -35,13 +32,54 @@
       </nav>
       <nav id="sub-nav">
         <div id="search-form-wrap">
-          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
         </div>
       </nav>
     </div>
   </div>
 </header>
     <section id="main" class="outer">
+      <article id="post-Matching-VM-disks-and-Windows-disks-with-PowerCLI" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/04/22/Matching-VM-disks-and-Windows-disks-with-PowerCLI/">Matching VM disks and Windows disks with PowerCLI</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2015/04/22/Matching-VM-disks-and-Windows-disks-with-PowerCLI/" class="article-date">
+  <time datetime="2015-04-22T02:18:00.000Z" itemprop="datePublished">2015-04-22</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Tweaked from <a href="http://www.van-lieshout.com/2009/12/match-vm-and-windows-harddisks-using-powercli/" target="_blank" rel="external">http://www.van-lieshout.com/2009/12/match-vm-and-windows-harddisks-using-powercli/</a> to be more modern and with more error checking.</p>
+<script src="https://gist.github.com/jacobludriks/a6356e89d54aad11cc4f.js"></script>
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/powercli/">powercli</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/powershell/">powershell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scsi/">scsi</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+</article>
+
+
+    
       <article id="post-Getting-Office365-license-information" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -66,9 +104,9 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>A nice little one-liner. This assumes you have already ran <code>Connect-MsolService</code>.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Get-MsolUser | select firstname,lastname,userprincipalname,islicensed,@&#123;N=&quot;License&quot;;E=&#123;switch -regex ($_.licenses.accountskuid) &#123; (&quot;ENTERPRISEPACK&quot;) &#123; &quot;E3&quot; &#125; (&quot;STANDARDPACK&quot;) &#123; &quot;E1&quot; &#125; &#125;&#125;&#125; | ft</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Get-MsolUser | select firstname,lastname,userprincipalname,islicensed,@&#123;N=&quot;License&quot;;E=&#123;switch -regex ($_.licenses.accountskuid) &#123; (&quot;ENTERPRISEPACK&quot;) &#123; &quot;E3&quot; &#125; (&quot;STANDARDPACK&quot;) &#123; &quot;E1&quot; &#125; &#125;&#125;&#125; | ft</div></pre></td></tr></table></figure>
 <p>You can add more switches for more license types but we only use E3 and E1. Types are:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&quot;DESKLESSPACK&quot; = &quot;Office 365 (Plan K1)&quot;</span><br><span class="line">&quot;DESKLESSWOFFPACK&quot; = &quot;Office 365 (Plan K2)&quot;</span><br><span class="line">&quot;LITEPACK&quot; = &quot;Office 365 (Plan P1)&quot;</span><br><span class="line">&quot;EXCHANGESTANDARD&quot; = &quot;Office 365 Exchange Online Only&quot;</span><br><span class="line">&quot;STANDARDPACK&quot; = &quot;Office 365 (Plan E1)&quot;</span><br><span class="line">&quot;STANDARDWOFFPACK&quot; = &quot;Office 365 (Plan E2)&quot;</span><br><span class="line">&quot;ENTERPRISEPACK&quot; = &quot;Office 365 (Plan E3)&quot;</span><br><span class="line">&quot;ENTERPRISEPACKLRG&quot; = &quot;Office 365 (Plan E3)&quot;</span><br><span class="line">&quot;ENTERPRISEWITHSCAL&quot; = &quot;Office 365 (Plan E4)&quot;</span><br><span class="line">&quot;STANDARDPACK_STUDENT&quot; = &quot;Office 365 (Plan A1) for Students&quot;</span><br><span class="line">&quot;STANDARDWOFFPACKPACK_STUDENT&quot; = &quot;Office 365 (Plan A2) for Students&quot;</span><br><span class="line">&quot;ENTERPRISEPACK_STUDENT&quot; = &quot;Office 365 (Plan A3) for Students&quot;</span><br><span class="line">&quot;ENTERPRISEWITHSCAL_STUDENT&quot; = &quot;Office 365 (Plan A4) for Students&quot;</span><br><span class="line">&quot;STANDARDPACK_FACULTY&quot; = &quot;Office 365 (Plan A1) for Faculty&quot;</span><br><span class="line">&quot;STANDARDWOFFPACKPACK_FACULTY&quot; = &quot;Office 365 (Plan A2) for Faculty&quot;</span><br><span class="line">&quot;ENTERPRISEPACK_FACULTY&quot; = &quot;Office 365 (Plan A3) for Faculty&quot;</span><br><span class="line">&quot;ENTERPRISEWITHSCAL_FACULTY&quot; = &quot;Office 365 (Plan A4) for Faculty&quot;</span><br><span class="line">&quot;ENTERPRISEPACK_B_PILOT&quot; = &quot;Office 365 (Enterprise Preview)&quot;</span><br><span class="line">&quot;STANDARD_B_PILOT&quot; = &quot;Office 365 (Small Business Preview)&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&quot;DESKLESSPACK&quot; = &quot;Office 365 (Plan K1)&quot;</div><div class="line">&quot;DESKLESSWOFFPACK&quot; = &quot;Office 365 (Plan K2)&quot;</div><div class="line">&quot;LITEPACK&quot; = &quot;Office 365 (Plan P1)&quot;</div><div class="line">&quot;EXCHANGESTANDARD&quot; = &quot;Office 365 Exchange Online Only&quot;</div><div class="line">&quot;STANDARDPACK&quot; = &quot;Office 365 (Plan E1)&quot;</div><div class="line">&quot;STANDARDWOFFPACK&quot; = &quot;Office 365 (Plan E2)&quot;</div><div class="line">&quot;ENTERPRISEPACK&quot; = &quot;Office 365 (Plan E3)&quot;</div><div class="line">&quot;ENTERPRISEPACKLRG&quot; = &quot;Office 365 (Plan E3)&quot;</div><div class="line">&quot;ENTERPRISEWITHSCAL&quot; = &quot;Office 365 (Plan E4)&quot;</div><div class="line">&quot;STANDARDPACK_STUDENT&quot; = &quot;Office 365 (Plan A1) for Students&quot;</div><div class="line">&quot;STANDARDWOFFPACKPACK_STUDENT&quot; = &quot;Office 365 (Plan A2) for Students&quot;</div><div class="line">&quot;ENTERPRISEPACK_STUDENT&quot; = &quot;Office 365 (Plan A3) for Students&quot;</div><div class="line">&quot;ENTERPRISEWITHSCAL_STUDENT&quot; = &quot;Office 365 (Plan A4) for Students&quot;</div><div class="line">&quot;STANDARDPACK_FACULTY&quot; = &quot;Office 365 (Plan A1) for Faculty&quot;</div><div class="line">&quot;STANDARDWOFFPACKPACK_FACULTY&quot; = &quot;Office 365 (Plan A2) for Faculty&quot;</div><div class="line">&quot;ENTERPRISEPACK_FACULTY&quot; = &quot;Office 365 (Plan A3) for Faculty&quot;</div><div class="line">&quot;ENTERPRISEWITHSCAL_FACULTY&quot; = &quot;Office 365 (Plan A4) for Faculty&quot;</div><div class="line">&quot;ENTERPRISEPACK_B_PILOT&quot; = &quot;Office 365 (Enterprise Preview)&quot;</div><div class="line">&quot;STANDARD_B_PILOT&quot; = &quot;Office 365 (Small Business Preview)&quot;</div></pre></td></tr></table></figure>
       
     </div>
     
@@ -157,7 +195,7 @@
 
 <p>The script should be run as the user whos mailbox will be monitored (ours is set up as a scheduled task). Next, it should have to subfolders called “Error” and “Processed”. Successful emails get marked as read and send to “Processed”, and unsuccessful emails get kept as unread and moved to “Error”. Because we send from some systems that don’t have SMTP authentication, there is a field called “Secret” that should be defined at the top of the PowerShell script and put in each email.</p>
 <p>The format for the email is:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">From: fromuser</span><br><span class="line">To: number in international format (ie. +61404040404)</span><br><span class="line">Text: any text here</span><br><span class="line">Secret: secret code defined in script</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">From: fromuser</div><div class="line">To: number in international format (ie. +61404040404)</div><div class="line">Text: any text here</div><div class="line">Secret: secret code defined in script</div></pre></td></tr></table></figure>
 <p>The script is set to run every 20 seconds.</p>
 
       
@@ -247,14 +285,14 @@
 <li><p>Get the Managed Object ID of the VM. This can be done through PowerCLI with the following script:</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$vcenter = &quot;vcenter.domain.name&quot;</span><br><span class="line">$targetvm = &quot;targetvm&quot;</span><br><span class="line"></span><br><span class="line">Add-PSSnapin VMware.VimAutomation.Core</span><br><span class="line">Connect-VIServer -Server $vcenter -Force</span><br><span class="line">$vmid = (Get-VM $targetvm).id -replace &quot;VirtualMachine-&quot;,&quot;&quot;</span><br><span class="line">Disconnect-VIServer -Server $vcenter -Confirm:$false</span><br><span class="line"></span><br><span class="line">Write-Output &quot;VM MOID is $vmid&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$vcenter = &quot;vcenter.domain.name&quot;</div><div class="line">$targetvm = &quot;targetvm&quot;</div><div class="line"></div><div class="line">Add-PSSnapin VMware.VimAutomation.Core</div><div class="line">Connect-VIServer -Server $vcenter -Force</div><div class="line">$vmid = (Get-VM $targetvm).id -replace &quot;VirtualMachine-&quot;,&quot;&quot;</div><div class="line">Disconnect-VIServer -Server $vcenter -Confirm:$false</div><div class="line"></div><div class="line">Write-Output &quot;VM MOID is $vmid&quot;</div></pre></td></tr></table></figure>
 <ul>
 <li><p>Give the user access to the VM. The permission “Virtual Machine\Interaction\Console Interation” needs to be given on both the VM and the host. It doesn’t need to inherit to children so deselect “Propagate to children” in the permisisons screen”.</p>
 </li>
 <li><p>Create a shortcut to connect straight to the VM. The following PowerShell script can create the shortcut automatically.</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$desktop = [Environment]::GetFolderPath(&quot;Desktop&quot;)</span><br><span class="line">$vcenter = &quot;vcenter.domain.name&quot;</span><br><span class="line">$targetvm = &quot;targetvm&quot;</span><br><span class="line">$vmid = &quot;vm-moid&quot;</span><br><span class="line"></span><br><span class="line">$WshShell = New-Object -comObject WScript.Shell</span><br><span class="line">$Shortcut = $WshShell.CreateShortcut(&quot;$desktop\$targetvm.lnk&quot;)</span><br><span class="line">$Shortcut.TargetPath = &quot;vmrc://$vcenter/?moid=$vmid&quot;</span><br><span class="line">$Shortcut.Save()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$desktop = [Environment]::GetFolderPath(&quot;Desktop&quot;)</div><div class="line">$vcenter = &quot;vcenter.domain.name&quot;</div><div class="line">$targetvm = &quot;targetvm&quot;</div><div class="line">$vmid = &quot;vm-moid&quot;</div><div class="line"></div><div class="line">$WshShell = New-Object -comObject WScript.Shell</div><div class="line">$Shortcut = $WshShell.CreateShortcut(&quot;$desktop\$targetvm.lnk&quot;)</div><div class="line">$Shortcut.TargetPath = &quot;vmrc://$vcenter/?moid=$vmid&quot;</div><div class="line">$Shortcut.Save()</div></pre></td></tr></table></figure>
 <p>Afterwards, double click on the shortcut on the desktop and enter appropriate credentials. You’ll be straight in to the console.</p>
 
       
@@ -343,7 +381,7 @@
         <p>The iLO interface on one of our servers complete broke and we had no way of accessing it, and it wasn’t updating through the HP SPP media. Fortunately I was able to update it through SSH.</p>
 <p>However, because the firmware on the iLO interface was so old, it needed to be upgraded to an earlier version first before updating to the latest. This is documented on the <a href="http://h20564.www2.hp.com/hpsc/doc/public/display?docId=mmr_kc-0107776" target="_blank" rel="external">HP Support Centre</a>.</p>
 <p>Download a iLO3 1.2x firmware. It will come with the filename <code>ilo3_12x.bin</code>, with x being the minor version number. Upload the file to a web server that can be accessed by the iLO interface. Now, open a SSH session and connect to the iLO IP address. Run the following commands, replacing <code>webserver</code> with your web server FQDN/IP and the filename with the file you downloaded:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd map1/firmware1</span><br><span class="line">load -source http://webserver/ilo3_12x.bin</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd map1/firmware1</div><div class="line">load -source http://webserver/ilo3_12x.bin</div></pre></td></tr></table></figure>
 <p>The iLO will now update and reboot, disconnecting you from SSH in the process. Once it’s back up, it will be upgraded and ready for the final upgrade through the HP SPP.</p>
 
       
@@ -387,28 +425,28 @@
       
         <p><strong>Set up SSH</strong></p>
 <p>First, set up SSH by running the following in the tcsh session.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">echo &apos;sshd_enable=&quot;YES&quot;&apos; &gt;&gt; /etc/rc.conf</span><br><span class="line">echo &apos;ListenAddress 0.0.0.0&apos; &gt;&gt; /etc/ssh/sshd_config</span><br><span class="line">echo &apos;PermitRootLogin yes&apos; &gt;&gt; /etc/ssh/sshd_config</span><br><span class="line">echo &apos;PasswordAuthentication yes&apos; &gt;&gt; /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">echo &apos;sshd_enable=&quot;YES&quot;&apos; &gt;&gt; /etc/rc.conf</div><div class="line">echo &apos;ListenAddress 0.0.0.0&apos; &gt;&gt; /etc/ssh/sshd_config</div><div class="line">echo &apos;PermitRootLogin yes&apos; &gt;&gt; /etc/ssh/sshd_config</div><div class="line">echo &apos;PasswordAuthentication yes&apos; &gt;&gt; /etc/ssh/sshd_config</div></pre></td></tr></table></figure>
 <p>Create a host RSA key with <code>ssh-keygen -t rsa</code> and entering <code>/etc/ssh/ssh_host_rsa_key</code> as the directory. Do not worry about a passphrase. After this is done, start the SSHd service with <code>service sshd start</code>.</p>
 <p><strong>Note</strong>: This isn’t the most secure as you are logging in as root.</p>
 <p>Reset the root password with <code>passwd</code>.</p>
 <p><strong>Install packages and dependencies</strong></p>
 <p>Install the latest <code>pkg</code> package with <code>pkg bootstrap -f</code>. After this has installed, upgrade with <code>pkg2ng</code>. Next, install the packages:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pkg install xorg openbox tightvnc linuxdcpp</span><br><span class="line">pkg install libiconv expat</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">pkg install xorg openbox tightvnc linuxdcpp</div><div class="line">pkg install libiconv expat</div></pre></td></tr></table></figure>
 <p>For some reason Pango needs to be reinstalled, so reinstall with:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pkg install -f pango</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pkg install -f pango</div></pre></td></tr></table></figure>
 <p><strong>Set up VNC</strong></p>
 <p>Create a directory for the <code>xstartup</code> script and then edit the file.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir ~/.vnc</span><br><span class="line">edit ~/.vnc/xstartup</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir ~/.vnc</div><div class="line">edit ~/.vnc/xstartup</div></pre></td></tr></table></figure>
 <p>Place the following in the <code>xstartup</code> script and save:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/sh</span><br><span class="line">xrdb $HOME/.Xresources &amp;</span><br><span class="line">openbox &amp;</span><br><span class="line">xterm -bg black -fg gray &amp;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">#!/bin/sh</div><div class="line">xrdb $HOME/.Xresources &amp;</div><div class="line">openbox &amp;</div><div class="line">xterm -bg black -fg gray &amp;</div></pre></td></tr></table></figure>
 <p>Make the script executable:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x ~/.vnc/xstartup</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chmod +x ~/.vnc/xstartup</div></pre></td></tr></table></figure>
 <p><strong>Get rid of setup quirks</strong></p>
 <p>There are certain things that <code>linuxdcpp</code> doesn’t like, so run the following commands:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gdk-pixbuf-query-loaders &gt; /usr/local/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache</span><br><span class="line">mkdir -p /root/.local/share</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">gdk-pixbuf-query-loaders &gt; /usr/local/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache</div><div class="line">mkdir -p /root/.local/share</div></pre></td></tr></table></figure>
 <p><strong>Run VNC</strong></p>
 <p>Run the following to start <code>VNC</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vncserver -depth 24 -geometry 1280x800 -nolisten tcp :1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vncserver -depth 24 -geometry 1280x800 -nolisten tcp :1</div></pre></td></tr></table></figure>
 <p>You will be asked to set a password - this is your VNC password for later.</p>
 <p><strong>Setting up PuTTY</strong></p>
 <p>Download <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/" target="_blank" rel="external">PuTTY</a> and run. Enter your host details.</p>
@@ -460,9 +498,9 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>I ran in to an issue where SickRage wasn’t downloading torrents due to a Unicode decode failure. The error I was getting:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">2015-01-17 14:57:12 WARNING  SEARCHQUEUE-MANUAL-272644 :: Failed to download result</span><br><span class="line">AA</span><br><span class="line">AAUnicodeEncodeError: &apos;ascii&apos; codec can&apos;t encode characters in position 56-57: ordinal not in range(128)</span><br><span class="line">AA    with open(filename, &apos;wb&apos;) as fp:</span><br><span class="line">AA  File &quot;/usr/pbi/sickrage-amd64/share/sickrage/SickRage/sickbeard/helpers.py&quot;, line 1209, in download_file</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">2015-01-17 14:57:12 WARNING  SEARCHQUEUE-MANUAL-272644 :: Failed to download result</div><div class="line">AA</div><div class="line">AAUnicodeEncodeError: &apos;ascii&apos; codec can&apos;t encode characters in position 56-57: ordinal not in range(128)</div><div class="line">AA    with open(filename, &apos;wb&apos;) as fp:</div><div class="line">AA  File &quot;/usr/pbi/sickrage-amd64/share/sickrage/SickRage/sickbeard/helpers.py&quot;, line 1209, in download_file</div></pre></td></tr></table></figure>
 <p>To fix this, I ssh’ed in to the jail and ran <code>edit /usr/local/etc/rc.d/sickrage</code>. After the line <code>load_rc_config ${name}</code>, I pasted the following lines:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export LC_ALL=en_US.UTF-8</span><br><span class="line">export LANG=en_US.UTF-8</span><br><span class="line">export LANGUAGE=en_US.UTF-8</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export LC_ALL=en_US.UTF-8</div><div class="line">export LANG=en_US.UTF-8</div><div class="line">export LANGUAGE=en_US.UTF-8</div></pre></td></tr></table></figure>
 <p>After saving the file and restarting the <code>sickrage</code> service, everything worked again.</p>
 
       
@@ -481,86 +519,6 @@
 
 
     
-      <article id="post-Switching-to-FreeNAS" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/15/Switching-to-FreeNAS/">Switching to FreeNAS</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      <a href="/2015/01/15/Switching-to-FreeNAS/" class="article-date">
-  <time datetime="2015-01-15T06:56:00.000Z" itemprop="datePublished">2015-01-15</time>
-</a>
-      
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>I’ve been running a little short on storage space lately, so I decided to take the plunge and order a new storage system. Previously I was using a Synology DS413 with four 3TB Hitachi disks and I was hoping to get a Synology again for my new system, however once you want a Synology unit with more than four bays the price goes up quite significantly.</p>
-<p>After a lot of research and reviewing of similar builds, I ended up with the following components.</p>
-<h3 id="Component-List"><a href="#Component-List" class="headerlink" title="Component List"></a>Component List</h3><ul>
-<li><p><strong>Case - Fractal Design Node 304</strong></p>
-<p>  This case fits six drives, a Mini-ITX motherboard and a standard ATX power supply. Cable management is quite difficult however the entire case is less than 20L in size which is only marginally larger than my existing Synology unit.</p>
-</li>
-<li><p><strong>Motherboard - ASRock E3C224D2I</strong></p>
-<p>  Unfortunately there isn’t much choice when it comes to server-grade Mini-ITX motherboards, however this one fits the specifications quite nicely. It has six SATA ports (2 x SATA2, 4 x SATA3), two ECC DDR3 slots, a BMC chip and two Intel GBe ports. The other option was an Atom Avoton C2550 motherboard however I wasn’t too keen on a non-upgradable CPU and using a Marvell storage controller over an Intel one.</p>
-</li>
-<li><p><strong>CPU - Intel Core i3-4160</strong></p>
-<p>  Surprisingly, the Core i3 supports ECC RAM! I was originally going to get the Core i3-4150 however this model was on sale and ended up being cheaper.</p>
-</li>
-<li><p><strong>Memory - Kingston KVR13E9K2/16I</strong></p>
-<p>  After reading lots of stories of incompatible memory, I decided to go with RAM sticks that somebody else had tested. </p>
-</li>
-<li><p><strong>Power Supply - Corsair CX600M Modular</strong></p>
-<p>  80+ Bronze certified and six SATA power connectors. I would have rathered an 80+ Gold certified power supply but the price difference was too great.</p>
-</li>
-<li><p><strong>OS Disk - SanDisk Cruzer Fit 16GB</strong></p>
-<p>  A nice and small USB key that can be installed directly on to the motherboard.</p>
-</li>
-<li><p><strong>Storage Disks - 6 x Western Digital Red 6TB WD60EFRX</strong></p>
-<p>  Originally I was going to order Western Digital Green 6TB WDEZRX drives and run WDIDLE3 on them to fix the LCC issue, however I found that the two models were fairly close in price and the Reds have a longer warranty.</p>
-</li>
-<li><p><strong>OS - FreeNAS</strong></p>
-<p>  For the OS, I chose FreeNAS after reading a lot about ZFS. The drives are configured in a RAID-Z2 configuration (similar to RAID6) which can tolerate two disk failures. This gives me 36TB of raw storage and 21.8TB of usable storage.</p>
-</li>
-</ul>
-<img src="/2015/01/15/Switching-to-FreeNAS/IMG_20150115_173137.jpg" alt="IMG_20150115_173137.jpg" title="">
-<img src="/2015/01/15/Switching-to-FreeNAS/IMG_20150115_173213.jpg" alt="IMG_20150115_173213.jpg" title="">
-<img src="/2015/01/15/Switching-to-FreeNAS/IMG_20150115_173253.jpg" alt="IMG_20150115_173253.jpg" title="">
-<img src="/2015/01/15/Switching-to-FreeNAS/IMG_20150115_173336.jpg" alt="IMG_20150115_173336.jpg" title="">
-<img src="/2015/01/15/Switching-to-FreeNAS/IMG_20150115_173413.jpg" alt="IMG_20150115_173413.jpg" title="">
-<h3 id="Performance"><a href="#Performance" class="headerlink" title="Performance"></a>Performance</h3><p>To test performance, I had two panes open in <code>tmux</code> and ran one command in each window:</p>
-<ul>
-<li>Pane 1: <code>iozone -a -s 24g -r 4096 -+w 1 -+y 1 -+C 1</code></li>
-<li>Pane 2: <code>zpool iostat 1</code></li>
-</ul>
-<p>Watching the <code>zpool iostat</code> output whilst iozone was running, I saw that my maximum read speed was around 550-600 MB/s  and my maximum write speed was around 300-350 MB/s.</p>
-<h3 id="Thoughts"><a href="#Thoughts" class="headerlink" title="Thoughts"></a>Thoughts</h3><p>The next upgrade will be 10gbit networking, however this is a long way off and not really needed at the moment. With a switch upgrade I will be able to use teaming but there is generally only one client accessing the server at once which negates this.</p>
-
-      
-    </div>
-    
-    
-      <footer class="article-footer">
-        
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/freenas/">freenas</a></li></ul>
-
-      </footer>
-    
-  </div>
-  
-</article>
-
-
-    
       <nav id="page-nav">
         <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
       </nav>
@@ -569,7 +527,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2016 Jacob Ludriks&nbsp;
+      &copy; 2017 Jacob Ludriks&nbsp;
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
     </div>
   </div>
