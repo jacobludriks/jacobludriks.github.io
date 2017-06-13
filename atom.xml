@@ -1,0 +1,790 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Jacob Ludriks</title>
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://jacob.ludriks.com/"/>
+  <updated>2017-06-13T05:23:44.365Z</updated>
+  <id>http://jacob.ludriks.com/</id>
+  
+  <author>
+    <name>Jacob Ludriks</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>SSL/TLS: A Primer</title>
+    <link href="http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/"/>
+    <id>http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/</id>
+    <published>2017-06-13T01:05:02.000Z</published>
+    <updated>2017-06-13T05:23:44.365Z</updated>
+    
+    <content type="html"><![CDATA[<p>We all use SSL or TLS every day. But how does it work and what infrastructure is involved? For the rest of the article, I will be referencing both SSL and TLS but will be using the blanket term “TLS” to refer to both.</p>
+<a id="more"></a>
+<h2 id="Certificate-Infrastructure"><a href="#Certificate-Infrastructure" class="headerlink" title="Certificate Infrastructure"></a>Certificate Infrastructure</h2><h3 id="Root-CAs"><a href="#Root-CAs" class="headerlink" title="Root CAs"></a>Root CAs</h3><p>Trusted root CAs are organizations that have protocols in place to issue certificates at different levels. They are audited regularly and comply to ISO standards. A list of all root CAs that have completed these requirements are provided and updated regularly by most operating systems:</p>
+<ul>
+<li>Microsoft: <a href="https://social.technet.microsoft.com/wiki/contents/articles/37816.microsoft-trusted-root-certificate-program-participants-as-of-april-25-2017.aspx" target="_blank" rel="external">https://social.technet.microsoft.com/wiki/contents/articles/37816.microsoft-trusted-root-certificate-program-participants-as-of-april-25-2017.aspx</a></li>
+<li>Apple: <a href="https://support.apple.com/en-au/HT207177" target="_blank" rel="external">https://support.apple.com/en-au/HT207177</a></li>
+<li>Linux: Most distributions use Mozilla’s list - <a href="https://ccadb-public.secure.force.com/mozilla/IncludedCACertificateReport" target="_blank" rel="external">https://ccadb-public.secure.force.com/mozilla/IncludedCACertificateReport</a></li>
+</ul>
+<h3 id="Intermediate-CAs"><a href="#Intermediate-CAs" class="headerlink" title="Intermediate CAs"></a>Intermediate CAs</h3><p>More often than not, certificates used on the internet are not issued by a root CA, but instead from an intermediate CA. One of the many reasons is that if the intermediate CA were to be compromised, the root CA can issue out a revocation that tells clients not to trust any certificate by that intermediate CA. There can be multiple levels of intermediate CA’s underneath a root CA.</p>
+<h3 id="Issuing-CAs"><a href="#Issuing-CAs" class="headerlink" title="Issuing CAs"></a>Issuing CAs</h3><p>Just as root CAs generally don’t issue client certificates, intermediate CAs don’t have to issue client certificates either. When a CA starts issuing certificates to clients, it is called an issuing CA.</p>
+<h3 id="CDPs-and-CRLs"><a href="#CDPs-and-CRLs" class="headerlink" title="CDPs and CRLs"></a>CDPs and CRLs</h3><p>The CDP (CRL distribution point) is a network location that is stamped on to a certificate when it is issued from a CA. It contains one or many CRLs (certificate revocation list). A CRL is a file that the client reads to see if any issued certificates have been revoked. CRLs in the CDP are usually updated automatically by the CA software itself. The exception to this are root CAs, which are generally kept offline. This CRL needs to be updated manually and transferred from the airgapped system to the CDP accessible by clients on the internet (or network, if it is LAN CA). There can be a CRL and multiple delta CRLs, which contain changes in between CRL refresh periods. This helps to keep download sizes minimal.</p>
+<h3 id="OCSP"><a href="#OCSP" class="headerlink" title="OCSP"></a>OCSP</h3><p>OCSP (Online Certificate Status Protocol) is a great alternative to CRLs. The OCSP responder server URI is stamped on to the certicate when it is issued from the CA. When the client needs to check the status of a certificate, it sends the serial number of the certificate to the OCSP responder to check if it is still valid. The server then responds with the status. It uses much less bandwidth than a CDP with CRLs and delta CRLs.</p>
+<h3 id="Microsoft-AD-CA-Infrastructure"><a href="#Microsoft-AD-CA-Infrastructure" class="headerlink" title="Microsoft AD CA Infrastructure"></a>Microsoft AD CA Infrastructure</h3><p>Best practice guidance from Microsoft suggests the following infrastructure:</p>
+<ol>
+<li>A non-domain joined standalone root CA. Once it has issued a certificate to the intermediate CA, it is to be shut down and only powered back on to update its CRL.</li>
+<li>A domain-joined intermediate CA. This is integrated with Active Directory and issues certificates from certificate templates. It can also act as a CDP and OCSP responder for all clients, but it is generally better to split these roles out to other servers. Usually the CA stores the CDP data in AD as well as a file share and website, for maximum availability.</li>
+</ol>
+<h2 id="Certificate-types"><a href="#Certificate-types" class="headerlink" title="Certificate types"></a>Certificate types</h2><p>There are three different types of certificates, each with different levels of trust and verification.</p>
+<h3 id="Domain-Validated-certificates"><a href="#Domain-Validated-certificates" class="headerlink" title="Domain Validated certificates"></a>Domain Validated certificates</h3><p>This is the base type of certificate. All that is usually needed to verify ownership of the domain is to add a TXT record, or click on a link sent to <code>admin@domain.com</code>. Whilst the encryption being used can be the same as the higher certificates, the level of trust may be low.</p>
+<h3 id="Organization-Validated-certificates"><a href="#Organization-Validated-certificates" class="headerlink" title="Organization Validated certificates"></a>Organization Validated certificates</h3><p>This certificate type requires further verification. Normally it requires an exchange of physical documents to prove ownership of the business that the domain name is representing.</p>
+<h3 id="Extended-Validation-certificates"><a href="#Extended-Validation-certificates" class="headerlink" title="Extended Validation certificates"></a>Extended Validation certificates</h3><p>This certificate has the highest level of trust. When applied to a website, users’ web browsers show a green bar. It has the following requirements:</p>
+<ol>
+<li>Establish the legal identity as well as the operational and physical presence of website owner.</li>
+<li>Establish that the applicant is the domain name owner or has exclusive control over the domain name.</li>
+<li>Confirm the identity and authority of the individuals acting for the website owner, and that documents pertaining to legal obligations are signed by an authorised officer.</li>
+</ol>
+<p>It is not currently possible to get a wildcard EV certificate - it is just for the domains in the certificate request.</p>
+<h2 id="Certificate-structure"><a href="#Certificate-structure" class="headerlink" title="Certificate structure"></a>Certificate structure</h2><p>A certificate contains the following information:</p>
+<ul>
+<li>Serial number - This is unique to the CA and is used to tracl revocation information.</li>
+<li>Subject - The entity that the certificate belongs to. This can be a user, device, or organization.</li>
+<li>Issuer - The issuer of the certificate, who verified the information within.</li>
+<li>Not Before - The earliest time at which the certificate can be considered valid.</li>
+<li>Not After - The latest time at which the certificate can be considered valid.</li>
+<li>Key Usage - The valid cryptographic uses of the certificate’s public key. This can include digital signature validation, key encipherment, etc.</li>
+<li>Extended Key Usage - The applications the certificate can be used for. This can include code signing, email signing, etc.</li>
+<li>Public Key - The public key for the certificate subject.</li>
+<li>Signature Algorithm - The algorithm used to sign the public key certificate.</li>
+<li>Signature - A signature of the certificate body by the issuer’s private key.</li>
+</ul>
+<h2 id="Encryption-types"><a href="#Encryption-types" class="headerlink" title="Encryption types"></a>Encryption types</h2><h3 id="Symmetric"><a href="#Symmetric" class="headerlink" title="Symmetric"></a>Symmetric</h3><p>Symmetric encryption is used when both parties have the same encryption key.</p>
+<h3 id="Asymmetric"><a href="#Asymmetric" class="headerlink" title="Asymmetric"></a>Asymmetric</h3><p>Asymmetric encryption is used when both parties have different encryption keys. This is more commonly called public/private key encryption. The keys are generated at the same time. Anything encrypted with the private key can be decrypted by the public key, and vice-versa.</p>
+<h2 id="Anatomy-of-a-TLS-handshake"><a href="#Anatomy-of-a-TLS-handshake" class="headerlink" title="Anatomy of a TLS handshake"></a>Anatomy of a TLS handshake</h2><p>TLS uses a combination of both asymmetric and symmetric encryption whilst communicating.</p>
+<h3 id="Negotiation"><a href="#Negotiation" class="headerlink" title="Negotiation"></a>Negotiation</h3><ol>
+<li>The <strong>client</strong> sends a <code>ClientHello</code> message to the server, which specifies the highest TLS protocol it supports, a random number, a list of ciphers it supports and a list of compression methods it supports.</li>
+<li>The <strong>server</strong> sends a <code>ServerHello</code> message to the client, containing the TLS protocol, compression method and cipher from the lists sent from the user, as well as a random number. The server may also send a session ID, however this is not mandatory.</li>
+<li>The <strong>server</strong> may also send both a <code>Certificate</code> (which contains the public key of the server, and is verified by a third-party) and a <code>ServerKeyExchange</code> message, depending on the cipher suite. The server can also send a <code>CertificateRequest</code> message if mutual certificate authentication is being used.</li>
+<li>The <strong>server</strong> sends a <code>ServerHelloDone</code> message, to show it is done with handshake negotiation.</li>
+<li>The <strong>client</strong> sends a <code>Certificate</code> message (if mutual certificate authentication is being used).</li>
+<li>The <strong>client</strong> sends a <code>ClientKeyExchange</code> message, which contains either a <code>PreMasterSecret</code>, public key, or nothing. It is encrypted with the public key of the server certificate.</li>
+<li>The <strong>client</strong> sends a <code>CertificateVerify</code> message, which is a signature for the previous client handshake messages and is generated using the client private key. It can be verified with the client public key.</li>
+<li>The <strong>client and server</strong> use the shared random numbers and <code>PreMasterSecret</code> to generate a common shared secret. This is called the <code>master secret</code>. All future data is encrypted with this secret and a psudorandom function.</li>
+</ol>
+<h3 id="ChangeCipherSpec"><a href="#ChangeCipherSpec" class="headerlink" title="ChangeCipherSpec"></a>ChangeCipherSpec</h3><ol>
+<li>The <strong>client</strong> sends a <code>ChangeCipherSpec</code> message. This lets the server know that the cient will only talk in that cipher for the rest of the session.</li>
+<li>The <strong>client</strong> sends a <code>Finished</code> message that contains a hash of all the previous handshake messages. If this fails at the server end, the TLS connection is not considered valid and will be torn down.</li>
+<li>The <strong>server</strong> sends a <code>ChangeCipherSpec</code> message. This lets the client know that the server will only talk in that server for the rest of the session.</li>
+<li>The <strong>server</strong> sends a <code>Finished</code> message that contains a hash of all the previous handshake messages. If this fails at the client end, the TLS connection is not considered valid and will be torn down.</li>
+</ol>
+<p>The handshake is now complete and now that both ends have the same <code>master secret</code>, they can switch to symmetric encryption, which is computationally much less expensive.</p>
+<h2 id="TLS-Versions"><a href="#TLS-Versions" class="headerlink" title="TLS Versions"></a>TLS Versions</h2><p>TLS versions and ciphers are independent of certificates, and can be changed at any time on the server. This may have implications with client support, however nearly all modern clients have support for TLS 1.2 (the latest version as of this blog post).</p>
+<ul>
+<li>SSL 3.0</li>
+</ul>
+<p>SSL 3.0 was first introducted in 1996. It has been depreciated by the IETF since 2015 and is not considered secure. It should no longer be used, as it has been broken due to multiple vulnerabilities (POODLE, DROWN, etc).</p>
+<ul>
+<li>TLS 1.0</li>
+</ul>
+<p>TLS 1.0 supports downgrade negitiation, allowing an attacker to bring the server back down to SSL 3.0, and therefore bringing the vulnerabilities with it. It should also no longer be used. It does however allow the use of better ciphers than SSL 3.0</p>
+<ul>
+<li>TLS 1.1</li>
+</ul>
+<p>TLS 1.1 should be considered the bare minimum for TLS-protected communications. No protocol-level vulnerabilities have been found so far. It provides protection against padding errors (the basis of the POODLE attack).</p>
+<ul>
+<li>TLS 1.2</li>
+</ul>
+<p>TLS 1.2 is the newest TLS protocol, introduced in 2008. It is currently the strongest TLS protocol.</p>
+<ul>
+<li>TLS 1.3</li>
+</ul>
+<p>TLS 1.3 is currently a working draft with the IETF and is not released for general use yet.</p>
+<h2 id="Ciphers"><a href="#Ciphers" class="headerlink" title="Ciphers"></a>Ciphers</h2><p>Along with the TLS protocol version, the client and server also negotiate a cipher to communicate with. The ciphers considered secure change as cracking technology progresses and vulnerabilities are found.</p>
+<p>I’ve found that <a href="https://cipherli.st/" target="_blank" rel="external">https://cipherli.st/</a> is a great resource for server cipher list configuration, and <a href="https://www.ssllabs.com/ssltest/" target="_blank" rel="external">https://www.ssllabs.com/ssltest/</a> is great for testing your site.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;We all use SSL or TLS every day. But how does it work and what infrastructure is involved? For the rest of the article, I will be referencing both SSL and TLS but will be using the blanket term “TLS” to refer to both.&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails</title>
+    <link href="http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/"/>
+    <id>http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/</id>
+    <published>2017-06-08T03:58:13.000Z</published>
+    <updated>2017-06-13T04:51:16.805Z</updated>
+    
+    <content type="html"><![CDATA[<p>Following on from the previous post about thin jails, we can now procede to install the following applications in to seperate jails:</p>
+<ul>
+<li>Sonarr</li>
+<li>Radarr</li>
+<li>SABnzbd</li>
+<li>nginx as a reverse proxy for the above applications</li>
+<li>Plex</li>
+</ul>
+<p>First, clone the skeleton snapshot to the thinjails directory for each jail:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/sonarr</div><div class="line">zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/radarr</div><div class="line">zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/sabnzbd</div><div class="line">zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/nginx</div><div class="line">zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/plex</div></pre></td></tr></table></figure>
+<p>Next, create the mount folders for the jails</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mkdir -p /usr/local/jails/sonarr</div><div class="line">mkdir -p /usr/local/jails/radarr</div><div class="line">mkdir -p /usr/local/jails/sabnzbd</div><div class="line">mkdir -p /usr/local/jails/nginx</div><div class="line">mkdir -p /usr/local/jails/plex</div></pre></td></tr></table></figure>
+<p>Add the configurations for the jails in <code>/etc/jail.conf</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"># Insert at the bottom of jail.conf from previous blog post</div><div class="line">sonarr &#123;</div><div class="line">    $ip = 45;</div><div class="line">&#125;</div><div class="line"></div><div class="line">radarr &#123;</div><div class="line">    $ip = 46;</div><div class="line">&#125;</div><div class="line"></div><div class="line">sabnzbd &#123;</div><div class="line">    $ip = 47;</div><div class="line">&#125;</div><div class="line"></div><div class="line">nginx &#123;</div><div class="line">    $ip = 48;</div><div class="line">&#125;</div><div class="line"></div><div class="line">plex &#123;</div><div class="line">    $ip = 49;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Create a fstab file for each jail at <code>/usr/local/jails/&lt;jailname&gt;.fstab</code>, replacing <code>&lt;jailname&gt;</code> with the jail name of each.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/usr/local/jails/templates/base-11.0-RELEASE    /usr/local/jails/&lt;jailname&gt;/  nullfs  ro      0       0</div><div class="line">/usr/local/jails/thinjails/&lt;jailname&gt; /usr/local/jails/&lt;jailname&gt;/skeleton  nullfs  rw      0       0</div></pre></td></tr></table></figure>
+<p>Create and start jails</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">jail -c sonarr</div><div class="line">jail -c radarr</div><div class="line">jail -c sabnzbd</div><div class="line">jail -c nginx</div><div class="line">jail -c plex</div></pre></td></tr></table></figure>
+<p>Add jails to auto-start on boot in <code>/etc/rc.conf</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jail_list=&quot;plex sonarr radarr nginx sabnzbd&quot;</div></pre></td></tr></table></figure>
+<h2 id="Sonarr"><a href="#Sonarr" class="headerlink" title="Sonarr"></a>Sonarr</h2><p>Enter jail, replacing <code>&lt;id&gt;</code> with the ID of the Sonarr jail shown in <code>jls</code> output</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">jls</div><div class="line">jexec &lt;id&gt; /bin/sh</div></pre></td></tr></table></figure>
+<p>Install Sonarr, answering <code>yes</code> to installing <code>pkg</code> and the package itself</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pkg install sonarr</div></pre></td></tr></table></figure>
+<p>Enable and start Sonarr</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sysrc sonarr_enable=YES</div><div class="line">service sonarr start</div></pre></td></tr></table></figure>
+<h2 id="Radarr"><a href="#Radarr" class="headerlink" title="Radarr"></a>Radarr</h2><p>Enter jail, replacing <code>&lt;id&gt;</code> with the ID of the Radarr jail shown in <code>jls</code> output</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">jls</div><div class="line">jexec &lt;id&gt; /bin/sh</div></pre></td></tr></table></figure>
+<p>Install Radarr, answering <code>yes</code> to installing <code>pkg</code> and the package itself</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pkg install radarr</div></pre></td></tr></table></figure>
+<p>Enable and start Radarr</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sysrc radarr_enable=YES</div><div class="line">service radarr start</div></pre></td></tr></table></figure>
+<h2 id="SABnzbd"><a href="#SABnzbd" class="headerlink" title="SABnzbd"></a>SABnzbd</h2><p>Enter jail, replacing <code>&lt;id&gt;</code> with the ID of the SABnzbd jail shown in <code>jls</code> output</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">jls</div><div class="line">jexec &lt;id&gt; /bin/sh</div></pre></td></tr></table></figure>
+<p>Install SABbnzbd, answering “yes” to installing pkg and the package itself</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pkg install sabnzbdplus</div></pre></td></tr></table></figure>
+<p>Enable and start SABbnzbd</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sysrc sabnzbdplus_enable=YES</div><div class="line">service sabnzbdplus start</div></pre></td></tr></table></figure>
+<h2 id="Plex"><a href="#Plex" class="headerlink" title="Plex"></a>Plex</h2><p>Enter jail, replacing <code>&lt;id&gt;</code> with the ID of the Plex jail shown in <code>jls</code> output</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">jls</div><div class="line">jexec &lt;id&gt; /bin/sh</div></pre></td></tr></table></figure>
+<p>Install Plex, answering “yes” to installing pkg and the package itself</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pkg install plexmediaserver</div></pre></td></tr></table></figure>
+<p>Enable and start Plex</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sysrc plexmediaserver_enable=YES</div><div class="line">service plexmediaserver start</div></pre></td></tr></table></figure>
+<h2 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h2><p>Enter jail, replacing <code>&lt;id&gt;</code> with the ID of the nginx jail shown in <code>jls</code> output</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">jls</div><div class="line">jexec &lt;id&gt; /bin/sh</div></pre></td></tr></table></figure>
+<p>Install nginx, answering “yes” to installing pkg and the package itself</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pkg install nginx</div></pre></td></tr></table></figure>
+<p>Enable nginx</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sysrc nginx_enable=YES</div></pre></td></tr></table></figure>
+<p>Edit <code>/usr/local/etc/nginx/nginx.conf</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">events &#123;</div><div class="line">    worker_connections  1024;</div><div class="line">&#125;</div><div class="line"></div><div class="line">http &#123;</div><div class="line">    server &#123;</div><div class="line">        listen  80;</div><div class="line">        server_name home.ludriks.com 10.1.1.45;</div><div class="line"></div><div class="line">        location /sonarr &#123;</div><div class="line">            proxy_pass  http://&lt;sonarr_ip here&gt;:8989;</div><div class="line">            proxy_set_header    X-Real-IP  $remote_addr;</div><div class="line">            proxy_set_header    Host $host;</div><div class="line">            proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;</div><div class="line">            proxy_set_header    X-Forwarded-Proto $scheme;</div><div class="line">            proxy_redirect off;</div><div class="line">        &#125;</div><div class="line">        location /radarr &#123;</div><div class="line">            proxy_pass  http://&lt;radarr_ip here&gt;:7878;</div><div class="line">            proxy_set_header    X-Real-IP  $remote_addr;</div><div class="line">            proxy_set_header    Host $host;</div><div class="line">            proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;</div><div class="line">            proxy_set_header    X-Forwarded-Proto $scheme;</div><div class="line">            proxy_redirect off;</div><div class="line">        &#125;</div><div class="line">        location /sabnzbd &#123;</div><div class="line">            proxy_pass  http://&lt;sabnzbd_ip here&gt;:8080;</div><div class="line">            proxy_set_header    X-Real-IP  $remote_addr;</div><div class="line">            proxy_set_header    Host $host;</div><div class="line">            proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;</div><div class="line">            proxy_set_header    X-Forwarded-Proto $scheme;</div><div class="line">            proxy_redirect off;</div><div class="line">        &#125;</div><div class="line">        access_log /var/log/nginx/sonarr.your-domain.xyz;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Start nginx</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service nginx start</div></pre></td></tr></table></figure>
+<p>I will follow up this blog post with another detailing integration with the jails.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Following on from the previous post about thin jails, we can now procede to install the following applications in to seperate jails:&lt;/p&gt;
+
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>FreeBSD Thin Jails</title>
+    <link href="http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/"/>
+    <id>http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/</id>
+    <published>2017-06-07T01:01:40.000Z</published>
+    <updated>2017-06-07T03:33:04.085Z</updated>
+    
+    <content type="html"><![CDATA[<p>Recently I built up a new storage server running FreeBSD. Initially I was going to go with FreeNAS like my old storage server, however the FreeNAS project is in a bit of flux at the moment and I thought this would be a good way to learn about the inner workings of FreeBSD. Part of this is segregating the applications running on the server in to “jails”. They are a form of OS-level virtualization, where each jail has its own files, processes and user accounts.</p>
+<p>I was tempted to run a jail management tool such as ezjail, iocage or qjail, however configuring manually through jail.conf and the jail command seems to be quite easy once you wrap your head around it. This guide walks through building a base jail template that can easily be added as a layer to new jails. This approach is great as you only need to update one layer when OS-level updates get released.</p>
+<p>First, enable jails in your OS.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sysrc jail_enable=YES</div></pre></td></tr></table></figure>
+<p>Create a dataset for the jails and thinjails</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">zfs create -o mountpoint=/usr/local/jails zroot/jails</div><div class="line">zfs create zroot/jails/thinjails</div></pre></td></tr></table></figure>
+<p>Then, create another dataset for the 11.0-RELEASE files</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zfs create -p zroot/jails/releases/11.0-RELEASE</div></pre></td></tr></table></figure>
+<p>Download and extract all required binaries from a FreeBSD mirror. I chose Optus Australia as that is my closest/fastest mirror.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">fetch ftp://ftp4.au.freebsd.org/pub/FreeBSD/releases/amd64/amd64/11.0-RELEASE/base.txz -o /tmp/base.txz</div><div class="line">fetch ftp://ftp4.au.freebsd.org/pub/FreeBSD/releases/amd64/amd64/11.0-RELEASE/lib32.txz -o /tmp/lib32.txz</div><div class="line">fetch ftp://ftp4.au.freebsd.org/pub/FreeBSD/releases/amd64/amd64/11.0-RELEASE/ports.txz -o /tmp/ports.txz</div><div class="line">tar -xvf /tmp/base.txz -C /usr/local/jails/releases/11.0-RELEASE</div><div class="line">tar -xvf /tmp/lib32.txz -C /usr/local/jails/releases/11.0-RELEASE</div><div class="line">tar -xvf /tmp/ports.txz -C /usr/local/jails/releases/11.0-RELEASE</div></pre></td></tr></table></figure>
+<p>Update to latest patch level (p10 at the release of this blog post)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">env UNAME_r=11.0-RELEASE freebsd-update -b /usr/local/jails/releases/11.0-RELEASE fetch install</div></pre></td></tr></table></figure>
+<p>Verify nothing was damaged in transit (this is more paranoia than anything…)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">env UNAME_r=11.0-RELEASE freebsd-update -b /usr/local/jails/releases/11.0-RELEASE IDS</div></pre></td></tr></table></figure>
+<p>Add local timezone and DNS servers to files</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cp /etc/resolv.conf /usr/local/jails/releases/11.0-RELEASE/etc/resolv.conf</div><div class="line">cp /etc/localtime /usr/local/jails/releases/11.0-RELEASE/etc/localtime</div></pre></td></tr></table></figure>
+<p>Snapshot the release. Since mine is patch level 10, I chose the name <code>p10</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zfs snapshot zroot/jails/releases/11.0-RELEASE@p10</div></pre></td></tr></table></figure>
+<p>Clone the <code>11.0-RELEASE</code> snapshot to a new base jail. This will be the first layer in future jails.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">zfs create zroot/jails/templates</div><div class="line">zfs clone zroot/jails/releases/11.0-RELEASE@p10 zroot/jails/templates/base-11.0-RELEASE</div></pre></td></tr></table></figure>
+<p>Create a skeleton dataset that will be used for jail-specific files</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zfs create -p zroot/jails/templates/skeleton-11.0-RELEASE</div></pre></td></tr></table></figure>
+<p>Create folders in skeleton dataset</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir -p /usr/local/jails/templates/skeleton-11.0-RELEASE/usr/ports/distfiles</div><div class="line">mkdir -p /usr/local/jails/templates/skeleton-11.0-RELEASE/home</div><div class="line">mkdir -p /usr/local/jails/templates/skeleton-11.0-RELEASE/portsbuild</div></pre></td></tr></table></figure>
+<p>Move folders from the base jail layer to the skeleton jail layer. These are jail-specific directories.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mv /usr/local/jails/templates/base-11.0-RELEASE/etc /usr/local/jails/templates/skeleton-11.0-RELEASE/etc</div><div class="line">mv /usr/local/jails/templates/base-11.0-RELEASE/usr/local /usr/local/jails/templates/skeleton-11.0-RELEASE/usr/local</div><div class="line">mv /usr/local/jails/templates/base-11.0-RELEASE/tmp /usr/local/jails/templates/skeleton-11.0-RELEASE/tmp</div><div class="line">mv /usr/local/jails/templates/base-11.0-RELEASE/var /usr/local/jails/templates/skeleton-11.0-RELEASE/var</div><div class="line">mv /usr/local/jails/templates/base-11.0-RELEASE/root /usr/local/jails/templates/skeleton-11.0-RELEASE/root</div></pre></td></tr></table></figure>
+<p>For some reason <code>/var/empty</code> still remained when I moved the folders, so I had to remove it manually.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">chflags 0 /usr/local/jails/templates/base-11.0-RELEASE/var/empty</div><div class="line">rm -r /usr/local/jails/templates/base-11.0-RELEASE/var</div></pre></td></tr></table></figure>
+<p>Symlink the directories to the skeleton layer. Make sure you are in <code>/usr/local/jails/templates/base-11.0-RELEASE/</code> folder before running the commands, as the paths are all relative.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/jails/templates/base-11.0-RELEASE</div><div class="line">mkdir skeleton</div><div class="line">ln -s skeleton/etc etc</div><div class="line">ln -s skeleton/home home</div><div class="line">ln -s skeleton/root root</div><div class="line">ln -s ../skeleton/usr/local usr/local</div><div class="line">ln -s ../../skeleton/usr/ports/distfiles usr/ports/distfiles</div><div class="line">ln -s skeleton/tmp tmp</div><div class="line">ln -s skeleton/var var</div></pre></td></tr></table></figure>
+<p>Update the ports make configuration to build in the non-default directory</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo &quot;WRKDIRPREFIX?=  /skeleton/portbuild&quot; &gt;&gt; /usr/local/jails/templates/skeleton-11.0-RELEASE/etc/make.conf</div></pre></td></tr></table></figure>
+<p>Snapshot the skeleton so we can clone it in each jail</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zfs snapshot zroot/jails/templates/skeleton-11.0-RELEASE@skeleton</div></pre></td></tr></table></figure>
+<p>Create /etc/jail.conf with the below text. I have added comments to explain each section.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"># The interface that the jails will interface with on the host</div><div class="line">interface = &quot;igb0&quot;;</div><div class="line"></div><div class="line"># The name of each jail. $name is a placeholder. In the example below, $name would be jail1</div><div class="line">host.hostname = &quot;$name.domain.local&quot;;</div><div class="line"></div><div class="line"># The path to the jail files</div><div class="line">path = &quot;/usr/local/jails/$name&quot;;</div><div class="line"></div><div class="line"># The IP address of the jail. In the example below, it would be 10.1.1.40</div><div class="line">ip4.addr = 10.1.1.$ip;</div><div class="line"></div><div class="line"># The fstab file for the jail. This resolves to jail1.fstab in the example.</div><div class="line">mount.fstab = &quot;/usr/local/jails/$name.fstab&quot;;</div><div class="line"></div><div class="line"># Common functions for all jails</div><div class="line">exec.start = &quot;/bin/sh /etc/rc&quot;;</div><div class="line">exec.stop = &quot;/bin/sh /etc/rc.shutdown&quot;;</div><div class="line">exec.clean;</div><div class="line">mount.devfs;</div><div class="line"></div><div class="line"># jail1 specific configuration</div><div class="line">jail1 &#123;</div><div class="line">        $ip = 40;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Done! We now have the components to create many thin jails. Now we will create our first thin jail off this template.</p>
+<h2 id="Creating-a-thin-jail"><a href="#Creating-a-thin-jail" class="headerlink" title="Creating a thin jail"></a>Creating a thin jail</h2><p>First, clone the skeleton files for the new jail, and then set the hostname</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/jail1</div><div class="line">echo hostname=\&quot;jail1\&quot; &gt; /usr/local/jails/thinjails/jail1/etc/rc.conf</div></pre></td></tr></table></figure>
+<p>Create folder where the layers for the jail will be mounted</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir -p /usr/local/jails/jail1</div></pre></td></tr></table></figure>
+<p>Create fstab at <code>/usr/local/jails/jail1.fstab</code> . The first layer is the base, mounted as read-only. The next is the skeleton we cloned, mounted as read-write.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/usr/local/jails/templates/base-11.0-RELEASE    /usr/local/jails/jail1/  nullfs  ro      0       0</div><div class="line">/usr/local/jails/thinjails/jail1 /usr/local/jails/jail1/skeleton  nullfs  rw      0       0</div></pre></td></tr></table></figure>
+<p>Create and start jail “jail1”</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jail -c jail1</div></pre></td></tr></table></figure>
+<p>Add jail to auto-start on boot in <code>/etc/rc.conf</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jail_list=&quot;jail1&quot;</div></pre></td></tr></table></figure>
+<p>For each new jail, just follow the process:</p>
+<ol>
+<li>Add config to <code>/etc/jail.conf</code></li>
+<li>Clone skeleton to <code>/usr/local/jails/thinjails/&lt;jailname&gt;</code></li>
+<li>Write hostname to <code>/etc/rc.conf</code> in new jail files</li>
+<li>Create folder <code>/usr/local/jails/&lt;jailname&gt;</code> for new jail</li>
+<li>Create fstab <code>/usr/local/jails/&lt;jailname&gt;.fstab</code> and populate with layer information</li>
+<li>Create and start with <code>jail -c jailname</code></li>
+</ol>
+<p>Whenever we want to update all jails at once, shut down the jails and run:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">env UNAME_r=11.0-RELEASE freebsd-update -b /usr/local/jails/templates/base-11.0-RELEASE fetch install</div><div class="line">portsnap -p /usr/local/jails/templates/base-11.0-RELEASE/usr/ports auto</div></pre></td></tr></table></figure>
+<p>This will update the base to the latest patch level, and update to the latest ports tree.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Recently I built up a new storage server running FreeBSD. Initially I was going to go with FreeNAS like my old storage server, however th
+    
+    </summary>
+    
+    
+      <category term="freebsd" scheme="http://jacob.ludriks.com/tags/freebsd/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Foglight SSL Certificates</title>
+    <link href="http://jacob.ludriks.com/2016/05/12/Foglight-SSL-Certificates/"/>
+    <id>http://jacob.ludriks.com/2016/05/12/Foglight-SSL-Certificates/</id>
+    <published>2016-05-12T01:40:44.000Z</published>
+    <updated>2016-05-12T01:49:48.815Z</updated>
+    
+    <content type="html"><![CDATA[<p>Foglight for Virtualization 7.0 Standard uses Tomcat under the covers to serve the web interface. To replace the SSL certificate, follow the instructions below. I started with a password-protected PFX file that had the password <code>foglight</code>.</p>
+<ol>
+<li>Copy the PFX file to the server to the <code>/usr/local/tomcat/conf</code> directory</li>
+<li>Run the following to convert the PFX in to a Java keystore file, entering <code>foglight</code> for all password prompts: <code>/usr/local/jre1.6.0_43/bin/keytool -importkeystore -srckeystore /usr/local/tomcat/conf/foglight.pfx -srcstoretype pkcs12 -destkeystore /usr/local/tomcat/conf/foglight.jks -deststoretype JKS</code></li>
+<li>Open <code>/usr/local/tomcat/conf/server.xml</code> in your favourite editor</li>
+<li><p>Replace the Connector section with SSL with the following:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;Connector server=&quot;VKernel&quot; port=&quot;443&quot; maxHttpHeaderSize=&quot;8192&quot;</div><div class="line">        maxThreads=&quot;150&quot; minSpareThreads=&quot;25&quot;</div><div class="line">        enableLookups=&quot;false&quot; disableUploadTimeout=&quot;true&quot;</div><div class="line">        acceptCount=&quot;100&quot; scheme=&quot;https&quot; secure=&quot;true&quot;</div><div class="line">        SSLEnabled=&quot;true&quot; keystoreFile=&quot;conf/foglight.jks&quot;</div><div class="line">        keystorePass=&quot;foglight&quot; clientAuth=&quot;false&quot; sslProtocol=&quot;TLS&quot;</div><div class="line">        ciphers=&quot;TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,</div><div class="line">        TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,</div><div class="line">        TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA,</div><div class="line">        TLS_RSA_WITH_AES_256_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA&quot; /&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>Restart Tomcat with <code>service tomcat restart</code></p>
+</li>
+</ol>
+<p>After a restart, the web interface will now be using the new certificate.</p>
+<p>For reference, the username and password for the appliance is <code>vkernel/vkernel</code> and the <code>su</code> password is <code>password</code>.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Foglight for Virtualization 7.0 Standard uses Tomcat under the covers to serve the web interface. To replace the SSL certificate, follow 
+    
+    </summary>
+    
+    
+      <category term="foglight" scheme="http://jacob.ludriks.com/tags/foglight/"/>
+    
+      <category term="tomcat" scheme="http://jacob.ludriks.com/tags/tomcat/"/>
+    
+      <category term="ssl" scheme="http://jacob.ludriks.com/tags/ssl/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Password expiry notification</title>
+    <link href="http://jacob.ludriks.com/2016/02/15/Password-expiry-notification/"/>
+    <id>http://jacob.ludriks.com/2016/02/15/Password-expiry-notification/</id>
+    <published>2016-02-15T01:48:00.000Z</published>
+    <updated>2016-05-12T03:27:44.432Z</updated>
+    
+    <content type="html"><![CDATA[<p>Password policies are a good thing, however as users aren’t chained to their desks anymore they might not realize that their AD password is expiring. Here’s a script that you can run as a scheduled task that will notify users that their password is expiring.</p>
+<script src="https://gist.github.com/jacobludriks/1d8bbfcfb8f36d86ea62.js"></script>
+
+<p>It was roughly copied from a Reddit thread (<a href="https://www.reddit.com/r/sysadmin/comments/445qp5/those_of_you_who_are_emailing_people_to_warn_them/cznmxyq" target="_blank" rel="external">link</a>) however it had a few bugs relating to fine-grained password policies and was using .NET methods for a few things instead of Powershell cmdlets.</p>
+<p>Hope it comes in useful for someone.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Password policies are a good thing, however as users aren’t chained to their desks anymore they might not realize that their AD password 
+    
+    </summary>
+    
+    
+      <category term="powershell" scheme="http://jacob.ludriks.com/tags/powershell/"/>
+    
+      <category term="security" scheme="http://jacob.ludriks.com/tags/security/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Powershell FTP functions</title>
+    <link href="http://jacob.ludriks.com/2016/01/27/Powershell-FTP-functions/"/>
+    <id>http://jacob.ludriks.com/2016/01/27/Powershell-FTP-functions/</id>
+    <published>2016-01-27T06:13:00.000Z</published>
+    <updated>2016-05-12T03:28:56.508Z</updated>
+    
+    <content type="html"><![CDATA[<p>It turns out there’s a lot to getting Powershell to connect to FTP servers. Here’s two functions I’ve written that can list FTP contents and download files. Enjoy.</p>
+<script src="https://gist.github.com/jacobludriks/18c4d9f964ec77098736.js"></script>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;It turns out there’s a lot to getting Powershell to connect to FTP servers. Here’s two functions I’ve written that can list FTP contents 
+    
+    </summary>
+    
+    
+      <category term="ftp" scheme="http://jacob.ludriks.com/tags/ftp/"/>
+    
+      <category term="powershell" scheme="http://jacob.ludriks.com/tags/powershell/"/>
+    
+      <category term="windows" scheme="http://jacob.ludriks.com/tags/windows/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Set-Permissions</title>
+    <link href="http://jacob.ludriks.com/2016/01/15/Set-Permissions/"/>
+    <id>http://jacob.ludriks.com/2016/01/15/Set-Permissions/</id>
+    <published>2016-01-15T01:04:00.000Z</published>
+    <updated>2016-05-12T03:29:41.710Z</updated>
+    
+    <content type="html"><![CDATA[<p>Hee’s a basic script I created recently to set permissions on a file/folder. This can be integrated with other scripts quite nicely.</p>
+<script src="https://gist.github.com/jacobludriks/2c51e0d2988fc73c8225.js"></script>
+
+<p>Enjoy!</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Hee’s a basic script I created recently to set permissions on a file/folder. This can be integrated with other scripts quite nicely.&lt;/p&gt;
+
+    
+    </summary>
+    
+    
+      <category term="powershell" scheme="http://jacob.ludriks.com/tags/powershell/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Updating ciphers for Foglight for Virtualization Standard</title>
+    <link href="http://jacob.ludriks.com/2015/10/15/Updating-ciphers-for-Foglight-for-Virtualization-Standard/"/>
+    <id>http://jacob.ludriks.com/2015/10/15/Updating-ciphers-for-Foglight-for-Virtualization-Standard/</id>
+    <published>2015-10-15T03:23:00.000Z</published>
+    <updated>2016-05-12T03:30:36.226Z</updated>
+    
+    <content type="html"><![CDATA[<p>As of v45, Chrome is now blocking HTTPS sites with weak Diffie-Hellman public keys. Whilst this is good for everyone, it does cause certain things to stop working. Our Foglight for Virtualization Standard instance stopped working with Chrome and had to be fixed. Although this applies for Foglight, it can be used for any Tomcat 7 instance.</p>
+<ol>
+<li>SSH in to the Foglight virtual machine. Default username is <code>vkernel</code> and password is <code>vkernel</code> also.</li>
+<li>Change to root by typing <code>su -</code>. Default password is <code>password</code>.</li>
+<li>Type <code>nano /usr/local/tomcat/conf/server.xml</code> to edit the Tomcat config file.</li>
+<li>Under the HTTPS config section (starts with <code>&lt;Connector server=&quot;VKernel&quot; port=&quot;443&quot; maxHttpHeaderSize=&quot;8192&quot; ....</code>), you will find a cipher list like <code>ciphers=&quot;TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA ....&quot;</code>. Replace this with: <code>ciphers=&quot;TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA&quot;</code></li>
+<li>Press <code>Ctrl + X</code> and then <code>y</code> to save the file.</li>
+<li>Type <code>service tomcat stop</code> then <code>service tomcat start</code> to reload the config file</li>
+</ol>
+<p>You should now be able to access the site properly with Chrome v45+.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;As of v45, Chrome is now blocking HTTPS sites with weak Diffie-Hellman public keys. Whilst this is good for everyone, it does cause certa
+    
+    </summary>
+    
+    
+      <category term="foglight" scheme="http://jacob.ludriks.com/tags/foglight/"/>
+    
+      <category term="tomcat" scheme="http://jacob.ludriks.com/tags/tomcat/"/>
+    
+      <category term="ssl" scheme="http://jacob.ludriks.com/tags/ssl/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>HP ProLiant SPP 2015.10.0 released</title>
+    <link href="http://jacob.ludriks.com/2015/10/08/HP-ProLiant-SPP-2015-10-0-released/"/>
+    <id>http://jacob.ludriks.com/2015/10/08/HP-ProLiant-SPP-2015-10-0-released/</id>
+    <published>2015-10-07T22:59:00.000Z</published>
+    <updated>2016-05-12T03:31:24.415Z</updated>
+    
+    <content type="html"><![CDATA[<p>HP has released the new ProLiant SPP for October 2015.</p>
+<p><a href="http://h17007.www1.hp.com/us/en/enterprise/servers/products/service_pack/spp/index.aspx" target="_blank" rel="external">http://h17007.www1.hp.com/us/en/enterprise/servers/products/service_pack/spp/index.aspx</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;HP has released the new ProLiant SPP for October 2015.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://h17007.www1.hp.com/us/en/enterprise/servers/products/servic
+    
+    </summary>
+    
+    
+      <category term="hp" scheme="http://jacob.ludriks.com/tags/hp/"/>
+    
+      <category term="patches" scheme="http://jacob.ludriks.com/tags/patches/"/>
+    
+      <category term="spp" scheme="http://jacob.ludriks.com/tags/spp/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Considerations using MessageOps Exchange Migrator</title>
+    <link href="http://jacob.ludriks.com/2015/06/18/Considerations-using-MessageOps-Exchange-Migrator/"/>
+    <id>http://jacob.ludriks.com/2015/06/18/Considerations-using-MessageOps-Exchange-Migrator/</id>
+    <published>2015-06-18T03:32:00.000Z</published>
+    <updated>2016-05-12T03:35:07.857Z</updated>
+    
+    <content type="html"><![CDATA[<p>I’ve been using MessageOps Exchange Migrator for a while now and while it is an amzing product, it isn’t without its quirks. Here are some I came across whilst migrating a small org (80 users) to Office365</p>
+<ol>
+<li>Make sure that the account you’re migrating isn’t disabled. If it is disabled, it doesn’t show up in the source mailbox list.</li>
+<li>Ensure the mailbox isn’t hidden from the GAL. If it is, the migration will fail with a <code>MAIL_E_NAMEN</code> error and then <code>WSAECONNRESET</code>.</li>
+<li>Ensure you have proper rights on the mailbox you are migrating from.</li>
+<li>Ensure the mailbox you are migrating to has an Exchange license assigned. This can be E1, E2, E3, whatever.</li>
+<li>If you change change any permissions or disable/enable accounts, hit back in the tool and let it rescan everything. This saves you restarting the app and having to type all your credentials again.</li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;I’ve been using MessageOps Exchange Migrator for a while now and while it is an amzing product, it isn’t without its quirks. Here are som
+    
+    </summary>
+    
+    
+      <category term="office365" scheme="http://jacob.ludriks.com/tags/office365/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>BitLocker AD ACE&#39;s</title>
+    <link href="http://jacob.ludriks.com/2015/06/04/BitLocker-AD-ACE-s/"/>
+    <id>http://jacob.ludriks.com/2015/06/04/BitLocker-AD-ACE-s/</id>
+    <published>2015-06-04T05:27:00.000Z</published>
+    <updated>2016-05-12T03:34:53.440Z</updated>
+    
+    <content type="html"><![CDATA[<p>When setting up BitLocker for interoperability with Active Directory, Microsoft gets you to run a VBS script to add an Access Control Entity (<a href="https://technet.microsoft.com/en-us/library/dd875529%28v=ws.10%29.aspx" target="_blank" rel="external">https://technet.microsoft.com/en-us/library/dd875529%28v=ws.10%29.aspx</a>). Unfortunately the script didn’t work for me, so I rewrote it in PowerShell.</p>
+<script src="https://gist.github.com/jacobludriks/0bd728f35570a63b7dbf.js"></script>
+
+<p>Use with <code>.\BitLocker-ACE.ps1 -Read</code> to check if the ACE is already there and <code>.\BitLocker-ACE.ps1 -Write</code> to create the ACE.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;When setting up BitLocker for interoperability with Active Directory, Microsoft gets you to run a VBS script to add an Access Control Ent
+    
+    </summary>
+    
+    
+      <category term="powershell" scheme="http://jacob.ludriks.com/tags/powershell/"/>
+    
+      <category term="activedirectory" scheme="http://jacob.ludriks.com/tags/activedirectory/"/>
+    
+      <category term="bitlocker" scheme="http://jacob.ludriks.com/tags/bitlocker/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Trying out Docker with VMWare Photon and Docker CLI for Windows</title>
+    <link href="http://jacob.ludriks.com/2015/04/23/Trying-out-Docker-with-VMWare-Photon-and-Docker-CLI-for-Windows/"/>
+    <id>http://jacob.ludriks.com/2015/04/23/Trying-out-Docker-with-VMWare-Photon-and-Docker-CLI-for-Windows/</id>
+    <published>2015-04-23T06:30:00.000Z</published>
+    <updated>2016-05-12T03:54:58.993Z</updated>
+    
+    <content type="html"><![CDATA[<p>VMWare released “Photon” earlier this week, which is a lightweight Linux OS for hosting Docker containers. It’s amazingly slim like CoreOS and deploys in a matter of seconds. I gave it a spin today and it worked pretty well. Installing it on vSphere was pretty straightforward following <a href="https://vmware.github.io/photon/assets/files/getting_started_with_photon_on_vsphere.pdf" target="_blank" rel="external">documentation</a> on the Photon GitHub site. Once it was installed, I needed to make a few changes to get it working smoothly.</p>
+<h4 id="Setting-the-proxy"><a href="#Setting-the-proxy" class="headerlink" title="Setting the proxy"></a>Setting the proxy</h4><p>If your environment uses a proxy to connect to the internet, continue with this section. If not, skip.</p>
+<p>First, create a new directory to store the extra configuration.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir /etc/systemd/system/docker.service.d</div></pre></td></tr></table></figure>
+<p>Next, create a <code>http-proxy.conf</code> file in the directory and edit it.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">touch /etc/systemd/system/docker.service.d/http-proxy.conf</div><div class="line">nano /etc/systemd/system/docker.service.d/http-proxy.conf</div></pre></td></tr></table></figure>
+<p>Add the following information to the file (substituting where necessary) and save with <code>Ctrl + X</code>.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[Service]</div><div class="line">Environment=&quot;HTTP_PROXY=http://username:password@proxy.example.com:8080/&quot;</div></pre></td></tr></table></figure>
+<p>Reload the <code>systemd</code> daemon and restart Docker.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">systemctl daemon-reload</div><div class="line">systemctl restart docker</div></pre></td></tr></table></figure>
+<p>Docker now has access to the internet.</p>
+<h4 id="Allow-Docker-connection-via-TCP"><a href="#Allow-Docker-connection-via-TCP" class="headerlink" title="Allow Docker connection via TCP"></a>Allow Docker connection via TCP</h4><p>By default, Docker only allows connection through UNIX sockets. Since we will be controlling it via the Windows client, we need TCP access.</p>
+<p>Open up the Docker service file in nano</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nano /etc/systemd/system/multi-user.target.wants/docker.service</div></pre></td></tr></table></figure>
+<p>Edit the <code>Service -&gt; ExecStart</code> line to allow TCP connections by changing:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ExecStart=/bin/docker -d -s overlay</div></pre></td></tr></table></figure>
+<p>to</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ExecStart=/bin/docker -d -s overlay -H tcp://0.0.0.0:2375</div></pre></td></tr></table></figure>
+<p>Reload the <code>systemd</code> daemon and restart Docker.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">systemctl daemon-reload</div><div class="line">systemctl restart docker</div></pre></td></tr></table></figure>
+<h4 id="Upgrade-the-Docker-binary"><a href="#Upgrade-the-Docker-binary" class="headerlink" title="Upgrade the Docker binary"></a>Upgrade the Docker binary</h4><p>Photon comes with Docker 1.5.0 but unfortunately the Windows client only works with 1.6.0 and above.</p>
+<p>If you are using a corporate proxy, you will first need to set the <code>http_proxy</code> environmental variable so <code>wget</code> works</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export https_proxy=&quot;http://username:password@proxy.example.com:8080/&quot;</div></pre></td></tr></table></figure>
+<p>Download the Docker 1.6.0 binary</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget https://get.docker.com/builds/Linux/x86_64/docker-1.6.0</div></pre></td></tr></table></figure>
+<p>Move the binary to <code>/bin/</code> and mark it as executable</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">systemctl stop docker</div><div class="line">rm -r /bin/docker</div><div class="line">mv docker-1.6.0 /bin/docker</div><div class="line">chmod +x /bin/docker</div><div class="line">systemctl start docker</div></pre></td></tr></table></figure>
+<p>You will now have Docker 1.6.0 running.</p>
+<h4 id="Connecting-from-Windows"><a href="#Connecting-from-Windows" class="headerlink" title="Connecting from Windows"></a>Connecting from Windows</h4><p>Download Docker 1.6.0 for Windows from Docker.com - <a href="https://get.docker.com/builds/Windows/i386/docker-1.6.0.exe" target="_blank" rel="external">32-bit</a> or <a href="https://get.docker.com/builds/Windows/x86_64/docker-1.6.0.exe" target="_blank" rel="external">64-bit</a> and open PowerShell in that directory. At this point I recommend renaming the file to <code>docker.exe</code>.</p>
+<p>To connect to the Photon host, run the following:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">.\docker.exe -H=tcp://photon.ip.address.here:2375 info</div></pre></td></tr></table></figure>
+<p>This will show information about the Docker host like so:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Containers: 12</div><div class="line">Images: 49</div><div class="line">Storage Driver: overlay</div><div class="line"> Backing Filesystem: extfs</div><div class="line">Execution Driver: native-0.2</div><div class="line">Kernel Version: 3.19.2</div><div class="line">Operating System: &lt;unknown&gt;</div><div class="line">CPUs: 2</div><div class="line">Total Memory: 489.7 MiB</div><div class="line">Name: bvdocker1</div><div class="line">ID: &lt;id here&gt;</div></pre></td></tr></table></figure>
+<p>You are now connected!</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;VMWare released “Photon” earlier this week, which is a lightweight Linux OS for hosting Docker containers. It’s amazingly slim like CoreO
+    
+    </summary>
+    
+    
+      <category term="windows" scheme="http://jacob.ludriks.com/tags/windows/"/>
+    
+      <category term="photon" scheme="http://jacob.ludriks.com/tags/photon/"/>
+    
+      <category term="docker" scheme="http://jacob.ludriks.com/tags/docker/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Matching VM disks and Windows disks with PowerCLI</title>
+    <link href="http://jacob.ludriks.com/2015/04/22/Matching-VM-disks-and-Windows-disks-with-PowerCLI/"/>
+    <id>http://jacob.ludriks.com/2015/04/22/Matching-VM-disks-and-Windows-disks-with-PowerCLI/</id>
+    <published>2015-04-22T02:18:00.000Z</published>
+    <updated>2016-05-12T03:36:13.187Z</updated>
+    
+    <content type="html"><![CDATA[<p>Tweaked from <a href="http://www.van-lieshout.com/2009/12/match-vm-and-windows-harddisks-using-powercli/" target="_blank" rel="external">http://www.van-lieshout.com/2009/12/match-vm-and-windows-harddisks-using-powercli/</a> to be more modern and with more error checking.</p>
+<script src="https://gist.github.com/jacobludriks/a6356e89d54aad11cc4f.js"></script>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Tweaked from &lt;a href=&quot;http://www.van-lieshout.com/2009/12/match-vm-and-windows-harddisks-using-powercli/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;
+    
+    </summary>
+    
+    
+      <category term="powershell" scheme="http://jacob.ludriks.com/tags/powershell/"/>
+    
+      <category term="powercli" scheme="http://jacob.ludriks.com/tags/powercli/"/>
+    
+      <category term="scsi" scheme="http://jacob.ludriks.com/tags/scsi/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Getting Office365 license information</title>
+    <link href="http://jacob.ludriks.com/2015/04/21/Getting-Office365-license-information/"/>
+    <id>http://jacob.ludriks.com/2015/04/21/Getting-Office365-license-information/</id>
+    <published>2015-04-21T05:06:00.000Z</published>
+    <updated>2016-05-12T05:43:07.075Z</updated>
+    
+    <content type="html"><![CDATA[<p>A nice little one-liner. This assumes you have already ran <code>Connect-MsolService</code>.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Get-MsolUser | select firstname,lastname,userprincipalname,islicensed,@&#123;N=&quot;License&quot;;E=&#123;switch -regex ($_.licenses.accountskuid) &#123; (&quot;ENTERPRISEPACK&quot;) &#123; &quot;E3&quot; &#125; (&quot;STANDARDPACK&quot;) &#123; &quot;E1&quot; &#125; &#125;&#125;&#125; | ft</div></pre></td></tr></table></figure>
+<p>You can add more switches for more license types but we only use E3 and E1. Types are:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&quot;DESKLESSPACK&quot; = &quot;Office 365 (Plan K1)&quot;</div><div class="line">&quot;DESKLESSWOFFPACK&quot; = &quot;Office 365 (Plan K2)&quot;</div><div class="line">&quot;LITEPACK&quot; = &quot;Office 365 (Plan P1)&quot;</div><div class="line">&quot;EXCHANGESTANDARD&quot; = &quot;Office 365 Exchange Online Only&quot;</div><div class="line">&quot;STANDARDPACK&quot; = &quot;Office 365 (Plan E1)&quot;</div><div class="line">&quot;STANDARDWOFFPACK&quot; = &quot;Office 365 (Plan E2)&quot;</div><div class="line">&quot;ENTERPRISEPACK&quot; = &quot;Office 365 (Plan E3)&quot;</div><div class="line">&quot;ENTERPRISEPACKLRG&quot; = &quot;Office 365 (Plan E3)&quot;</div><div class="line">&quot;ENTERPRISEWITHSCAL&quot; = &quot;Office 365 (Plan E4)&quot;</div><div class="line">&quot;STANDARDPACK_STUDENT&quot; = &quot;Office 365 (Plan A1) for Students&quot;</div><div class="line">&quot;STANDARDWOFFPACKPACK_STUDENT&quot; = &quot;Office 365 (Plan A2) for Students&quot;</div><div class="line">&quot;ENTERPRISEPACK_STUDENT&quot; = &quot;Office 365 (Plan A3) for Students&quot;</div><div class="line">&quot;ENTERPRISEWITHSCAL_STUDENT&quot; = &quot;Office 365 (Plan A4) for Students&quot;</div><div class="line">&quot;STANDARDPACK_FACULTY&quot; = &quot;Office 365 (Plan A1) for Faculty&quot;</div><div class="line">&quot;STANDARDWOFFPACKPACK_FACULTY&quot; = &quot;Office 365 (Plan A2) for Faculty&quot;</div><div class="line">&quot;ENTERPRISEPACK_FACULTY&quot; = &quot;Office 365 (Plan A3) for Faculty&quot;</div><div class="line">&quot;ENTERPRISEWITHSCAL_FACULTY&quot; = &quot;Office 365 (Plan A4) for Faculty&quot;</div><div class="line">&quot;ENTERPRISEPACK_B_PILOT&quot; = &quot;Office 365 (Enterprise Preview)&quot;</div><div class="line">&quot;STANDARD_B_PILOT&quot; = &quot;Office 365 (Small Business Preview)&quot;</div></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;A nice little one-liner. This assumes you have already ran &lt;code&gt;Connect-MsolService&lt;/code&gt;.&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;
+    
+    </summary>
+    
+    
+      <category term="powershell" scheme="http://jacob.ludriks.com/tags/powershell/"/>
+    
+      <category term="office365" scheme="http://jacob.ludriks.com/tags/office365/"/>
+    
+      <category term="oneliner" scheme="http://jacob.ludriks.com/tags/oneliner/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Deploying Node.js with Powershell DSC</title>
+    <link href="http://jacob.ludriks.com/2015/04/20/Deploying-Node-js-with-Powershell-DSC/"/>
+    <id>http://jacob.ludriks.com/2015/04/20/Deploying-Node-js-with-Powershell-DSC/</id>
+    <published>2015-04-20T05:06:00.000Z</published>
+    <updated>2016-05-12T05:43:59.248Z</updated>
+    
+    <content type="html"><![CDATA[<p>As the title says, a DSC file for Node.js. This also changes the global node_modules directory to something accessibly by all users.</p>
+<script src="https://gist.github.com/jacobludriks/f163880aa27c78efe8a6.js"></script>
+
+<p>Enjoy.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;As the title says, a DSC file for Node.js. This also changes the global node_modules directory to something accessibly by all users.&lt;/p&gt;
+
+    
+    </summary>
+    
+    
+      <category term="powershell" scheme="http://jacob.ludriks.com/tags/powershell/"/>
+    
+      <category term="dsc" scheme="http://jacob.ludriks.com/tags/dsc/"/>
+    
+      <category term="nodejs" scheme="http://jacob.ludriks.com/tags/nodejs/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Email2SMS</title>
+    <link href="http://jacob.ludriks.com/2015/02/11/Email2SMS/"/>
+    <id>http://jacob.ludriks.com/2015/02/11/Email2SMS/</id>
+    <published>2015-02-11T06:27:00.000Z</published>
+    <updated>2016-05-12T05:44:57.011Z</updated>
+    
+    <content type="html"><![CDATA[<p>We’ve switched SMS providers at work to <a href="http://www.nexmo.com" target="_blank" rel="external">Nexmo</a>, however they don’t have a SMTP API. I whipped up a quick EWS script to monitor a mailbox for emails in the correct format and to send SMS’ based off it. Script below.</p>
+<script src="https://gist.github.com/jacobludriks/849ed52a7987e407cc2d.js"></script>
+
+<p>The script should be run as the user whos mailbox will be monitored (ours is set up as a scheduled task). Next, it should have to subfolders called “Error” and “Processed”. Successful emails get marked as read and send to “Processed”, and unsuccessful emails get kept as unread and moved to “Error”. Because we send from some systems that don’t have SMTP authentication, there is a field called “Secret” that should be defined at the top of the PowerShell script and put in each email.</p>
+<p>The format for the email is:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">From: fromuser</div><div class="line">To: number in international format (ie. +61404040404)</div><div class="line">Text: any text here</div><div class="line">Secret: secret code defined in script</div></pre></td></tr></table></figure>
+<p>The script is set to run every 20 seconds.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;We’ve switched SMS providers at work to &lt;a href=&quot;http://www.nexmo.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Nexmo&lt;/a&gt;, however they don’t have 
+    
+    </summary>
+    
+    
+      <category term="powershell" scheme="http://jacob.ludriks.com/tags/powershell/"/>
+    
+      <category term="sms" scheme="http://jacob.ludriks.com/tags/sms/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Send-NexmoSMS</title>
+    <link href="http://jacob.ludriks.com/2015/02/11/Send-NexmoSMS/"/>
+    <id>http://jacob.ludriks.com/2015/02/11/Send-NexmoSMS/</id>
+    <published>2015-02-11T01:17:00.000Z</published>
+    <updated>2016-05-12T05:45:48.727Z</updated>
+    
+    <content type="html"><![CDATA[<p>A simple Powershell function to send a SMS through the <a href="http://www.nexmo.com" target="_blank" rel="external">Nexmo</a> API. Enjoy.</p>
+<script src="https://gist.github.com/jacobludriks/a9fa14f95038e3b41952.js"></script>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;A simple Powershell function to send a SMS through the &lt;a href=&quot;http://www.nexmo.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Nexmo&lt;/a&gt; API. Enjoy
+    
+    </summary>
+    
+    
+      <category term="powershell" scheme="http://jacob.ludriks.com/tags/powershell/"/>
+    
+      <category term="sms" scheme="http://jacob.ludriks.com/tags/sms/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Connecting to vSphere consoles with VMware Player</title>
+    <link href="http://jacob.ludriks.com/2015/02/06/Connecting-to-vSphere-consoles-with-VMware-Player/"/>
+    <id>http://jacob.ludriks.com/2015/02/06/Connecting-to-vSphere-consoles-with-VMware-Player/</id>
+    <published>2015-02-06T00:48:00.000Z</published>
+    <updated>2016-05-12T05:46:49.376Z</updated>
+    
+    <content type="html"><![CDATA[<p>This isn’t really documented anywhere on the VMware website, but it comes in really handy if require certain users to have console access to machines without the complication of the vSphere Web Client.</p>
+<ul>
+<li><p>Install VMware Player from the <a href="https://my.vmware.com/web/vmware/downloads" target="_blank" rel="external">VMware website</a></p>
+</li>
+<li><p>Get the Managed Object ID of the VM. This can be done through PowerCLI with the following script:</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$vcenter = &quot;vcenter.domain.name&quot;</div><div class="line">$targetvm = &quot;targetvm&quot;</div><div class="line"></div><div class="line">Add-PSSnapin VMware.VimAutomation.Core</div><div class="line">Connect-VIServer -Server $vcenter -Force</div><div class="line">$vmid = (Get-VM $targetvm).id -replace &quot;VirtualMachine-&quot;,&quot;&quot;</div><div class="line">Disconnect-VIServer -Server $vcenter -Confirm:$false</div><div class="line"></div><div class="line">Write-Output &quot;VM MOID is $vmid&quot;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>Give the user access to the VM. The permission “Virtual Machine\Interaction\Console Interation” needs to be given on both the VM and the host. It doesn’t need to inherit to children so deselect “Propagate to children” in the permisisons screen”.</p>
+</li>
+<li><p>Create a shortcut to connect straight to the VM. The following PowerShell script can create the shortcut automatically.</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$desktop = [Environment]::GetFolderPath(&quot;Desktop&quot;)</div><div class="line">$vcenter = &quot;vcenter.domain.name&quot;</div><div class="line">$targetvm = &quot;targetvm&quot;</div><div class="line">$vmid = &quot;vm-moid&quot;</div><div class="line"></div><div class="line">$WshShell = New-Object -comObject WScript.Shell</div><div class="line">$Shortcut = $WshShell.CreateShortcut(&quot;$desktop\$targetvm.lnk&quot;)</div><div class="line">$Shortcut.TargetPath = &quot;vmrc://$vcenter/?moid=$vmid&quot;</div><div class="line">$Shortcut.Save()</div></pre></td></tr></table></figure>
+<p>Afterwards, double click on the shortcut on the desktop and enter appropriate credentials. You’ll be straight in to the console.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;This isn’t really documented anywhere on the VMware website, but it comes in really handy if require certain users to have console access
+    
+    </summary>
+    
+    
+      <category term="powershell" scheme="http://jacob.ludriks.com/tags/powershell/"/>
+    
+      <category term="powercli" scheme="http://jacob.ludriks.com/tags/powercli/"/>
+    
+      <category term="vmware" scheme="http://jacob.ludriks.com/tags/vmware/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Installing Pydio through Powershell DSC</title>
+    <link href="http://jacob.ludriks.com/2015/02/05/Installing-Pydio-through-Powershell-DSC/"/>
+    <id>http://jacob.ludriks.com/2015/02/05/Installing-Pydio-through-Powershell-DSC/</id>
+    <published>2015-02-05T04:00:00.000Z</published>
+    <updated>2016-05-12T05:47:50.042Z</updated>
+    
+    <content type="html"><![CDATA[<p>Powershell Desired State Configuration (DSC) is relatively new but wow, it is so powerful! I’ve had troubles getting Pydio up and running in the past, so I created a consistent configuration file to get it working.</p>
+<script src="https://gist.github.com/jacobludriks/e22bb0f31b6d949c0655.js"></script>
+
+<p>Simply save the file as pydio.ps1 and run it on the target server. Make sure to download the prerequisite files (PHP, VC++ 2012 Redistributable, PHP Manager for IIS) and put them in an accessible location.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Powershell Desired State Configuration (DSC) is relatively new but wow, it is so powerful! I’ve had troubles getting Pydio up and running
+    
+    </summary>
+    
+    
+      <category term="powershell" scheme="http://jacob.ludriks.com/tags/powershell/"/>
+    
+      <category term="dsc" scheme="http://jacob.ludriks.com/tags/dsc/"/>
+    
+      <category term="pydio" scheme="http://jacob.ludriks.com/tags/pydio/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Updating iLO3 through SSH</title>
+    <link href="http://jacob.ludriks.com/2015/01/22/Updating-iLO3-through-SSH/"/>
+    <id>http://jacob.ludriks.com/2015/01/22/Updating-iLO3-through-SSH/</id>
+    <published>2015-01-21T23:47:00.000Z</published>
+    <updated>2016-05-12T05:48:43.926Z</updated>
+    
+    <content type="html"><![CDATA[<p>The iLO interface on one of our servers complete broke and we had no way of accessing it, and it wasn’t updating through the HP SPP media. Fortunately I was able to update it through SSH.</p>
+<p>However, because the firmware on the iLO interface was so old, it needed to be upgraded to an earlier version first before updating to the latest. This is documented on the <a href="http://h20564.www2.hp.com/hpsc/doc/public/display?docId=mmr_kc-0107776" target="_blank" rel="external">HP Support Centre</a>.</p>
+<p>Download a iLO3 1.2x firmware. It will come with the filename <code>ilo3_12x.bin</code>, with x being the minor version number. Upload the file to a web server that can be accessed by the iLO interface. Now, open a SSH session and connect to the iLO IP address. Run the following commands, replacing <code>webserver</code> with your web server FQDN/IP and the filename with the file you downloaded:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd map1/firmware1</div><div class="line">load -source http://webserver/ilo3_12x.bin</div></pre></td></tr></table></figure>
+<p>The iLO will now update and reboot, disconnecting you from SSH in the process. Once it’s back up, it will be upgraded and ready for the final upgrade through the HP SPP.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;The iLO interface on one of our servers complete broke and we had no way of accessing it, and it wasn’t updating through the HP SPP media
+    
+    </summary>
+    
+    
+      <category term="hp" scheme="http://jacob.ludriks.com/tags/hp/"/>
+    
+      <category term="ilo" scheme="http://jacob.ludriks.com/tags/ilo/"/>
+    
+  </entry>
+  
+</feed>
