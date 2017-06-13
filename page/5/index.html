@@ -39,6 +39,92 @@
   </div>
 </header>
     <section id="main" class="outer">
+      <article id="post-Member-count-of-distribution-lists" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/05/12/Member-count-of-distribution-lists/">Member count of distribution lists</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2014/05/12/Member-count-of-distribution-lists/" class="article-date">
+  <time datetime="2014-05-12T04:03:00.000Z" itemprop="datePublished">2014-05-12</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I am looking at enabling certain features of mailing lists depending on how many users there are. The following script generates this report with group recursion.</p>
+<script src="https://gist.github.com/jacobludriks/ceb99cdfaf6bb427d3d6.js"></script>
+
+<p>By default it outputs to grouplisting.csv in the same folder you run the script from.</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/exchange/">exchange</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/powershell/">powershell</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+</article>
+
+
+    
+      <article id="post-Disabling-calendar-and-tasks-archiving-in-Exchange-2013" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/05/12/Disabling-calendar-and-tasks-archiving-in-Exchange-2013/">Disabling calendar and tasks archiving in Exchange 2013</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2014/05/12/Disabling-calendar-and-tasks-archiving-in-Exchange-2013/" class="article-date">
+  <time datetime="2014-05-12T01:49:00.000Z" itemprop="datePublished">2014-05-12</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>In our Exchange 2013 environment we have a few users who have tasks that can occur once every 5-10 years. Unfortunately this doesn’t sit well with our retention policies and they get moved down to the archive mailbox. To disable them from getting archived, create a DWORD Value in <code>HKLM\SYSTEM\CurrentControlSet\Services\MSExchangeMailboxAssistants\Parameters</code> called <code>ELCAssistantCalendarTaskRetentionEnabled</code> and make sure it is set to <code>0</code>.</p>
+<p>Restart the <code>MSExchangeMailboxAssistants</code> service after making this change.</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/exchange/">exchange</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+</article>
+
+
+    
       <article id="post-Synology-update-URLs" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     

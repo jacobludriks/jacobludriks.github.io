@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>SSL/TLS: A Primer - Jacob Ludriks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="We all use SSL or TLS every day. But how does it work and what infrastructure is involved? For the rest of the article, I will be referencing both SSL and TLS but will be using the blanket term “TLS”">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSL&#x2F;TLS: A Primer">
+<meta property="og:url" content="http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/index.html">
+<meta property="og:site_name" content="Jacob Ludriks">
+<meta property="og:description" content="We all use SSL or TLS every day. But how does it work and what infrastructure is involved? For the rest of the article, I will be referencing both SSL and TLS but will be using the blanket term “TLS”">
+<meta property="og:updated_time" content="2017-06-13T04:47:52.828Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SSL&#x2F;TLS: A Primer">
+<meta name="twitter:description" content="We all use SSL or TLS every day. But how does it work and what infrastructure is involved? For the rest of the article, I will be referencing both SSL and TLS but will be using the blanket term “TLS”">
+  
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-SSL-TLS-A-Primer" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      SSL/TLS: A Primer
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/06/13/SSL-TLS-A-Primer/" class="article-date">
+  <time datetime="2017-06-13T01:05:02.000Z" itemprop="datePublished">2017-06-13</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>We all use SSL or TLS every day. But how does it work and what infrastructure is involved? For the rest of the article, I will be referencing both SSL and TLS but will be using the blanket term “TLS” to refer to both.</p>
+<h2 id="Certificate-Infrastructure"><a href="#Certificate-Infrastructure" class="headerlink" title="Certificate Infrastructure"></a>Certificate Infrastructure</h2><h3 id="Root-CAs"><a href="#Root-CAs" class="headerlink" title="Root CAs"></a>Root CAs</h3><p>Trusted root CAs are organizations that have protocols in place to issue certificates at different levels. They are audited regularly and comply to ISO standards. A list of all root CAs that have completed these requirements are provided and updated regularly by most operating systems:</p>
+<ul>
+<li>Microsoft: <a href="https://social.technet.microsoft.com/wiki/contents/articles/37816.microsoft-trusted-root-certificate-program-participants-as-of-april-25-2017.aspx" target="_blank" rel="external">https://social.technet.microsoft.com/wiki/contents/articles/37816.microsoft-trusted-root-certificate-program-participants-as-of-april-25-2017.aspx</a></li>
+<li>Apple: <a href="https://support.apple.com/en-au/HT207177" target="_blank" rel="external">https://support.apple.com/en-au/HT207177</a></li>
+<li>Linux: Most distributions use Mozilla’s list - <a href="https://ccadb-public.secure.force.com/mozilla/IncludedCACertificateReport" target="_blank" rel="external">https://ccadb-public.secure.force.com/mozilla/IncludedCACertificateReport</a></li>
+</ul>
+<h3 id="Intermediate-CAs"><a href="#Intermediate-CAs" class="headerlink" title="Intermediate CAs"></a>Intermediate CAs</h3><p>More often than not, certificates used on the internet are not issued by a root CA, but instead from an intermediate CA. One of the many reasons is that if the intermediate CA were to be compromised, the root CA can issue out a revocation that tells clients not to trust any certificate by that intermediate CA. There can be multiple levels of intermediate CA’s underneath a root CA.</p>
+<h3 id="Issuing-CAs"><a href="#Issuing-CAs" class="headerlink" title="Issuing CAs"></a>Issuing CAs</h3><p>Just as root CAs generally don’t issue client certificates, intermediate CAs don’t have to issue client certificates either. When a CA starts issuing certificates to clients, it is called an issuing CA.</p>
+<h3 id="CDPs-and-CRLs"><a href="#CDPs-and-CRLs" class="headerlink" title="CDPs and CRLs"></a>CDPs and CRLs</h3><p>The CDP (CRL distribution point) is a network location that is stamped on to a certificate when it is issued from a CA. It contains one or many CRLs (certificate revocation list). A CRL is a file that the client reads to see if any issued certificates have been revoked. CRLs in the CDP are usually updated automatically by the CA software itself. The exception to this are root CAs, which are generally kept offline. This CRL needs to be updated manually and transferred from the airgapped system to the CDP accessible by clients on the internet (or network, if it is LAN CA). There can be a CRL and multiple delta CRLs, which contain changes in between CRL refresh periods. This helps to keep download sizes minimal.</p>
+<h3 id="OCSP"><a href="#OCSP" class="headerlink" title="OCSP"></a>OCSP</h3><p>OCSP (Online Certificate Status Protocol) is a great alternative to CRLs. The OCSP responder server URI is stamped on to the certicate when it is issued from the CA. When the client needs to check the status of a certificate, it sends the serial number of the certificate to the OCSP responder to check if it is still valid. The server then responds with the status. It uses much less bandwidth than a CDP with CRLs and delta CRLs.</p>
+<h3 id="Microsoft-AD-CA-Infrastructure"><a href="#Microsoft-AD-CA-Infrastructure" class="headerlink" title="Microsoft AD CA Infrastructure"></a>Microsoft AD CA Infrastructure</h3><p>Best practice guidance from Microsoft suggests the following infrastructure:</p>
+<ol>
+<li>A non-domain joined standalone root CA. Once it has issued a certificate to the intermediate CA, it is to be shut down and only powered back on to update its CRL.</li>
+<li>A domain-joined intermediate CA. This is integrated with Active Directory and issues certificates from certificate templates. It can also act as a CDP and OCSP responder for all clients, but it is generally better to split these roles out to other servers. Usually the CA stores the CDP data in AD as well as a file share and website, for maximum availability.</li>
+</ol>
+<h2 id="Certificate-types"><a href="#Certificate-types" class="headerlink" title="Certificate types"></a>Certificate types</h2><p>There are three different types of certificates, each with different levels of trust and verification.</p>
+<h3 id="Domain-Validated-certificates"><a href="#Domain-Validated-certificates" class="headerlink" title="Domain Validated certificates"></a>Domain Validated certificates</h3><p>This is the base type of certificate. All that is usually needed to verify ownership of the domain is to add a TXT record, or click on a link sent to <code>admin@domain.com</code>. Whilst the encryption being used can be the same as the higher certificates, the level of trust may be low.</p>
+<h3 id="Organization-Validated-certificates"><a href="#Organization-Validated-certificates" class="headerlink" title="Organization Validated certificates"></a>Organization Validated certificates</h3><p>This certificate type requires further verification. Normally it requires an exchange of physical documents to prove ownership of the business that the domain name is representing.</p>
+<h3 id="Extended-Validation-certificates"><a href="#Extended-Validation-certificates" class="headerlink" title="Extended Validation certificates"></a>Extended Validation certificates</h3><p>This certificate has the highest level of trust. When applied to a website, users’ web browsers show a green bar. It has the following requirements:</p>
+<ol>
+<li>Establish the legal identity as well as the operational and physical presence of website owner.</li>
+<li>Establish that the applicant is the domain name owner or has exclusive control over the domain name.</li>
+<li>Confirm the identity and authority of the individuals acting for the website owner, and that documents pertaining to legal obligations are signed by an authorised officer.</li>
+</ol>
+<p>It is not currently possible to get a wildcard EV certificate - it is just for the domains in the certificate request.</p>
+<h2 id="Certificate-structure"><a href="#Certificate-structure" class="headerlink" title="Certificate structure"></a>Certificate structure</h2><p>A certificate contains the following information:</p>
+<ul>
+<li>Serial number - This is unique to the CA and is used to tracl revocation information.</li>
+<li>Subject - The entity that the certificate belongs to. This can be a user, device, or organization.</li>
+<li>Issuer - The issuer of the certificate, who verified the information within.</li>
+<li>Not Before - The earliest time at which the certificate can be considered valid.</li>
+<li>Not After - The latest time at which the certificate can be considered valid.</li>
+<li>Key Usage - The valid cryptographic uses of the certificate’s public key. This can include digital signature validation, key encipherment, etc.</li>
+<li>Extended Key Usage - The applications the certificate can be used for. This can include code signing, email signing, etc.</li>
+<li>Public Key - The public key for the certificate subject.</li>
+<li>Signature Algorithm - The algorithm used to sign the public key certificate.</li>
+<li>Signature - A signature of the certificate body by the issuer’s private key.</li>
+</ul>
+<h2 id="Encryption-types"><a href="#Encryption-types" class="headerlink" title="Encryption types"></a>Encryption types</h2><h3 id="Symmetric"><a href="#Symmetric" class="headerlink" title="Symmetric"></a>Symmetric</h3><p>Symmetric encryption is used when both parties have the same encryption key.</p>
+<h3 id="Asymmetric"><a href="#Asymmetric" class="headerlink" title="Asymmetric"></a>Asymmetric</h3><p>Asymmetric encryption is used when both parties have different encryption keys. This is more commonly called public/private key encryption. The keys are generated at the same time. Anything encrypted with the private key can be decrypted by the public key, and vice-versa.</p>
+<h2 id="Anatomy-of-a-TLS-handshake"><a href="#Anatomy-of-a-TLS-handshake" class="headerlink" title="Anatomy of a TLS handshake"></a>Anatomy of a TLS handshake</h2><p>TLS uses a combination of both asymmetric and symmetric encryption whilst communicating.</p>
+<h3 id="Negotiation"><a href="#Negotiation" class="headerlink" title="Negotiation"></a>Negotiation</h3><ol>
+<li>The <strong>client</strong> sends a <code>ClientHello</code> message to the server, which specifies the highest TLS protocol it supports, a random number, a list of ciphers it supports and a list of compression methods it supports.</li>
+<li>The <strong>server</strong> sends a <code>ServerHello</code> message to the client, containing the TLS protocol, compression method and cipher from the lists sent from the user, as well as a random number. The server may also send a session ID, however this is not mandatory.</li>
+<li>The <strong>server</strong> may also send both a <code>Certificate</code> (which contains the public key of the server, and is verified by a third-party) and a <code>ServerKeyExchange</code> message, depending on the cipher suite. The server can also send a <code>CertificateRequest</code> message if mutual certificate authentication is being used.</li>
+<li>The <strong>server</strong> sends a <code>ServerHelloDone</code> message, to show it is done with handshake negotiation.</li>
+<li>The <strong>client</strong> sends a <code>Certificate</code> message (if mutual certificate authentication is being used).</li>
+<li>The <strong>client</strong> sends a <code>ClientKeyExchange</code> message, which contains either a <code>PreMasterSecret</code>, public key, or nothing. It is encrypted with the public key of the server certificate.</li>
+<li>The <strong>client</strong> sends a <code>CertificateVerify</code> message, which is a signature for the previous client handshake messages and is generated using the client private key. It can be verified with the client public key.</li>
+<li>The <strong>client and server</strong> use the shared random numbers and <code>PreMasterSecret</code> to generate a common shared secret. This is called the <code>master secret</code>. All future data is encrypted with this secret and a psudorandom function.</li>
+</ol>
+<h3 id="ChangeCipherSpec"><a href="#ChangeCipherSpec" class="headerlink" title="ChangeCipherSpec"></a>ChangeCipherSpec</h3><ol>
+<li>The <strong>client</strong> sends a <code>ChangeCipherSpec</code> message. This lets the server know that the cient will only talk in that cipher for the rest of the session.</li>
+<li>The <strong>client</strong> sends a <code>Finished</code> message that contains a hash of all the previous handshake messages. If this fails at the server end, the TLS connection is not considered valid and will be torn down.</li>
+<li>The <strong>server</strong> sends a <code>ChangeCipherSpec</code> message. This lets the client know that the server will only talk in that server for the rest of the session.</li>
+<li>The <strong>server</strong> sends a <code>Finished</code> message that contains a hash of all the previous handshake messages. If this fails at the client end, the TLS connection is not considered valid and will be torn down.</li>
+</ol>
+<p>The handshake is now complete and now that both ends have the same <code>master secret</code>, they can switch to symmetric encryption, which is computationally much less expensive.</p>
+<h2 id="TLS-Versions"><a href="#TLS-Versions" class="headerlink" title="TLS Versions"></a>TLS Versions</h2><p>TLS versions and ciphers are independent of certificates, and can be changed at any time on the server. This may have implications with client support, however nearly all modern clients have support for TLS 1.2 (the latest version as of this blog post).</p>
+<ul>
+<li>SSL 3.0</li>
+</ul>
+<p>SSL 3.0 was first introducted in 1996. It has been depreciated by the IETF since 2015 and is not considered secure. It should no longer be used, as it has been broken due to multiple vulnerabilities (POODLE, DROWN, etc).</p>
+<ul>
+<li>TLS 1.0</li>
+</ul>
+<p>TLS 1.0 supports downgrade negitiation, allowing an attacker to bring the server back down to SSL 3.0, and therefore bringing the vulnerabilities with it. It should also no longer be used. It does however allow the use of better ciphers than SSL 3.0</p>
+<ul>
+<li>TLS 1.1</li>
+</ul>
+<p>TLS 1.1 should be considered the bare minimum for TLS-protected communications. No protocol-level vulnerabilities have been found so far. It provides protection against padding errors (the basis of the POODLE attack).</p>
+<ul>
+<li>TLS 1.2</li>
+</ul>
+<p>TLS 1.2 is the newest TLS protocol, introduced in 2008. It is currently the strongest TLS protocol.</p>
+<ul>
+<li>TLS 1.3</li>
+</ul>
+<p>TLS 1.3 is currently a working draft with the IETF and is not released for general use yet.</p>
+<h2 id="Ciphers"><a href="#Ciphers" class="headerlink" title="Ciphers"></a>Ciphers</h2><p>Along with the TLS protocol version, the client and server also negotiate a cipher to communicate with. The ciphers considered secure change as cracking technology progresses and vulnerabilities are found.</p>
+<p>I’ve found that <a href="https://cipherli.st/" target="_blank" rel="external">https://cipherli.st/</a> is a great resource for server cipher list configuration, and <a href="https://www.ssllabs.com/ssltest/" target="_blank" rel="external">https://www.ssllabs.com/ssltest/</a> is great for testing your site.</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Jacob Ludriks&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>

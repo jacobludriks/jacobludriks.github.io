@@ -39,6 +39,124 @@
   </div>
 </header>
     <section id="main" class="outer">
+      <article id="post-BitLocker-AD-ACE-s" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/06/04/BitLocker-AD-ACE-s/">BitLocker AD ACE&#39;s</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2015/06/04/BitLocker-AD-ACE-s/" class="article-date">
+  <time datetime="2015-06-04T05:27:00.000Z" itemprop="datePublished">2015-06-04</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>When setting up BitLocker for interoperability with Active Directory, Microsoft gets you to run a VBS script to add an Access Control Entity (<a href="https://technet.microsoft.com/en-us/library/dd875529%28v=ws.10%29.aspx" target="_blank" rel="external">https://technet.microsoft.com/en-us/library/dd875529%28v=ws.10%29.aspx</a>). Unfortunately the script didn’t work for me, so I rewrote it in PowerShell.</p>
+<script src="https://gist.github.com/jacobludriks/0bd728f35570a63b7dbf.js"></script>
+
+<p>Use with <code>.\BitLocker-ACE.ps1 -Read</code> to check if the ACE is already there and <code>.\BitLocker-ACE.ps1 -Write</code> to create the ACE.</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/activedirectory/">activedirectory</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/bitlocker/">bitlocker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/powershell/">powershell</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+</article>
+
+
+    
+      <article id="post-Trying-out-Docker-with-VMWare-Photon-and-Docker-CLI-for-Windows" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/04/23/Trying-out-Docker-with-VMWare-Photon-and-Docker-CLI-for-Windows/">Trying out Docker with VMWare Photon and Docker CLI for Windows</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2015/04/23/Trying-out-Docker-with-VMWare-Photon-and-Docker-CLI-for-Windows/" class="article-date">
+  <time datetime="2015-04-23T06:30:00.000Z" itemprop="datePublished">2015-04-23</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>VMWare released “Photon” earlier this week, which is a lightweight Linux OS for hosting Docker containers. It’s amazingly slim like CoreOS and deploys in a matter of seconds. I gave it a spin today and it worked pretty well. Installing it on vSphere was pretty straightforward following <a href="https://vmware.github.io/photon/assets/files/getting_started_with_photon_on_vsphere.pdf" target="_blank" rel="external">documentation</a> on the Photon GitHub site. Once it was installed, I needed to make a few changes to get it working smoothly.</p>
+<h4 id="Setting-the-proxy"><a href="#Setting-the-proxy" class="headerlink" title="Setting the proxy"></a>Setting the proxy</h4><p>If your environment uses a proxy to connect to the internet, continue with this section. If not, skip.</p>
+<p>First, create a new directory to store the extra configuration.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir /etc/systemd/system/docker.service.d</div></pre></td></tr></table></figure>
+<p>Next, create a <code>http-proxy.conf</code> file in the directory and edit it.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">touch /etc/systemd/system/docker.service.d/http-proxy.conf</div><div class="line">nano /etc/systemd/system/docker.service.d/http-proxy.conf</div></pre></td></tr></table></figure>
+<p>Add the following information to the file (substituting where necessary) and save with <code>Ctrl + X</code>.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[Service]</div><div class="line">Environment=&quot;HTTP_PROXY=http://username:password@proxy.example.com:8080/&quot;</div></pre></td></tr></table></figure>
+<p>Reload the <code>systemd</code> daemon and restart Docker.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">systemctl daemon-reload</div><div class="line">systemctl restart docker</div></pre></td></tr></table></figure>
+<p>Docker now has access to the internet.</p>
+<h4 id="Allow-Docker-connection-via-TCP"><a href="#Allow-Docker-connection-via-TCP" class="headerlink" title="Allow Docker connection via TCP"></a>Allow Docker connection via TCP</h4><p>By default, Docker only allows connection through UNIX sockets. Since we will be controlling it via the Windows client, we need TCP access.</p>
+<p>Open up the Docker service file in nano</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nano /etc/systemd/system/multi-user.target.wants/docker.service</div></pre></td></tr></table></figure>
+<p>Edit the <code>Service -&gt; ExecStart</code> line to allow TCP connections by changing:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ExecStart=/bin/docker -d -s overlay</div></pre></td></tr></table></figure>
+<p>to</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ExecStart=/bin/docker -d -s overlay -H tcp://0.0.0.0:2375</div></pre></td></tr></table></figure>
+<p>Reload the <code>systemd</code> daemon and restart Docker.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">systemctl daemon-reload</div><div class="line">systemctl restart docker</div></pre></td></tr></table></figure>
+<h4 id="Upgrade-the-Docker-binary"><a href="#Upgrade-the-Docker-binary" class="headerlink" title="Upgrade the Docker binary"></a>Upgrade the Docker binary</h4><p>Photon comes with Docker 1.5.0 but unfortunately the Windows client only works with 1.6.0 and above.</p>
+<p>If you are using a corporate proxy, you will first need to set the <code>http_proxy</code> environmental variable so <code>wget</code> works</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export https_proxy=&quot;http://username:password@proxy.example.com:8080/&quot;</div></pre></td></tr></table></figure>
+<p>Download the Docker 1.6.0 binary</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget https://get.docker.com/builds/Linux/x86_64/docker-1.6.0</div></pre></td></tr></table></figure>
+<p>Move the binary to <code>/bin/</code> and mark it as executable</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">systemctl stop docker</div><div class="line">rm -r /bin/docker</div><div class="line">mv docker-1.6.0 /bin/docker</div><div class="line">chmod +x /bin/docker</div><div class="line">systemctl start docker</div></pre></td></tr></table></figure>
+<p>You will now have Docker 1.6.0 running.</p>
+<h4 id="Connecting-from-Windows"><a href="#Connecting-from-Windows" class="headerlink" title="Connecting from Windows"></a>Connecting from Windows</h4><p>Download Docker 1.6.0 for Windows from Docker.com - <a href="https://get.docker.com/builds/Windows/i386/docker-1.6.0.exe" target="_blank" rel="external">32-bit</a> or <a href="https://get.docker.com/builds/Windows/x86_64/docker-1.6.0.exe" target="_blank" rel="external">64-bit</a> and open PowerShell in that directory. At this point I recommend renaming the file to <code>docker.exe</code>.</p>
+<p>To connect to the Photon host, run the following:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">.\docker.exe -H=tcp://photon.ip.address.here:2375 info</div></pre></td></tr></table></figure>
+<p>This will show information about the Docker host like so:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Containers: 12</div><div class="line">Images: 49</div><div class="line">Storage Driver: overlay</div><div class="line"> Backing Filesystem: extfs</div><div class="line">Execution Driver: native-0.2</div><div class="line">Kernel Version: 3.19.2</div><div class="line">Operating System: &lt;unknown&gt;</div><div class="line">CPUs: 2</div><div class="line">Total Memory: 489.7 MiB</div><div class="line">Name: bvdocker1</div><div class="line">ID: &lt;id here&gt;</div></pre></td></tr></table></figure>
+<p>You are now connected!</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/photon/">photon</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/">windows</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+</article>
+
+
+    
       <article id="post-Matching-VM-disks-and-Windows-disks-with-PowerCLI" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -391,125 +509,6 @@
       <footer class="article-footer">
         
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hp/">hp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ilo/">ilo</a></li></ul>
-
-      </footer>
-    
-  </div>
-  
-</article>
-
-
-    
-      <article id="post-Installing-LinuxDC-in-a-FreeNAS-jail" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/21/Installing-LinuxDC-in-a-FreeNAS-jail/">Installing LinuxDC++ in a FreeNAS jail</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      <a href="/2015/01/21/Installing-LinuxDC-in-a-FreeNAS-jail/" class="article-date">
-  <time datetime="2015-01-21T09:30:00.000Z" itemprop="datePublished">2015-01-21</time>
-</a>
-      
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>Set up SSH</strong></p>
-<p>First, set up SSH by running the following in the tcsh session.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">echo &apos;sshd_enable=&quot;YES&quot;&apos; &gt;&gt; /etc/rc.conf</div><div class="line">echo &apos;ListenAddress 0.0.0.0&apos; &gt;&gt; /etc/ssh/sshd_config</div><div class="line">echo &apos;PermitRootLogin yes&apos; &gt;&gt; /etc/ssh/sshd_config</div><div class="line">echo &apos;PasswordAuthentication yes&apos; &gt;&gt; /etc/ssh/sshd_config</div></pre></td></tr></table></figure>
-<p>Create a host RSA key with <code>ssh-keygen -t rsa</code> and entering <code>/etc/ssh/ssh_host_rsa_key</code> as the directory. Do not worry about a passphrase. After this is done, start the SSHd service with <code>service sshd start</code>.</p>
-<p><strong>Note</strong>: This isn’t the most secure as you are logging in as root.</p>
-<p>Reset the root password with <code>passwd</code>.</p>
-<p><strong>Install packages and dependencies</strong></p>
-<p>Install the latest <code>pkg</code> package with <code>pkg bootstrap -f</code>. After this has installed, upgrade with <code>pkg2ng</code>. Next, install the packages:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">pkg install xorg openbox tightvnc linuxdcpp</div><div class="line">pkg install libiconv expat</div></pre></td></tr></table></figure>
-<p>For some reason Pango needs to be reinstalled, so reinstall with:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pkg install -f pango</div></pre></td></tr></table></figure>
-<p><strong>Set up VNC</strong></p>
-<p>Create a directory for the <code>xstartup</code> script and then edit the file.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir ~/.vnc</div><div class="line">edit ~/.vnc/xstartup</div></pre></td></tr></table></figure>
-<p>Place the following in the <code>xstartup</code> script and save:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">#!/bin/sh</div><div class="line">xrdb $HOME/.Xresources &amp;</div><div class="line">openbox &amp;</div><div class="line">xterm -bg black -fg gray &amp;</div></pre></td></tr></table></figure>
-<p>Make the script executable:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chmod +x ~/.vnc/xstartup</div></pre></td></tr></table></figure>
-<p><strong>Get rid of setup quirks</strong></p>
-<p>There are certain things that <code>linuxdcpp</code> doesn’t like, so run the following commands:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">gdk-pixbuf-query-loaders &gt; /usr/local/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache</div><div class="line">mkdir -p /root/.local/share</div></pre></td></tr></table></figure>
-<p><strong>Run VNC</strong></p>
-<p>Run the following to start <code>VNC</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vncserver -depth 24 -geometry 1280x800 -nolisten tcp :1</div></pre></td></tr></table></figure>
-<p>You will be asked to set a password - this is your VNC password for later.</p>
-<p><strong>Setting up PuTTY</strong></p>
-<p>Download <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/" target="_blank" rel="external">PuTTY</a> and run. Enter your host details.</p>
-<img src="/2015/01/21/Installing-LinuxDC-in-a-FreeNAS-jail/host.png" alt="host.png" title="">
-<p>Go to <code>Connection &gt; SSH &gt; Tunnels</code> and create a tunnel on port 5901 for VNC. Don’t forget to press “Add”</p>
-<img src="/2015/01/21/Installing-LinuxDC-in-a-FreeNAS-jail/tunnel.png" alt="tunnel.png" title="">
-<p>Press “Open” to connect. Enter <code>root</code> for the username and then type the password you specified earlier with <code>passwd</code>.</p>
-<p>Now, download and install <a href="http://www.tightvnc.com/download.php" target="_blank" rel="external">TightVNC</a> and open the viewer. Connect to <code>localhost:5901</code>. Type the VNC password and press enter. You will now be connected to a remote desktop.</p>
-<p>Open LinuxDC++ with <code>linuxdcpp</code>.</p>
-<p>Done!</p>
-
-      
-    </div>
-    
-    
-      <footer class="article-footer">
-        
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dcpp/">dcpp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/freenas/">freenas</a></li></ul>
-
-      </footer>
-    
-  </div>
-  
-</article>
-
-
-    
-      <article id="post-SickRage-not-working-in-a-FreeNAS-jail" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/18/SickRage-not-working-in-a-FreeNAS-jail/">SickRage not working in a FreeNAS jail</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      <a href="/2015/01/18/SickRage-not-working-in-a-FreeNAS-jail/" class="article-date">
-  <time datetime="2015-01-17T23:05:00.000Z" itemprop="datePublished">2015-01-18</time>
-</a>
-      
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>I ran in to an issue where SickRage wasn’t downloading torrents due to a Unicode decode failure. The error I was getting:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">2015-01-17 14:57:12 WARNING  SEARCHQUEUE-MANUAL-272644 :: Failed to download result</div><div class="line">AA</div><div class="line">AAUnicodeEncodeError: &apos;ascii&apos; codec can&apos;t encode characters in position 56-57: ordinal not in range(128)</div><div class="line">AA    with open(filename, &apos;wb&apos;) as fp:</div><div class="line">AA  File &quot;/usr/pbi/sickrage-amd64/share/sickrage/SickRage/sickbeard/helpers.py&quot;, line 1209, in download_file</div></pre></td></tr></table></figure>
-<p>To fix this, I ssh’ed in to the jail and ran <code>edit /usr/local/etc/rc.d/sickrage</code>. After the line <code>load_rc_config ${name}</code>, I pasted the following lines:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export LC_ALL=en_US.UTF-8</div><div class="line">export LANG=en_US.UTF-8</div><div class="line">export LANGUAGE=en_US.UTF-8</div></pre></td></tr></table></figure>
-<p>After saving the file and restarting the <code>sickrage</code> service, everything worked again.</p>
-
-      
-    </div>
-    
-    
-      <footer class="article-footer">
-        
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/freenas/">freenas</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sickrage/">sickrage</a></li></ul>
 
       </footer>
     

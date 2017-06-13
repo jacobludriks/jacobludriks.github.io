@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails - Jacob Ludriks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Following on from the previous post about thin jails, we can now procede to install the following applications in to seperate jails:  Sonarr Radarr SABnzbd nginx as a reverse proxy for the above appli">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails">
+<meta property="og:url" content="http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/index.html">
+<meta property="og:site_name" content="Jacob Ludriks">
+<meta property="og:description" content="Following on from the previous post about thin jails, we can now procede to install the following applications in to seperate jails:  Sonarr Radarr SABnzbd nginx as a reverse proxy for the above appli">
+<meta property="og:updated_time" content="2017-06-13T04:51:16.805Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails">
+<meta name="twitter:description" content="Following on from the previous post about thin jails, we can now procede to install the following applications in to seperate jails:  Sonarr Radarr SABnzbd nginx as a reverse proxy for the above appli">
+  
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/" class="article-date">
+  <time datetime="2017-06-08T03:58:13.000Z" itemprop="datePublished">2017-06-08</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Following on from the previous post about thin jails, we can now procede to install the following applications in to seperate jails:</p>
+<ul>
+<li>Sonarr</li>
+<li>Radarr</li>
+<li>SABnzbd</li>
+<li>nginx as a reverse proxy for the above applications</li>
+<li>Plex</li>
+</ul>
+<p>First, clone the skeleton snapshot to the thinjails directory for each jail:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/sonarr</div><div class="line">zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/radarr</div><div class="line">zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/sabnzbd</div><div class="line">zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/nginx</div><div class="line">zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/plex</div></pre></td></tr></table></figure>
+<p>Next, create the mount folders for the jails</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mkdir -p /usr/local/jails/sonarr</div><div class="line">mkdir -p /usr/local/jails/radarr</div><div class="line">mkdir -p /usr/local/jails/sabnzbd</div><div class="line">mkdir -p /usr/local/jails/nginx</div><div class="line">mkdir -p /usr/local/jails/plex</div></pre></td></tr></table></figure>
+<p>Add the configurations for the jails in <code>/etc/jail.conf</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"># Insert at the bottom of jail.conf from previous blog post</div><div class="line">sonarr &#123;</div><div class="line">    $ip = 45;</div><div class="line">&#125;</div><div class="line"></div><div class="line">radarr &#123;</div><div class="line">    $ip = 46;</div><div class="line">&#125;</div><div class="line"></div><div class="line">sabnzbd &#123;</div><div class="line">    $ip = 47;</div><div class="line">&#125;</div><div class="line"></div><div class="line">nginx &#123;</div><div class="line">    $ip = 48;</div><div class="line">&#125;</div><div class="line"></div><div class="line">plex &#123;</div><div class="line">    $ip = 49;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Create a fstab file for each jail at <code>/usr/local/jails/&lt;jailname&gt;.fstab</code>, replacing <code>&lt;jailname&gt;</code> with the jail name of each.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/usr/local/jails/templates/base-11.0-RELEASE    /usr/local/jails/&lt;jailname&gt;/  nullfs  ro      0       0</div><div class="line">/usr/local/jails/thinjails/&lt;jailname&gt; /usr/local/jails/&lt;jailname&gt;/skeleton  nullfs  rw      0       0</div></pre></td></tr></table></figure>
+<p>Create and start jails</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">jail -c sonarr</div><div class="line">jail -c radarr</div><div class="line">jail -c sabnzbd</div><div class="line">jail -c nginx</div><div class="line">jail -c plex</div></pre></td></tr></table></figure>
+<p>Add jails to auto-start on boot in <code>/etc/rc.conf</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jail_list=&quot;plex sonarr radarr nginx sabnzbd&quot;</div></pre></td></tr></table></figure>
+<h2 id="Sonarr"><a href="#Sonarr" class="headerlink" title="Sonarr"></a>Sonarr</h2><p>Enter jail, replacing <code>&lt;id&gt;</code> with the ID of the Sonarr jail shown in <code>jls</code> output</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">jls</div><div class="line">jexec &lt;id&gt; /bin/sh</div></pre></td></tr></table></figure>
+<p>Install Sonarr, answering <code>yes</code> to installing <code>pkg</code> and the package itself</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pkg install sonarr</div></pre></td></tr></table></figure>
+<p>Enable and start Sonarr</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sysrc sonarr_enable=YES</div><div class="line">service sonarr start</div></pre></td></tr></table></figure>
+<h2 id="Radarr"><a href="#Radarr" class="headerlink" title="Radarr"></a>Radarr</h2><p>Enter jail, replacing <code>&lt;id&gt;</code> with the ID of the Radarr jail shown in <code>jls</code> output</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">jls</div><div class="line">jexec &lt;id&gt; /bin/sh</div></pre></td></tr></table></figure>
+<p>Install Radarr, answering <code>yes</code> to installing <code>pkg</code> and the package itself</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pkg install radarr</div></pre></td></tr></table></figure>
+<p>Enable and start Radarr</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sysrc radarr_enable=YES</div><div class="line">service radarr start</div></pre></td></tr></table></figure>
+<h2 id="SABnzbd"><a href="#SABnzbd" class="headerlink" title="SABnzbd"></a>SABnzbd</h2><p>Enter jail, replacing <code>&lt;id&gt;</code> with the ID of the SABnzbd jail shown in <code>jls</code> output</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">jls</div><div class="line">jexec &lt;id&gt; /bin/sh</div></pre></td></tr></table></figure>
+<p>Install SABbnzbd, answering “yes” to installing pkg and the package itself</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pkg install sabnzbdplus</div></pre></td></tr></table></figure>
+<p>Enable and start SABbnzbd</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sysrc sabnzbdplus_enable=YES</div><div class="line">service sabnzbdplus start</div></pre></td></tr></table></figure>
+<h2 id="Plex"><a href="#Plex" class="headerlink" title="Plex"></a>Plex</h2><p>Enter jail, replacing <code>&lt;id&gt;</code> with the ID of the Plex jail shown in <code>jls</code> output</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">jls</div><div class="line">jexec &lt;id&gt; /bin/sh</div></pre></td></tr></table></figure>
+<p>Install Plex, answering “yes” to installing pkg and the package itself</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pkg install plexmediaserver</div></pre></td></tr></table></figure>
+<p>Enable and start Plex</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sysrc plexmediaserver_enable=YES</div><div class="line">service plexmediaserver start</div></pre></td></tr></table></figure>
+<h2 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h2><p>Enter jail, replacing <code>&lt;id&gt;</code> with the ID of the nginx jail shown in <code>jls</code> output</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">jls</div><div class="line">jexec &lt;id&gt; /bin/sh</div></pre></td></tr></table></figure>
+<p>Install nginx, answering “yes” to installing pkg and the package itself</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pkg install nginx</div></pre></td></tr></table></figure>
+<p>Enable nginx</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sysrc nginx_enable=YES</div></pre></td></tr></table></figure>
+<p>Edit <code>/usr/local/etc/nginx/nginx.conf</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">events &#123;</div><div class="line">    worker_connections  1024;</div><div class="line">&#125;</div><div class="line"></div><div class="line">http &#123;</div><div class="line">    server &#123;</div><div class="line">        listen  80;</div><div class="line">        server_name home.ludriks.com 10.1.1.45;</div><div class="line"></div><div class="line">        location /sonarr &#123;</div><div class="line">            proxy_pass  http://&lt;sonarr_ip here&gt;:8989;</div><div class="line">            proxy_set_header    X-Real-IP  $remote_addr;</div><div class="line">            proxy_set_header    Host $host;</div><div class="line">            proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;</div><div class="line">            proxy_set_header    X-Forwarded-Proto $scheme;</div><div class="line">            proxy_redirect off;</div><div class="line">        &#125;</div><div class="line">        location /radarr &#123;</div><div class="line">            proxy_pass  http://&lt;radarr_ip here&gt;:7878;</div><div class="line">            proxy_set_header    X-Real-IP  $remote_addr;</div><div class="line">            proxy_set_header    Host $host;</div><div class="line">            proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;</div><div class="line">            proxy_set_header    X-Forwarded-Proto $scheme;</div><div class="line">            proxy_redirect off;</div><div class="line">        &#125;</div><div class="line">        location /sabnzbd &#123;</div><div class="line">            proxy_pass  http://&lt;sabnzbd_ip here&gt;:8080;</div><div class="line">            proxy_set_header    X-Real-IP  $remote_addr;</div><div class="line">            proxy_set_header    Host $host;</div><div class="line">            proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;</div><div class="line">            proxy_set_header    X-Forwarded-Proto $scheme;</div><div class="line">            proxy_redirect off;</div><div class="line">        &#125;</div><div class="line">        access_log /var/log/nginx/sonarr.your-domain.xyz;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Start nginx</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service nginx start</div></pre></td></tr></table></figure>
+<p>I will follow up this blog post with another detailing integration with the jails.</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/06/13/SSL-TLS-A-Primer/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-title"><span>&lt;</span>&nbsp;
+        
+          SSL/TLS: A Primer
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/06/07/FreeBSD-Thin-Jails/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">FreeBSD Thin Jails&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Jacob Ludriks&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>
