@@ -121,7 +121,7 @@
     <link href="http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/"/>
     <id>http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/</id>
     <published>2017-06-08T03:58:13.000Z</published>
-    <updated>2017-06-13T04:51:16.805Z</updated>
+    <updated>2017-06-13T05:41:24.245Z</updated>
     
     <content type="html"><![CDATA[<p>Following on from the previous post about thin jails, we can now procede to install the following applications in to seperate jails:</p>
 <ul>
@@ -131,6 +131,7 @@
 <li>nginx as a reverse proxy for the above applications</li>
 <li>Plex</li>
 </ul>
+<a id="more"></a>
 <p>First, clone the skeleton snapshot to the thinjails directory for each jail:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/sonarr</div><div class="line">zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/radarr</div><div class="line">zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/sabnzbd</div><div class="line">zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/nginx</div><div class="line">zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/plex</div></pre></td></tr></table></figure>
 <p>Next, create the mount folders for the jails</p>
@@ -183,7 +184,13 @@
     <summary type="html">
     
       &lt;p&gt;Following on from the previous post about thin jails, we can now procede to install the following applications in to seperate jails:&lt;/p&gt;
-
+&lt;ul&gt;
+&lt;li&gt;Sonarr&lt;/li&gt;
+&lt;li&gt;Radarr&lt;/li&gt;
+&lt;li&gt;SABnzbd&lt;/li&gt;
+&lt;li&gt;nginx as a reverse proxy for the above applications&lt;/li&gt;
+&lt;li&gt;Plex&lt;/li&gt;
+&lt;/ul&gt;
     
     </summary>
     
@@ -195,9 +202,10 @@
     <link href="http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/"/>
     <id>http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/</id>
     <published>2017-06-07T01:01:40.000Z</published>
-    <updated>2017-06-07T03:33:04.085Z</updated>
+    <updated>2017-06-13T05:41:33.773Z</updated>
     
     <content type="html"><![CDATA[<p>Recently I built up a new storage server running FreeBSD. Initially I was going to go with FreeNAS like my old storage server, however the FreeNAS project is in a bit of flux at the moment and I thought this would be a good way to learn about the inner workings of FreeBSD. Part of this is segregating the applications running on the server in to “jails”. They are a form of OS-level virtualization, where each jail has its own files, processes and user accounts.</p>
+<a id="more"></a>
 <p>I was tempted to run a jail management tool such as ezjail, iocage or qjail, however configuring manually through jail.conf and the jail command seems to be quite easy once you wrap your head around it. This guide walks through building a base jail template that can easily be added as a layer to new jails. This approach is great as you only need to update one layer when OS-level updates get released.</p>
 <p>First, enable jails in your OS.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sysrc jail_enable=YES</div></pre></td></tr></table></figure>
@@ -260,7 +268,7 @@
     
     <summary type="html">
     
-      &lt;p&gt;Recently I built up a new storage server running FreeBSD. Initially I was going to go with FreeNAS like my old storage server, however th
+      &lt;p&gt;Recently I built up a new storage server running FreeBSD. Initially I was going to go with FreeNAS like my old storage server, however the FreeNAS project is in a bit of flux at the moment and I thought this would be a good way to learn about the inner workings of FreeBSD. Part of this is segregating the applications running on the server in to “jails”. They are a form of OS-level virtualization, where each jail has its own files, processes and user accounts.&lt;/p&gt;
     
     </summary>
     

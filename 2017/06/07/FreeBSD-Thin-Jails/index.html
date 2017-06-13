@@ -20,7 +20,7 @@
 <meta property="og:url" content="http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/index.html">
 <meta property="og:site_name" content="Jacob Ludriks">
 <meta property="og:description" content="Recently I built up a new storage server running FreeBSD. Initially I was going to go with FreeNAS like my old storage server, however the FreeNAS project is in a bit of flux at the moment and I thoug">
-<meta property="og:updated_time" content="2017-06-07T03:33:04.085Z">
+<meta property="og:updated_time" content="2017-06-13T05:41:33.773Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="FreeBSD Thin Jails">
 <meta name="twitter:description" content="Recently I built up a new storage server running FreeBSD. Initially I was going to go with FreeNAS like my old storage server, however the FreeNAS project is in a bit of flux at the moment and I thoug">
@@ -195,6 +195,7 @@
     <div class="post-content markdown" itemprop="articleBody">
         <div class="main-content-wrap">
             <p>Recently I built up a new storage server running FreeBSD. Initially I was going to go with FreeNAS like my old storage server, however the FreeNAS project is in a bit of flux at the moment and I thought this would be a good way to learn about the inner workings of FreeBSD. Part of this is segregating the applications running on the server in to “jails”. They are a form of OS-level virtualization, where each jail has its own files, processes and user accounts.</p>
+<a id="more"></a>
 <p>I was tempted to run a jail management tool such as ezjail, iocage or qjail, however configuring manually through jail.conf and the jail command seems to be quite easy once you wrap your head around it. This guide walks through building a base jail template that can easily be added as a layer to new jails. This approach is great as you only need to update one layer when OS-level updates get released.</p>
 <p>First, enable jails in your OS.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sysrc jail_enable=YES</div></pre></td></tr></table></figure>

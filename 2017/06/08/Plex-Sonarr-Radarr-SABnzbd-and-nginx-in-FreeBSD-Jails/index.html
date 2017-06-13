@@ -19,7 +19,7 @@
 <meta property="og:url" content="http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/index.html">
 <meta property="og:site_name" content="Jacob Ludriks">
 <meta property="og:description" content="Following on from the previous post about thin jails, we can now procede to install the following applications in to seperate jails:  Sonarr Radarr SABnzbd nginx as a reverse proxy for the above appli">
-<meta property="og:updated_time" content="2017-06-13T04:51:16.805Z">
+<meta property="og:updated_time" content="2017-06-13T05:41:24.245Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails">
 <meta name="twitter:description" content="Following on from the previous post about thin jails, we can now procede to install the following applications in to seperate jails:  Sonarr Radarr SABnzbd nginx as a reverse proxy for the above appli">
@@ -201,6 +201,7 @@
 <li>nginx as a reverse proxy for the above applications</li>
 <li>Plex</li>
 </ul>
+<a id="more"></a>
 <p>First, clone the skeleton snapshot to the thinjails directory for each jail:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/sonarr</div><div class="line">zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/radarr</div><div class="line">zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/sabnzbd</div><div class="line">zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/nginx</div><div class="line">zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/plex</div></pre></td></tr></table></figure>
 <p>Next, create the mount folders for the jails</p>
