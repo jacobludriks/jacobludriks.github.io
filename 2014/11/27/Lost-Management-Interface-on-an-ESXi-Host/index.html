@@ -1,13 +1,19 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
+    
 <head>
-  <meta charset="utf-8">
-  
-  <title>Lost Management Interface on an ESXi Host - Jacob Ludriks</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="A hosts management network interface somehow dropped off the network this afternoon. Fortunately I was still able to get in through iLO. It always pays to have an out-of-band interface active!  From t">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jacob Ludriks">
+    <title>Lost Management Interface on an ESXi Host - Jacob Ludriks</title>
+    <meta name="author" content="Jacob Ludriks">
+    
+    
+    
+    <meta name="description" content="A hosts management network interface somehow dropped off the network this afternoon. Fortunately I was still able to get in through iLO. It always pays to have an out-of-band interface active!  From t">
 <meta name="keywords" content="vmware,esxi">
-<meta property="og:type" content="article">
+<meta property="og:type" content="blog">
 <meta property="og:title" content="Lost Management Interface on an ESXi Host">
 <meta property="og:url" content="http://jacob.ludriks.com/2014/11/27/Lost-Management-Interface-on-an-ESXi-Host/index.html">
 <meta property="og:site_name" content="Jacob Ludriks">
@@ -18,113 +24,377 @@
 <meta name="twitter:title" content="Lost Management Interface on an ESXi Host">
 <meta name="twitter:description" content="A hosts management network interface somehow dropped off the network this afternoon. Fortunately I was still able to get in through iLO. It always pays to have an out-of-band interface active!  From t">
 <meta name="twitter:image" content="http://jacob.ludriks.com/2014/11/27/Lost-Management-Interface-on-an-ESXi-Host/esxi-no-mgmt.png">
-  
-  
-  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
-  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="/css/style.css">
-  
-
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <!--STYLES END-->
+    
+    
 </head>
 
-<body>
-  <div id="container">
-    <header id="header">
-  <div id="header-outer" class="outer">
-    <div id="header-inner" class="inner">
-      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
-      <a id="logo" class="logo" href="/"></a>
-      <nav id="main-nav">
-        
-      </nav>
-      <nav id="sub-nav">
-        <div id="search-form-wrap">
-          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
-        </div>
-      </nav>
-    </div>
-  </div>
-</header>
-    <section id="main" class="outer"><article id="post-Lost-Management-Interface-on-an-ESXi-Host" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      Lost Management Interface on an ESXi Host
-    </h1>
-  
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
 
-      </header>
+
     
-    <div class="article-meta">
-      <a href="/2014/11/27/Lost-Management-Interface-on-an-ESXi-Host/" class="article-date">
-  <time datetime="2014-11-27T11:32:00.000Z" itemprop="datePublished">2014-11-27</time>
-</a>
-      
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>A hosts management network interface somehow dropped off the network this afternoon. Fortunately I was still able to get in through iLO. It always pays to have an out-of-band interface active!</p>
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/ ">Jacob Ludriks</a>
+    </h1>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/ "
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">Home</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-categories"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">Categories</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-tags"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">Tags</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-archives"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">Archives</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link st-search-show-outputs"
+                         href="#search"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-search"></i>
+                    <span class="sidebar-button-desc">Search</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="#about"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">About</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/atom.xml"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            Lost Management Interface on an ESXi Host
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2014-11-27T22:32:00+11:00">
+	
+		    Nov 27, 2014
+    	
+    </time>
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>A hosts management network interface somehow dropped off the network this afternoon. Fortunately I was still able to get in through iLO. It always pays to have an out-of-band interface active!</p>
 <img src="/2014/11/27/Lost-Management-Interface-on-an-ESXi-Host/esxi-no-mgmt.png" alt="esxi-no-mgmt.png" title="">
 <p>From the DCUI screen, press <code>Alt + F1</code>. This will bring up the login screen. Log in as root then type <code>esxcli network ip interface list</code>. You will get an output similar to the one below.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">vmk2</div><div class="line">    Name: vmk2</div><div class="line">    MAC Address: 00:50:56:79:0c:de</div><div class="line">    Enabled: true</div><div class="line">    Portset: DvsPortset-0</div><div class="line">    Portgroup: N/A</div><div class="line">    VDS Name: dvSwitch-vMotion</div><div class="line">    VDS UUID: 0c 7d 1a 50 93 7b 86 3f-76 f8 74 80 73 7c 3d 0f</div><div class="line">    VDS Port: 101</div><div class="line">    VDS Connection: 1952632411</div><div class="line">    MTU: 1500</div><div class="line">    TSO MSS: 65535</div><div class="line">    Port ID: 33554436</div><div class="line"></div><div class="line">vmk0</div><div class="line">    Name: vmk0</div><div class="line">    MAC Address: 00:1c:c4:bd:d6:ee</div><div class="line">    Enabled: false</div><div class="line">    Portset: DvsPortset-2</div><div class="line">    Portgroup: N/A</div><div class="line">    VDS Name: dvSwitch</div><div class="line">    VDS UUID: 10 e1 1a 50 b1 22 19 a1-d4 33 10 dc 72 9a 92 db</div><div class="line">    VDS Port: 151</div><div class="line">    VDS Connection: 660732515</div><div class="line">    MTU: 1500</div><div class="line">    TSO MSS: 65535</div><div class="line">    Port ID: 67108871</div></pre></td></tr></table></figure>
 <p>Fortunately mine was an easy issue to solve; vmk0 had <code>Enabled: false</code>. An easy fix: <code>esxcli network ip interface set -i vmk0 -e true</code></p>
 <p>After this I was able to reconnect to the host from within vCenter.</p>
 
-      
+            
+        </div>
     </div>
-    
-    
-      <footer class="article-footer">
+    <div id="post-footer" class="post-footer main-content-wrap">
         
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/esxi/">esxi</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vmware/">vmware</a></li></ul>
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/esxi/">esxi</a> <a class="tag tag--primary tag--small t-link" href="/tags/vmware/">vmware</a>
 
-      </footer>
-    
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2014/11/27/Upgrading-HBA-Firmware-and-Drivers-on-HP-ESXi-Hosts/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-title"><span>&lt;</span>&nbsp;
+            </div>
         
-          Upgrading HBA Firmware and Drivers on HP ESXi Hosts
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2014/11/27/Upgrading-HBA-Firmware-and-Drivers-on-HP-ESXi-Hosts/"  data-tooltip="Upgrading HBA Firmware and Drivers on HP ESXi Hosts">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2014/11/27/Meeting-Room-Utilization/" data-tooltip="Meeting Room Utilization">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2014/11/27/Lost-Management-Interface-on-an-ESXi-Host/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2014/11/27/Lost-Management-Interface-on-an-ESXi-Host/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2014/11/27/Lost-Management-Interface-on-an-ESXi-Host/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
         
-      </div>
-    </a>
-  
-  
-    <a href="/2014/11/27/Meeting-Room-Utilization/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Meeting Room Utilization&nbsp;<span>&gt;</span></div>
-    </a>
-  
-</nav>
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
 
-  
+
+        
+            
+        
+    </div>
 </article>
 
-</section>
-    <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2017 Jacob Ludriks&nbsp;
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
-    </div>
-  </div>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2017 Jacob Ludriks. All Rights Reserved.
+    </span>
 </footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2014/11/27/Upgrading-HBA-Firmware-and-Drivers-on-HP-ESXi-Hosts/"  data-tooltip="Upgrading HBA Firmware and Drivers on HP ESXi Hosts">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2014/11/27/Meeting-Room-Utilization/" data-tooltip="Meeting Room Utilization">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2014/11/27/Lost-Management-Interface-on-an-ESXi-Host/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2014/11/27/Lost-Management-Interface-on-an-ESXi-Host/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2014/11/27/Lost-Management-Interface-on-an-ESXi-Host/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2014/11/27/Lost-Management-Interface-on-an-ESXi-Host/">
+                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2014/11/27/Lost-Management-Interface-on-an-ESXi-Host/">
+                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2014/11/27/Lost-Management-Interface-on-an-ESXi-Host/">
+                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <h4 id="about-card-name">Jacob Ludriks</h4>
+        
+            <h5 id="about-card-bio"><p>author.bio</p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </h5>
+        
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
     
 
-<script src="/js/jquery.min.js"></script>
 
 
-
-<script src="/js/script.js"></script>
-  </div>
-</body>
 </html>

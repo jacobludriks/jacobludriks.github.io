@@ -1,13 +1,19 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
+    
 <head>
-  <meta charset="utf-8">
-  
-  <title>Foglight SSL Certificates - Jacob Ludriks</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Foglight for Virtualization 7.0 Standard uses Tomcat under the covers to serve the web interface. To replace the SSL certificate, follow the instructions below. I started with a password-protected PFX">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jacob Ludriks">
+    <title>Foglight SSL Certificates - Jacob Ludriks</title>
+    <meta name="author" content="Jacob Ludriks">
+    
+    
+    
+    <meta name="description" content="Foglight for Virtualization 7.0 Standard uses Tomcat under the covers to serve the web interface. To replace the SSL certificate, follow the instructions below. I started with a password-protected PFX">
 <meta name="keywords" content="foglight,tomcat,ssl">
-<meta property="og:type" content="article">
+<meta property="og:type" content="blog">
 <meta property="og:title" content="Foglight SSL Certificates">
 <meta property="og:url" content="http://jacob.ludriks.com/2016/05/12/Foglight-SSL-Certificates/index.html">
 <meta property="og:site_name" content="Jacob Ludriks">
@@ -16,57 +22,176 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Foglight SSL Certificates">
 <meta name="twitter:description" content="Foglight for Virtualization 7.0 Standard uses Tomcat under the covers to serve the web interface. To replace the SSL certificate, follow the instructions below. I started with a password-protected PFX">
-  
-  
-  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
-  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="/css/style.css">
-  
-
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <!--STYLES END-->
+    
+    
 </head>
 
-<body>
-  <div id="container">
-    <header id="header">
-  <div id="header-outer" class="outer">
-    <div id="header-inner" class="inner">
-      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
-      <a id="logo" class="logo" href="/"></a>
-      <nav id="main-nav">
-        
-      </nav>
-      <nav id="sub-nav">
-        <div id="search-form-wrap">
-          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
-        </div>
-      </nav>
-    </div>
-  </div>
-</header>
-    <section id="main" class="outer"><article id="post-Foglight-SSL-Certificates" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      Foglight SSL Certificates
-    </h1>
-  
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
 
-      </header>
+
     
-    <div class="article-meta">
-      <a href="/2016/05/12/Foglight-SSL-Certificates/" class="article-date">
-  <time datetime="2016-05-12T01:40:44.000Z" itemprop="datePublished">2016-05-12</time>
-</a>
-      
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Foglight for Virtualization 7.0 Standard uses Tomcat under the covers to serve the web interface. To replace the SSL certificate, follow the instructions below. I started with a password-protected PFX file that had the password <code>foglight</code>.</p>
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/ ">Jacob Ludriks</a>
+    </h1>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/ "
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">Home</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-categories"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">Categories</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-tags"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">Tags</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-archives"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">Archives</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link st-search-show-outputs"
+                         href="#search"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-search"></i>
+                    <span class="sidebar-button-desc">Search</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="#about"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">About</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/atom.xml"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            Foglight SSL Certificates
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2016-05-12T11:40:44+10:00">
+	
+		    May 12, 2016
+    	
+    </time>
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>Foglight for Virtualization 7.0 Standard uses Tomcat under the covers to serve the web interface. To replace the SSL certificate, follow the instructions below. I started with a password-protected PFX file that had the password <code>foglight</code>.</p>
 <ol>
 <li>Copy the PFX file to the server to the <code>/usr/local/tomcat/conf</code> directory</li>
 <li>Run the following to convert the PFX in to a Java keystore file, entering <code>foglight</code> for all password prompts: <code>/usr/local/jre1.6.0_43/bin/keytool -importkeystore -srckeystore /usr/local/tomcat/conf/foglight.pfx -srcstoretype pkcs12 -destkeystore /usr/local/tomcat/conf/foglight.jks -deststoretype JKS</code></li>
@@ -80,56 +205,201 @@
 <p>After a restart, the web interface will now be using the new certificate.</p>
 <p>For reference, the username and password for the appliance is <code>vkernel/vkernel</code> and the <code>su</code> password is <code>password</code>.</p>
 
-      
+            
+        </div>
     </div>
-    
-    
-      <footer class="article-footer">
+    <div id="post-footer" class="post-footer main-content-wrap">
         
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/foglight/">foglight</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ssl/">ssl</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tomcat/">tomcat</a></li></ul>
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/foglight/">foglight</a> <a class="tag tag--primary tag--small t-link" href="/tags/ssl/">ssl</a> <a class="tag tag--primary tag--small t-link" href="/tags/tomcat/">tomcat</a>
 
-      </footer>
-    
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2017/06/07/FreeBSD-Thin-Jails/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-title"><span>&lt;</span>&nbsp;
+            </div>
         
-          FreeBSD Thin Jails
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/07/FreeBSD-Thin-Jails/"  data-tooltip="FreeBSD Thin Jails">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/02/15/Password-expiry-notification/" data-tooltip="Password expiry notification">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2016/05/12/Foglight-SSL-Certificates/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2016/05/12/Foglight-SSL-Certificates/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2016/05/12/Foglight-SSL-Certificates/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
         
-      </div>
-    </a>
-  
-  
-    <a href="/2016/02/15/Password-expiry-notification/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Password expiry notification&nbsp;<span>&gt;</span></div>
-    </a>
-  
-</nav>
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
 
-  
+
+        
+            
+        
+    </div>
 </article>
 
-</section>
-    <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2017 Jacob Ludriks&nbsp;
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
-    </div>
-  </div>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2017 Jacob Ludriks. All Rights Reserved.
+    </span>
 </footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/07/FreeBSD-Thin-Jails/"  data-tooltip="FreeBSD Thin Jails">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/02/15/Password-expiry-notification/" data-tooltip="Password expiry notification">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2016/05/12/Foglight-SSL-Certificates/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2016/05/12/Foglight-SSL-Certificates/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2016/05/12/Foglight-SSL-Certificates/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2016/05/12/Foglight-SSL-Certificates/">
+                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2016/05/12/Foglight-SSL-Certificates/">
+                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2016/05/12/Foglight-SSL-Certificates/">
+                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <h4 id="about-card-name">Jacob Ludriks</h4>
+        
+            <h5 id="about-card-bio"><p>author.bio</p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </h5>
+        
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
     
 
-<script src="/js/jquery.min.js"></script>
 
 
-
-<script src="/js/script.js"></script>
-  </div>
-</body>
 </html>

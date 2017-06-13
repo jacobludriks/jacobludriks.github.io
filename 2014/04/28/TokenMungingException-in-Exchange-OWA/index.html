@@ -1,13 +1,19 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
+    
 <head>
-  <meta charset="utf-8">
-  
-  <title>TokenMungingException in Exchange OWA - Jacob Ludriks</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="I’ve been busily rolling out Exchange 2013 SP1 at work and I’ve finally gotten to the stage where I can start migrating mailboxes over. Lo and behold, the fourth mailbox moved over had a strange issue">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jacob Ludriks">
+    <title>TokenMungingException in Exchange OWA - Jacob Ludriks</title>
+    <meta name="author" content="Jacob Ludriks">
+    
+    
+    
+    <meta name="description" content="I’ve been busily rolling out Exchange 2013 SP1 at work and I’ve finally gotten to the stage where I can start migrating mailboxes over. Lo and behold, the fourth mailbox moved over had a strange issue">
 <meta name="keywords" content="exchange">
-<meta property="og:type" content="article">
+<meta property="og:type" content="blog">
 <meta property="og:title" content="TokenMungingException in Exchange OWA">
 <meta property="og:url" content="http://jacob.ludriks.com/2014/04/28/TokenMungingException-in-Exchange-OWA/index.html">
 <meta property="og:site_name" content="Jacob Ludriks">
@@ -16,57 +22,176 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TokenMungingException in Exchange OWA">
 <meta name="twitter:description" content="I’ve been busily rolling out Exchange 2013 SP1 at work and I’ve finally gotten to the stage where I can start migrating mailboxes over. Lo and behold, the fourth mailbox moved over had a strange issue">
-  
-  
-  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
-  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="/css/style.css">
-  
-
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <!--STYLES END-->
+    
+    
 </head>
 
-<body>
-  <div id="container">
-    <header id="header">
-  <div id="header-outer" class="outer">
-    <div id="header-inner" class="inner">
-      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
-      <a id="logo" class="logo" href="/"></a>
-      <nav id="main-nav">
-        
-      </nav>
-      <nav id="sub-nav">
-        <div id="search-form-wrap">
-          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jacob.ludriks.com"></form>
-        </div>
-      </nav>
-    </div>
-  </div>
-</header>
-    <section id="main" class="outer"><article id="post-TokenMungingException-in-Exchange-OWA" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      TokenMungingException in Exchange OWA
-    </h1>
-  
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
 
-      </header>
+
     
-    <div class="article-meta">
-      <a href="/2014/04/28/TokenMungingException-in-Exchange-OWA/" class="article-date">
-  <time datetime="2014-04-28T03:48:00.000Z" itemprop="datePublished">2014-04-28</time>
-</a>
-      
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>I’ve been busily rolling out Exchange 2013 SP1 at work and I’ve finally gotten to the stage where I can start migrating mailboxes over. Lo and behold, the fourth mailbox moved over had a strange issue whilst trying to access OWA:</p>
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/ ">Jacob Ludriks</a>
+    </h1>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/ "
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">Home</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-categories"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">Categories</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-tags"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">Tags</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-archives"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">Archives</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link st-search-show-outputs"
+                         href="#search"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-search"></i>
+                    <span class="sidebar-button-desc">Search</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="#about"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">About</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/atom.xml"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            TokenMungingException in Exchange OWA
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2014-04-28T13:48:00+10:00">
+	
+		    Apr 28, 2014
+    	
+    </time>
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>I’ve been busily rolling out Exchange 2013 SP1 at work and I’ve finally gotten to the stage where I can start migrating mailboxes over. Lo and behold, the fourth mailbox moved over had a strange issue whilst trying to access OWA:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">something went wrong</div><div class="line"></div><div class="line">Sorry, we can&apos;t get that information right now. Please try again later. If the problem persists, contact your helpdesk.</div><div class="line"></div><div class="line">X-OWA-Error: Microsoft.Exchange.Security.Authentication.TokenMungingException</div><div class="line">X-OWA-Version: 15.0.847.32</div><div class="line">X-FEServer: MAIL2013-1</div><div class="line">X-BEServer: Mail2013-2</div><div class="line">Date: 28/04/2014 11:35:42 AM</div></pre></td></tr></table></figure>
 <p>It turns out that some users had a “LinkedMasterAccount” attribute set to “NT AUTHORITY\SELF” that didn’t need to be. The script to check all users with this attribute set:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Get-User -ResultSize unlimited | where &#123;$_.linkedmasteraccount -eq &quot;NT AUTHORITY\SELF&quot; -and $_.recipienttypedetails -ne &quot;RoomMailbox&quot; -and $_.recipienttypedetails -ne &quot;Equipmentmailbox&quot; -and $_.recipienttypedetails -ne &quot;DiscoveryMailbox&quot;&#125; | select name | ft</div></pre></td></tr></table></figure>
@@ -74,56 +199,201 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Set-User -Identity &lt;user&gt; -LinkedMasterAccount $null</div></pre></td></tr></table></figure>
 <p>After setting this the user was able to log in.</p>
 
-      
+            
+        </div>
     </div>
-    
-    
-      <footer class="article-footer">
+    <div id="post-footer" class="post-footer main-content-wrap">
         
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/exchange/">exchange</a></li></ul>
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/exchange/">exchange</a>
 
-      </footer>
-    
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2014/05/05/Manipulating-SDDL-s-through-PowerShell/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-title"><span>&lt;</span>&nbsp;
+            </div>
         
-          Manipulating SDDL&#39;s through PowerShell
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2014/05/05/Manipulating-SDDL-s-through-PowerShell/"  data-tooltip="Manipulating SDDL&#39;s through PowerShell">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2014/04/24/elasticsearch-trim/" data-tooltip="elasticsearch-trim">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2014/04/28/TokenMungingException-in-Exchange-OWA/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2014/04/28/TokenMungingException-in-Exchange-OWA/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2014/04/28/TokenMungingException-in-Exchange-OWA/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
         
-      </div>
-    </a>
-  
-  
-    <a href="/2014/04/24/elasticsearch-trim/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">elasticsearch-trim&nbsp;<span>&gt;</span></div>
-    </a>
-  
-</nav>
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
 
-  
+
+        
+            
+        
+    </div>
 </article>
 
-</section>
-    <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2017 Jacob Ludriks&nbsp;
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
-    </div>
-  </div>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2017 Jacob Ludriks. All Rights Reserved.
+    </span>
 </footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2014/05/05/Manipulating-SDDL-s-through-PowerShell/"  data-tooltip="Manipulating SDDL&#39;s through PowerShell">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2014/04/24/elasticsearch-trim/" data-tooltip="elasticsearch-trim">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2014/04/28/TokenMungingException-in-Exchange-OWA/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2014/04/28/TokenMungingException-in-Exchange-OWA/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2014/04/28/TokenMungingException-in-Exchange-OWA/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2014/04/28/TokenMungingException-in-Exchange-OWA/">
+                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2014/04/28/TokenMungingException-in-Exchange-OWA/">
+                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2014/04/28/TokenMungingException-in-Exchange-OWA/">
+                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <h4 id="about-card-name">Jacob Ludriks</h4>
+        
+            <h5 id="about-card-bio"><p>author.bio</p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </h5>
+        
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
     
 
-<script src="/js/jquery.min.js"></script>
 
 
-
-<script src="/js/script.js"></script>
-  </div>
-</body>
 </html>
