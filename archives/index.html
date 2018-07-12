@@ -13,13 +13,13 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
+    <script type="application/ld+json">{}</script>
     <meta property="og:type" content="blog">
 <meta property="og:title" content="Jacob Ludriks">
 <meta property="og:url" content="http://jacob.ludriks.com/archives/index.html">
 <meta property="og:site_name" content="Jacob Ludriks">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jacob Ludriks">
-<meta name="twitter:creator" content="@jludriks">
     
     
         
@@ -29,9 +29,10 @@
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link rel="stylesheet" href="/assets/css/style-3frockyt2j28isvdztjchy5nhkz8tjki9ermufc1ckptmvjdftux94m2ahub.min.css">
     <!--STYLES END-->
     
+
     
 </head>
 
@@ -42,11 +43,11 @@
 
     
 
-<header id="header" data-behavior="2">
+<header id="header" data-behavior="1">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <h1 class="header-title">
+    <div class="header-title">
         <a class="header-title-link" href="/ ">Jacob Ludriks</a>
-    </h1>
+    </div>
     
         
             <a  class="header-right-picture "
@@ -60,123 +61,428 @@
             <!-- Define author's picture -->
 
 
-<nav id="sidebar" data-behavior="2">
-    
-    
-        <ul class="sidebar-buttons">
+<nav id="sidebar" data-behavior="1">
+    <div class="sidebar-container">
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/ "
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
-                    <span class="sidebar-button-desc">Home</span>
-                </a>
-        </li>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/all-categories"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
-                    <span class="sidebar-button-desc">Categories</span>
-                </a>
-        </li>
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="Home"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                            title="Categories"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="Tags"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="Archives"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                            title="Search"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="#about"
+                            
+                            title="About"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/all-tags"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
-                    <span class="sidebar-button-desc">Tags</span>
-                </a>
-        </li>
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="http://stackoverflow.com/users" target="_blank" rel="noopener" title="Stack Overflow">
+                    
+                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Stack Overflow</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://twitter.com/" target="_blank" rel="noopener" title="Twitter">
+                    
+                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Twitter</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://facebook.com/" target="_blank" rel="noopener" title="Facebook">
+                    
+                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Facebook</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://plus.google.com/" target="_blank" rel="noopener" title="Google +">
+                    
+                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Google +</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/profile/" target="_blank" rel="noopener" title="LinkedIn">
+                    
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/mailto"
+                            title="Mail"
+                        >
+                    
+                        <i class="sidebar-button-icon fab fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/all-archives"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
-                    <span class="sidebar-button-desc">Archives</span>
-                </a>
-        </li>
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                            title="RSS"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link st-search-show-outputs"
-                         href="#search"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-search"></i>
-                    <span class="sidebar-button-desc">Search</span>
-                </a>
-        </li>
-        
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="#about"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
-                    <span class="sidebar-button-desc">About</span>
-                </a>
-        </li>
-        
-    </ul>
-    
-        <ul class="sidebar-buttons">
-        
-    </ul>
-    
-        <ul class="sidebar-buttons">
-        
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/atom.xml"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
-                    <span class="sidebar-button-desc">RSS</span>
-                </a>
-        </li>
-        
-    </ul>
-    
+    </div>
 </nav>
 
             
-            <div id="main" data-behavior="2"
+            <div id="main" data-behavior="1"
                  class="
                         hasCoverMetaIn
                         ">
                 
-    
-
-<section class="postShorten-group main-content-wrap">
+    <section class="postShorten-group main-content-wrap">
     
     
-    <article class="postShorten postShorten--thumbnailimg-right" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
+                    
+                        <a class="link-unstyled" href="/2018/07/12/Creating-a-media-management-jail-in-FreeBSD/">
+                            Creating a media management jail in FreeBSD
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2018-07-12T19:32:30+10:00">
+	
+		    Jul 12, 2018
+    	
+    </time>
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>This post explains how to make a media management jail in FreeBSD/FreeNAS that includes:</p>
+<ul>
+<li>Plex media server</li>
+<li>Sonarr</li>
+<li>Radarr</li>
+<li>SABnzbd</li>
+<li>Transmission</li>
+<li>nginx as a reverse proxy for the above</li>
+</ul>
+<h2 id="Creating-the-jail"><a href="#Creating-the-jail" class="headerlink" title="Creating the jail"></a>Creating the jail</h2><p>If you are running FreeNAS, simply create a new jail from the jail template. If you are on FreeBSD, follow the instructions below.</p>
+<ol>
+<li>Enable jails on the host machine</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sysrc jail_enable=&quot;YES&quot;</div></pre></td></tr></table></figure>
+<ol>
+<li>Create a dataset for the jail. Replace the paths with paths that are appropriate for your system.</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">zfs create -o mountpoint=/usr/local/jails zroot/jails</div><div class="line">zfs create zroot/jails/mediajail</div></pre></td></tr></table></figure>
+<ol>
+<li>Install FreeBSD in to the jail</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bsdinstall jail /usr/local/jails/mediajail</div></pre></td></tr></table></figure>
+<ol>
+<li>Copy DNS settings and time to the new jail</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cp /etc/resolv.conf /usr/local/jails/mediajail/etc/resolv.conf</div><div class="line">cp /etc/localtime /usr/local/jails/mediajail/etc/localtime</div></pre></td></tr></table></figure>
+<ol>
+<li>Create <code>/etc/jail.conf</code> and enter the appropriate configuration</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">interface = &quot;igb0&quot;;</div><div class="line">host.hostname = &quot;$name.domain.local&quot;;</div><div class="line">path = &quot;/usr/local/jails/$name&quot;;</div><div class="line">ip4.addr = 10.0.0.$ip;</div><div class="line">mount.fstab = &quot;/usr/local/jails/$name.fstab&quot;;</div><div class="line"></div><div class="line">exec.start = &quot;/bin/sh /etc/rc&quot;;</div><div class="line">exec.stop = &quot;/bin/sh /etc/rc.shutdown&quot;;</div><div class="line">exec.clean;</div><div class="line">mount.devfs;</div><div class="line"></div><div class="line">mediajail &#123;</div><div class="line">        $ip = 40;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ol>
+<li>Create the <code>fstab</code> file</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">touch /usr/local/jails/mediajail.fstab</div></pre></td></tr></table></figure>
+<ol>
+<li>Enter the paths you wish to present to the jail in to the fstab</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">/media/tank/tv /usr/local/jails/mediajail/media/tv        nullfs  rw      0       0</div><div class="line">/media/tank/movies /usr/local/jails/mediajail/media/movies        nullfs  rw      0       0</div><div class="line">/media/tank/downloads /usr/local/jails/mediajail/media/downloads        nullfs  rw      0       0</div></pre></td></tr></table></figure>
+<ol>
+<li>Create the folder that will be mounted</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mkdir /usr/local/jails/mediajail/media/tv</div><div class="line">mkdir /usr/local/jails/mediajail/media/movies</div><div class="line">mkdir /usr/local/jails/mediajail/media/downloads</div><div class="line">mkdir /usr/local/jails/mediajail/media/downloads/incomplete</div><div class="line">mkdir /usr/local/jails/mediajail/media/downloads/complete</div></pre></td></tr></table></figure>
+<ol>
+<li>Create and start the new jail</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jail -c mediajail</div></pre></td></tr></table></figure>
+<h2 id="Creating-the-mediagroup-group-on-the-host-system-and-assigning-permissions"><a href="#Creating-the-mediagroup-group-on-the-host-system-and-assigning-permissions" class="headerlink" title="Creating the mediagroup group on the host system, and assigning permissions"></a>Creating the mediagroup group on the host system, and assigning permissions</h2><ol>
+<li>Create a group on the host system with the name being <code>mediagroup</code> and the group ID being <code>816</code>. For FreeNAS this can be done through the GUI, for FreeBSD run:</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo pw groupadd -n mediagroup -g 816</div></pre></td></tr></table></figure>
+<ol>
+<li>Next, change the owner and permissions of the folders so that the jail can read and write through the shared mediagroup</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">chown -R root:mediagroup /media/tank/tv</div><div class="line">chown -R root:mediagroup /media/tank/movies</div><div class="line">chown -R root:mediagroup /media/tank/downloads</div><div class="line">chmod -R 6775 /media/tank/tv</div><div class="line">chmod -R 6775 /media/tank/movies</div><div class="line">chmod -R 6775 /media/tank/downloads</div></pre></td></tr></table></figure>
+<h2 id="Installing-the-apps"><a href="#Installing-the-apps" class="headerlink" title="Installing the apps"></a>Installing the apps</h2><ol>
+<li><p>Enter the new jail. In FreeNAS you can click the terminal window. In FreeBSD, run <code>jexec mediajail /bin/sh</code></p>
+</li>
+<li><p>If the jail is in an unsupported version of FreeBSD (looking at you FreeNAS), an unsupported version of <code>sqlite3</code> is needed. Run the following, accepting all defaults</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">portsnap fetch</div><div class="line">portsnap extract</div><div class="line">cd /usr/ports/databases/sqlite3</div><div class="line">make install clean ALLOW_UNSUPPORTED_SYSTEM=true</div></pre></td></tr></table></figure>
+<ol>
+<li>Run <code>pkg install</code> with the application names. If you do not have Plex Pass, replace <code>plexmediaserver-plexpass</code> with <code>plexmediaserver</code></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pkg install plexmediaserver-plexpass sonarr radarr sabnzbdplus nginx transmission-daemon py27-certbot</div></pre></td></tr></table></figure>
+<ol>
+<li>Enable all the applications to start on bootup of the jail. Again, if you do not have Plex Pass, replace <code>plexmediaserver_plexpass_enable=YES</code> with <code>plexmediaserver_enable=YES</code></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">sysrc plexmediaserver_plexpass_enable=YES</div><div class="line">sysrc sonarr_enable=YES</div><div class="line">sysrc radarr_enable=YES</div><div class="line">sysrc sabnzbd_enable=YES</div><div class="line">sysrc nginx_enable=YES</div><div class="line">sysrc transmission_enable=YES</div></pre></td></tr></table></figure>
+<ol>
+<li>Create the <code>mediagroup</code> group in the jail and add all the appliation accounts needed</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">pw groupadd -n mediagroup -g 816</div><div class="line">pw groupmod mediagroup -m sabnzbd</div><div class="line">pw groupmod mediagroup -m sonarr</div><div class="line">pw groupmod mediagroup -m radarr</div><div class="line">pw groupmod mediagroup -m transmission</div></pre></td></tr></table></figure>
+<ol>
+<li>Start the applications</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">service plexmediaserver_plexpass start</div><div class="line">service sonarr start</div><div class="line">service radarr start</div><div class="line">service sabnzbd start</div><div class="line">service nginx start</div><div class="line">service transmission start</div></pre></td></tr></table></figure>
+<h2 id="Configuring-SABnzbd"><a href="#Configuring-SABnzbd" class="headerlink" title="Configuring SABnzbd"></a>Configuring SABnzbd</h2><ol>
+<li>SABnzbd only allows connections from <code>localhost</code> initially. First, stop <code>sabnzbd</code></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service stop sabnzbd</div></pre></td></tr></table></figure>
+<ol>
+<li>Replace the host line in the config</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sed -i -e &apos;s/host = 127.0.0.1/host = 0.0.0.0/g&apos; /usr/local/etc/sabnzbd/sabnzbd.ini</div></pre></td></tr></table></figure>
+<ol>
+<li>Start <code>sabnzbd</code></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service start sabnzbd</div></pre></td></tr></table></figure>
+<ol>
+<li>Log in to SABnzbd in your browser at:</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;mediajailip&gt;:8080</div></pre></td></tr></table></figure>
+<ol>
+<li><p>Run through the initial setup of SABnzbd, inputting the language and news server details.</p>
+</li>
+<li><p>Once in SABnzbd, click on the cog in the top right corner to get to the settings.Click on the cog on the top to get to “General” settings.</p>
+</li>
+<li><p>Set up a username and password, then click “Save Changes”.</p>
+</li>
+<li><p>Go to the “Folders” settings and click “Advanced Settings”. Set the “Temporary Download Folder” to:</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/media/downloads/incomplete</div></pre></td></tr></table></figure>
+<ol>
+<li>Set the “Completed Download Folder” to:</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/media/downloads/complete</div></pre></td></tr></table></figure>
+<ol>
+<li>Set the “Permissions for completed downloads” to <code>775</code> then press “Save Changes”.</li>
+</ol>
+<h2 id="Configuring-Transmission"><a href="#Configuring-Transmission" class="headerlink" title="Configuring Transmission"></a>Configuring Transmission</h2><ol>
+<li>Transmission only allows connections from <code>localhost</code> initially, same as SABnzbd. First, stop <code>transmission</code></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service stop transmission</div></pre></td></tr></table></figure>
+<ol>
+<li>Open <code>settings.json</code> and edit the following lines:</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">rpc-enabled -&gt; change to true</div><div class="line">rpc-password -&gt; change to the password you want. This will be hashed upon restarting the service</div><div class="line">rpc-username -&gt; change to the username you want</div><div class="line">rpc-whitelist -&gt; set to your IP range, ie. 10.1.1.*</div><div class="line">rpc-whitelist-enabled -&gt; change to true</div><div class="line">download-dir -&gt; /media/downloads/complete</div><div class="line">incomplete-dir -&gt; /media/downloads/incomplete</div><div class="line">incomlete-dir-enabled -&gt; set to true</div><div class="line">umask -&gt; set to 0</div></pre></td></tr></table></figure>
+<ol>
+<li>Sometimes the download directory set does not stick. Change this with a variable</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sysrc transmission_download_dir=/media/downloads/complete</div></pre></td></tr></table></figure>
+<ol>
+<li>Start transmission</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service start transmission</div></pre></td></tr></table></figure>
+<ol>
+<li>Log in to Transmission in your browser at:</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;mediajailip&gt;:9191</div></pre></td></tr></table></figure>
+<h2 id="Configuring-Sonarr"><a href="#Configuring-Sonarr" class="headerlink" title="Configuring Sonarr"></a>Configuring Sonarr</h2><ol>
+<li>Log in to Sonarr in your browser at:</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;mediajailip&gt;:8989</div></pre></td></tr></table></figure>
+<ol>
+<li><p>Go to “Settings” and then “General”</p>
+</li>
+<li><p>Change the “URL Base” to:</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/sonarr</div></pre></td></tr></table></figure>
+<ol>
+<li>Set the “Authentication” to <code>Forms</code> and enter a Username and Password. Click “Save”.</li>
+</ol>
+<h2 id="Configuring-Radarr"><a href="#Configuring-Radarr" class="headerlink" title="Configuring Radarr"></a>Configuring Radarr</h2><ol>
+<li>Log in to Radarr in your browser at:</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;mediajailip&gt;:7878</div></pre></td></tr></table></figure>
+<ol>
+<li><p>Go to “Settings” and then “General”</p>
+</li>
+<li><p>Change the “URL Base” to:</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/radarr</div></pre></td></tr></table></figure>
+<ol>
+<li>Set the “Authentication” to <code>Forms</code> and enter a Username and Password. Click “Save”.</li>
+</ol>
+<h2 id="Configuring-nginx"><a href="#Configuring-nginx" class="headerlink" title="Configuring nginx"></a>Configuring nginx</h2><ol>
+<li>Stop the nginx service</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service stop nginx</div></pre></td></tr></table></figure>
+<ol>
+<li>Open <code>/usr/local/etc/nginx/nginx.conf</code> in an editor and change to the following, changing when needed</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line">events &#123;</div><div class="line">    worker_connections  1024;</div><div class="line">&#125;</div><div class="line"></div><div class="line">http &#123;</div><div class="line">    server &#123;</div><div class="line">        listen 80;</div><div class="line">        server_name &lt;hostname&gt;;</div><div class="line">        location ^~ /.well-known/acme-challenge/ &#123;</div><div class="line">            alias /usr/local/www/nginx/.well-known/acme-challenge/;</div><div class="line">        &#125;</div><div class="line">        location / &#123;</div><div class="line">            return 301 https://&lt;hostname&gt;$request_uri;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    server &#123;</div><div class="line">        listen 443 default_server ssl;</div><div class="line">        server_name &lt;hostname&gt; &lt;jail ip address&gt;;</div><div class="line"></div><div class="line">        ssl_certificate /usr/local/etc/letsencrypt/live/&lt;hostname&gt;/fullchain.pem;</div><div class="line">        ssl_certificate_key /usr/local/etc/letsencrypt/live/&lt;hostname&gt;/privkey.pem;</div><div class="line"></div><div class="line">        ssl_protocols TLSv1.2;</div><div class="line">        ssl_prefer_server_ciphers on;</div><div class="line">        ssl_ciphers &quot;EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH&quot;;</div><div class="line">        ssl_ecdh_curve secp384r1;</div><div class="line">        ssl_session_cache shared:SSL:10m;</div><div class="line">        ssl_session_tickets off;</div><div class="line"></div><div class="line">        location /sonarr &#123;</div><div class="line">            proxy_pass  http://localhost:8989;</div><div class="line">            proxy_set_header    X-Real-IP  $remote_addr;</div><div class="line">            proxy_set_header    Host $host;</div><div class="line">            proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;</div><div class="line">            proxy_set_header    X-Forwarded-Proto $scheme;</div><div class="line">            proxy_redirect off;</div><div class="line">        &#125;</div><div class="line">        location /radarr &#123;</div><div class="line">            proxy_pass  http://localhost:7878;</div><div class="line">            proxy_set_header    X-Real-IP  $remote_addr;</div><div class="line">            proxy_set_header    Host $host;</div><div class="line">            proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;</div><div class="line">            proxy_set_header    X-Forwarded-Proto $scheme;</div><div class="line">            proxy_redirect off;</div><div class="line">        &#125;</div><div class="line">        location /sabnzbd &#123;</div><div class="line">            proxy_pass  http://localhost:8080;</div><div class="line">            proxy_set_header    X-Real-IP  $remote_addr;</div><div class="line">            proxy_set_header    Host $host;</div><div class="line">            proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;</div><div class="line">            proxy_set_header    X-Forwarded-Proto $scheme;</div><div class="line">            proxy_redirect off;</div><div class="line">        &#125;</div><div class="line">        location /transmission &#123;</div><div class="line">            proxy_pass http://localhost:9091;</div><div class="line">            proxy_set_header X-Real-IP $remote_addr;</div><div class="line">            proxy_set_header X-Forwarded-Ssl on;</div><div class="line">            proxy_set_header Host $host;</div><div class="line">            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</div><div class="line">            proxy_set_header X-Forwarded-Proto $scheme;</div><div class="line">            proxy_set_header X-Forwarded-Host $server_name;</div><div class="line">            proxy_redirect off;</div><div class="line">        &#125;</div><div class="line">        access_log /var/log/nginx/&lt;hostname&gt;.log;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ol>
+<li>Start nginx</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service start nginx</div></pre></td></tr></table></figure>
+<ol>
+<li>Tell Certbot to generate a new SSL certificate</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">certbot certonly --webroot -w /usr/local/www/nginx -d &lt;hostname&gt;</div></pre></td></tr></table></figure>
+<ol>
+<li>Reload nginx for the certificate to take effect</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service reload nginx</div></pre></td></tr></table></figure>
+<ol>
+<li>Set up a new cron schedule with <code>visudo</code></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">37 2,15 * * * root /usr/local/bin/certbot renew --post-hook &quot;service nginx reload&quot;</div></pre></td></tr></table></figure>
+<h2 id="Finishing-up"><a href="#Finishing-up" class="headerlink" title="Finishing up"></a>Finishing up</h2><p>You can now access services through the following:</p>
+<ul>
+<li>Sonarr - https://<code>&lt;hostname&gt;</code>/sonarr</li>
+<li>Radarr - https://<code>&lt;hostname&gt;</code>/radarr</li>
+<li>SABnzbd - https://<code>&lt;hostname&gt;</code>/sabnzbd</li>
+<li>Transmission - https://<code>&lt;hostname&gt;</code>/transmission</li>
+</ul>
+
+                    
+                        
+
+                    
+                    
+                        <p>
+                            <a href="/2018/07/12/Creating-a-media-management-jail-in-FreeBSD/#post-footer" class="postShorten-excerpt_link link">
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-right">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2017/06/13/SSL-TLS-A-Primer/">
                             SSL/TLS: A Primer
@@ -184,7 +490,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2017-06-13T11:05:02+10:00">
+    <time datetime="2017-06-13T11:05:02+10:00">
 	
 		    Jun 13, 2017
     	
@@ -194,7 +500,7 @@
 
             </div>
             
-                <div class="postShorten-excerpt" itemprop="articleBody">
+                <div class="postShorten-excerpt">
                     <p>We all use SSL or TLS every day. But how does it work and what infrastructure is involved? For the rest of the article, I will be referencing both SSL and TLS but will be using the blanket term “TLS” to refer to both.</p>
                     
                         <a href="/2017/06/13/SSL-TLS-A-Primer/" class="postShorten-excerpt_link link">
@@ -209,11 +515,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-right" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/">
                             Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails
@@ -221,7 +527,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2017-06-08T13:58:13+10:00">
+    <time datetime="2017-06-08T13:58:13+10:00">
 	
 		    Jun 08, 2017
     	
@@ -231,7 +537,7 @@
 
             </div>
             
-                <div class="postShorten-excerpt" itemprop="articleBody">
+                <div class="postShorten-excerpt">
                     <p>Following on from the previous post about thin jails, we can now procede to install the following applications in to seperate jails:</p>
 <ul>
 <li>Sonarr</li>
@@ -253,11 +559,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-right" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2017/06/07/FreeBSD-Thin-Jails/">
                             FreeBSD Thin Jails
@@ -265,7 +571,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2017-06-07T11:01:40+10:00">
+    <time datetime="2017-06-07T11:01:40+10:00">
 	
 		    Jun 07, 2017
     	
@@ -275,7 +581,7 @@
 
             </div>
             
-                <div class="postShorten-excerpt" itemprop="articleBody">
+                <div class="postShorten-excerpt">
                     <p>Recently I built up a new storage server running FreeBSD. Initially I was going to go with FreeNAS like my old storage server, however the FreeNAS project is in a bit of flux at the moment and I thought this would be a good way to learn about the inner workings of FreeBSD. Part of this is segregating the applications running on the server in to “jails”. They are a form of OS-level virtualization, where each jail has its own files, processes and user accounts.</p>
                     
                         <a href="/2017/06/07/FreeBSD-Thin-Jails/" class="postShorten-excerpt_link link">
@@ -290,11 +596,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2016/05/12/Foglight-SSL-Certificates/">
                             Foglight SSL Certificates
@@ -302,7 +608,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2016-05-12T11:40:44+10:00">
+    <time datetime="2016-05-12T11:40:44+10:00">
 	
 		    May 12, 2016
     	
@@ -312,7 +618,7 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>Foglight for Virtualization 7.0 Standard uses Tomcat under the covers to serve the web interface. To replace the SSL certificate, follow the instructions below. I started with a password-protected PFX file that had the password <code>foglight</code>.</p>
 <ol>
 <li>Copy the PFX file to the server to the <code>/usr/local/tomcat/conf</code> directory</li>
@@ -329,6 +635,7 @@
 
                     
                         
+
                     
                     
                         <p>
@@ -344,11 +651,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2016/02/15/Password-expiry-notification/">
                             Password expiry notification
@@ -356,7 +663,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2016-02-15T12:48:00+11:00">
+    <time datetime="2016-02-15T12:48:00+11:00">
 	
 		    Feb 15, 2016
     	
@@ -366,7 +673,7 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>Password policies are a good thing, however as users aren’t chained to their desks anymore they might not realize that their AD password is expiring. Here’s a script that you can run as a scheduled task that will notify users that their password is expiring.</p>
 <script src="https://gist.github.com/jacobludriks/1d8bbfcfb8f36d86ea62.js"></script>
 
@@ -375,6 +682,7 @@
 
                     
                         
+
                     
                     
                         <p>
@@ -390,11 +698,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2016/01/27/Powershell-FTP-functions/">
                             Powershell FTP functions
@@ -402,7 +710,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2016-01-27T17:13:00+11:00">
+    <time datetime="2016-01-27T17:13:00+11:00">
 	
 		    Jan 27, 2016
     	
@@ -412,11 +720,12 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>It turns out there’s a lot to getting Powershell to connect to FTP servers. Here’s two functions I’ve written that can list FTP contents and download files. Enjoy.</p>
 <script src="https://gist.github.com/jacobludriks/18c4d9f964ec77098736.js"></script>
                     
                         
+
                     
                     
                         <p>
@@ -432,11 +741,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2016/01/15/Set-Permissions/">
                             Set-Permissions
@@ -444,7 +753,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2016-01-15T12:04:00+11:00">
+    <time datetime="2016-01-15T12:04:00+11:00">
 	
 		    Jan 15, 2016
     	
@@ -454,7 +763,7 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>Hee’s a basic script I created recently to set permissions on a file/folder. This can be integrated with other scripts quite nicely.</p>
 <script src="https://gist.github.com/jacobludriks/2c51e0d2988fc73c8225.js"></script>
 
@@ -462,6 +771,7 @@
 
                     
                         
+
                     
                     
                         <p>
@@ -477,11 +787,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2015/10/15/Updating-ciphers-for-Foglight-for-Virtualization-Standard/">
                             Updating ciphers for Foglight for Virtualization Standard
@@ -489,7 +799,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2015-10-15T14:23:00+11:00">
+    <time datetime="2015-10-15T14:23:00+11:00">
 	
 		    Oct 15, 2015
     	
@@ -499,7 +809,7 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>As of v45, Chrome is now blocking HTTPS sites with weak Diffie-Hellman public keys. Whilst this is good for everyone, it does cause certain things to stop working. Our Foglight for Virtualization Standard instance stopped working with Chrome and had to be fixed. Although this applies for Foglight, it can be used for any Tomcat 7 instance.</p>
 <ol>
 <li>SSH in to the Foglight virtual machine. Default username is <code>vkernel</code> and password is <code>vkernel</code> also.</li>
@@ -513,6 +823,7 @@
 
                     
                         
+
                     
                     
                         <p>
@@ -528,11 +839,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2015/10/08/HP-ProLiant-SPP-2015-10-0-released/">
                             HP ProLiant SPP 2015.10.0 released
@@ -540,7 +851,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2015-10-08T09:59:00+11:00">
+    <time datetime="2015-10-08T09:59:00+11:00">
 	
 		    Oct 08, 2015
     	
@@ -550,12 +861,13 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>HP has released the new ProLiant SPP for October 2015.</p>
 <p><a href="http://h17007.www1.hp.com/us/en/enterprise/servers/products/service_pack/spp/index.aspx" target="_blank" rel="external">http://h17007.www1.hp.com/us/en/enterprise/servers/products/service_pack/spp/index.aspx</a></p>
 
                     
                         
+
                     
                     
                         <p>
@@ -570,65 +882,16 @@
         
     </article>
     
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
-                    
-                        <a class="link-unstyled" href="/2015/06/18/Considerations-using-MessageOps-Exchange-Migrator/">
-                            Considerations using MessageOps Exchange Migrator
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2015-06-18T13:32:00+10:00">
-	
-		    Jun 18, 2015
-    	
-    </time>
-    
-</div>
-
-            </div>
-            
-                <div class="postShorten-content" itemprop="articleBody">
-                    <p>I’ve been using MessageOps Exchange Migrator for a while now and while it is an amzing product, it isn’t without its quirks. Here are some I came across whilst migrating a small org (80 users) to Office365</p>
-<ol>
-<li>Make sure that the account you’re migrating isn’t disabled. If it is disabled, it doesn’t show up in the source mailbox list.</li>
-<li>Ensure the mailbox isn’t hidden from the GAL. If it is, the migration will fail with a <code>MAIL_E_NAMEN</code> error and then <code>WSAECONNRESET</code>.</li>
-<li>Ensure you have proper rights on the mailbox you are migrating from.</li>
-<li>Ensure the mailbox you are migrating to has an Exchange license assigned. This can be E1, E2, E3, whatever.</li>
-<li>If you change change any permissions or disable/enable accounts, hit back in the tool and let it rescan everything. This saves you restarting the app and having to type all your credentials again.</li>
-</ol>
-
-                    
-                        
-                    
-                    
-                        <p>
-                            <a href="/2015/06/18/Considerations-using-MessageOps-Exchange-Migrator/#post-footer" class="postShorten-excerpt_link link">
-                                Comment and share
-                            </a>
-                        </p>
-                    
-                </div>
-            
-        </div>
-        
-    </article>
-    
     <div class="pagination-bar">
     <ul class="pagination">
         
         
-        <li class="pagination-next">
+          <li class="pagination-next">
             <a class="btn btn--default btn--small" href="/archives/page/2/">
-                    <span>OLDER POSTS</span>
-                <i class="fa fa-angle-right text-base icon-ml"></i>
+              <span>OLDER POSTS</span>
+              <i class="fa fa-angle-right text-base icon-ml"></i>
             </a>
-        </li>
+          </li>
         
         <li class="pagination-number">page 1 of 5</li>
     </ul>
@@ -640,7 +903,7 @@
 
                 <footer id="footer" class="main-content-wrap">
     <span class="copyrights">
-        Copyrights &copy; 2017 Jacob Ludriks. All Rights Reserved.
+        Copyrights &copy; 2018 Jacob Ludriks. All Rights Reserved.
     </span>
 </footer>
 
@@ -658,34 +921,29 @@
         
             <h4 id="about-card-name">Jacob Ludriks</h4>
         
-            <h5 id="about-card-bio"><p>Nerd</p>
-</h5>
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
         
         
-            <h5 id="about-card-job">
+            <div id="about-card-job">
                 <i class="fa fa-briefcase"></i>
                 <br/>
-                <p>System Administrator</p>
+                <p>author.job</p>
 
-            </h5>
+            </div>
         
-        
-            <h5 id="about-card-location">
-                <i class="fa fa-map-marker"></i>
-                <br/>
-                Australia
-            </h5>
         
     </div>
 </div>
 
         
+        
 <div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-    </body>
-    <!--SCRIPTS-->
-<script src="/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-xzfezjobyekpxrjktw5tz6muvzqfsbmo5n6atk3p5om9ulfptldi3p7cyqd8.min.js"></script>
 <!--SCRIPTS END-->
 
 
 
+    </body>
 </html>

@@ -13,17 +13,17 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jacob Ludriks","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"We all use SSL or TLS every day. But how does it work and what infrastructure is involved? For the rest of the article, I will be referencing both SSL and TLS but will be using the blanket term “TLS” to refer to both.\n\nCertificate InfrastructureRoot CAsTrusted root CAs are organizations that have protocols in place to issue certificates at different levels. They are audited regularly and comply to ISO standards. A list of all root CAs that have completed these requirements are provided and updated regularly by most operating systems:\n\nMicrosoft: https://social.technet.microsoft.com/wiki/contents/articles/37816.microsoft-trusted-root-certificate-program-participants-as-of-april-25-2017.aspx\nApple: https://support.apple.com/en-au/HT207177\nLinux: Most distributions use Mozilla’s list - https://ccadb-public.secure.force.com/mozilla/IncludedCACertificateReport\n\nIntermediate CAsMore often than not, certificates used on the internet are not issued by a root CA, but instead from an intermediate CA. One of the many reasons is that if the intermediate CA were to be compromised, the root CA can issue out a revocation that tells clients not to trust any certificate by that intermediate CA. There can be multiple levels of intermediate CA’s underneath a root CA.\nIssuing CAsJust as root CAs generally don’t issue client certificates, intermediate CAs don’t have to issue client certificates either. When a CA starts issuing certificates to clients, it is called an issuing CA.\nCDPs and CRLsThe CDP (CRL distribution point) is a network location that is stamped on to a certificate when it is issued from a CA. It contains one or many CRLs (certificate revocation list). A CRL is a file that the client reads to see if any issued certificates have been revoked. CRLs in the CDP are usually updated automatically by the CA software itself. The exception to this are root CAs, which are generally kept offline. This CRL needs to be updated manually and transferred from the airgapped system to the CDP accessible by clients on the internet (or network, if it is LAN CA). There can be a CRL and multiple delta CRLs, which contain changes in between CRL refresh periods. This helps to keep download sizes minimal.\nOCSPOCSP (Online Certificate Status Protocol) is a great alternative to CRLs. The OCSP responder server URI is stamped on to the certicate when it is issued from the CA. When the client needs to check the status of a certificate, it sends the serial number of the certificate to the OCSP responder to check if it is still valid. The server then responds with the status. It uses much less bandwidth than a CDP with CRLs and delta CRLs.\nMicrosoft AD CA InfrastructureBest practice guidance from Microsoft suggests the following infrastructure:\n\nA non-domain joined standalone root CA. Once it has issued a certificate to the intermediate CA, it is to be shut down and only powered back on to update its CRL.\nA domain-joined intermediate CA. This is integrated with Active Directory and issues certificates from certificate templates. It can also act as a CDP and OCSP responder for all clients, but it is generally better to split these roles out to other servers. Usually the CA stores the CDP data in AD as well as a file share and website, for maximum availability.\n\nCertificate typesThere are three different types of certificates, each with different levels of trust and verification.\nDomain Validated certificatesThis is the base type of certificate. All that is usually needed to verify ownership of the domain is to add a TXT record, or click on a link sent to admin@domain.com. Whilst the encryption being used can be the same as the higher certificates, the level of trust may be low.\nOrganization Validated certificatesThis certificate type requires further verification. Normally it requires an exchange of physical documents to prove ownership of the business that the domain name is representing.\nExtended Validation certificatesThis certificate has the highest level of trust. When applied to a website, users’ web browsers show a green bar. It has the following requirements:\n\nEstablish the legal identity as well as the operational and physical presence of website owner.\nEstablish that the applicant is the domain name owner or has exclusive control over the domain name.\nConfirm the identity and authority of the individuals acting for the website owner, and that documents pertaining to legal obligations are signed by an authorised officer.\n\nIt is not currently possible to get a wildcard EV certificate - it is just for the domains in the certificate request.\nCertificate structureA certificate contains the following information:\n\nSerial number - This is unique to the CA and is used to tracl revocation information.\nSubject - The entity that the certificate belongs to. This can be a user, device, or organization.\nIssuer - The issuer of the certificate, who verified the information within.\nNot Before - The earliest time at which the certificate can be considered valid.\nNot After - The latest time at which the certificate can be considered valid.\nKey Usage - The valid cryptographic uses of the certificate’s public key. This can include digital signature validation, key encipherment, etc.\nExtended Key Usage - The applications the certificate can be used for. This can include code signing, email signing, etc.\nPublic Key - The public key for the certificate subject.\nSignature Algorithm - The algorithm used to sign the public key certificate.\nSignature - A signature of the certificate body by the issuer’s private key.\n\nEncryption typesSymmetricSymmetric encryption is used when both parties have the same encryption key.\nAsymmetricAsymmetric encryption is used when both parties have different encryption keys. This is more commonly called public/private key encryption. The keys are generated at the same time. Anything encrypted with the private key can be decrypted by the public key, and vice-versa.\nAnatomy of a TLS handshakeTLS uses a combination of both asymmetric and symmetric encryption whilst communicating.\nNegotiation\nThe client sends a ClientHello message to the server, which specifies the highest TLS protocol it supports, a random number, a list of ciphers it supports and a list of compression methods it supports.\nThe server sends a ServerHello message to the client, containing the TLS protocol, compression method and cipher from the lists sent from the user, as well as a random number. The server may also send a session ID, however this is not mandatory.\nThe server may also send both a Certificate (which contains the public key of the server, and is verified by a third-party) and a ServerKeyExchange message, depending on the cipher suite. The server can also send a CertificateRequest message if mutual certificate authentication is being used.\nThe server sends a ServerHelloDone message, to show it is done with handshake negotiation.\nThe client sends a Certificate message (if mutual certificate authentication is being used).\nThe client sends a ClientKeyExchange message, which contains either a PreMasterSecret, public key, or nothing. It is encrypted with the public key of the server certificate.\nThe client sends a CertificateVerify message, which is a signature for the previous client handshake messages and is generated using the client private key. It can be verified with the client public key.\nThe client and server use the shared random numbers and PreMasterSecret to generate a common shared secret. This is called the master secret. All future data is encrypted with this secret and a psudorandom function.\n\nChangeCipherSpec\nThe client sends a ChangeCipherSpec message. This lets the server know that the cient will only talk in that cipher for the rest of the session.\nThe client sends a Finished message that contains a hash of all the previous handshake messages. If this fails at the server end, the TLS connection is not considered valid and will be torn down.\nThe server sends a ChangeCipherSpec message. This lets the client know that the server will only talk in that server for the rest of the session.\nThe server sends a Finished message that contains a hash of all the previous handshake messages. If this fails at the client end, the TLS connection is not considered valid and will be torn down.\n\nThe handshake is now complete and now that both ends have the same master secret, they can switch to symmetric encryption, which is computationally much less expensive.\nTLS VersionsTLS versions and ciphers are independent of certificates, and can be changed at any time on the server. This may have implications with client support, however nearly all modern clients have support for TLS 1.2 (the latest version as of this blog post).\n\nSSL 3.0\n\nSSL 3.0 was first introducted in 1996. It has been depreciated by the IETF since 2015 and is not considered secure. It should no longer be used, as it has been broken due to multiple vulnerabilities (POODLE, DROWN, etc).\n\nTLS 1.0\n\nTLS 1.0 supports downgrade negitiation, allowing an attacker to bring the server back down to SSL 3.0, and therefore bringing the vulnerabilities with it. It should also no longer be used. It does however allow the use of better ciphers than SSL 3.0\n\nTLS 1.1\n\nTLS 1.1 should be considered the bare minimum for TLS-protected communications. No protocol-level vulnerabilities have been found so far. It provides protection against padding errors (the basis of the POODLE attack).\n\nTLS 1.2\n\nTLS 1.2 is the newest TLS protocol, introduced in 2008. It is currently the strongest TLS protocol.\n\nTLS 1.3\n\nTLS 1.3 is currently a working draft with the IETF and is not released for general use yet.\nCiphersAlong with the TLS protocol version, the client and server also negotiate a cipher to communicate with. The ciphers considered secure change as cracking technology progresses and vulnerabilities are found.\nI’ve found that https://cipherli.st/ is a great resource for server cipher list configuration, and https://www.ssllabs.com/ssltest/ is great for testing your site.\n","dateCreated":"2017-06-13T11:05:02+10:00","dateModified":"2017-06-13T15:23:46+10:00","datePublished":"2017-06-13T11:05:02+10:00","description":"We all use SSL or TLS every day. But how does it work and what infrastructure is involved? For the rest of the article, I will be referencing both SSL and TLS but will be using the blanket term “TLS” to refer to both.","headline":"SSL/TLS: A Primer","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/"},"publisher":{"@type":"Organization","name":"Jacob Ludriks","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/"}</script>
     <meta name="description" content="We all use SSL or TLS every day. But how does it work and what infrastructure is involved? For the rest of the article, I will be referencing both SSL and TLS but will be using the blanket term “TLS”">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="SSL&#x2F;TLS: A Primer">
 <meta property="og:url" content="http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/index.html">
 <meta property="og:site_name" content="Jacob Ludriks">
 <meta property="og:description" content="We all use SSL or TLS every day. But how does it work and what infrastructure is involved? For the rest of the article, I will be referencing both SSL and TLS but will be using the blanket term “TLS”">
-<meta property="og:updated_time" content="2017-06-13T05:23:44.365Z">
+<meta property="og:updated_time" content="2017-06-13T05:23:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SSL&#x2F;TLS: A Primer">
 <meta name="twitter:description" content="We all use SSL or TLS every day. But how does it work and what infrastructure is involved? For the rest of the article, I will be referencing both SSL and TLS but will be using the blanket term “TLS”">
-<meta name="twitter:creator" content="@jludriks">
     
     
         
@@ -33,9 +33,10 @@
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link rel="stylesheet" href="/assets/css/style-3frockyt2j28isvdztjchy5nhkz8tjki9ermufc1ckptmvjdftux94m2ahub.min.css">
     <!--STYLES END-->
     
+
     
 </head>
 
@@ -48,9 +49,9 @@
 
 <header id="header" data-behavior="4">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <h1 class="header-title">
+    <div class="header-title">
         <a class="header-title-link" href="/ ">Jacob Ludriks</a>
-    </h1>
+    </div>
     
         
             <a  class="header-right-picture "
@@ -65,104 +66,179 @@
 
 
 <nav id="sidebar" data-behavior="4">
-    
-    
-        <ul class="sidebar-buttons">
+    <div class="sidebar-container">
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/ "
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
-                    <span class="sidebar-button-desc">Home</span>
-                </a>
-        </li>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/all-categories"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
-                    <span class="sidebar-button-desc">Categories</span>
-                </a>
-        </li>
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="Home"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                            title="Categories"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="Tags"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="Archives"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                            title="Search"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="#about"
+                            
+                            title="About"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/all-tags"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
-                    <span class="sidebar-button-desc">Tags</span>
-                </a>
-        </li>
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="http://stackoverflow.com/users" target="_blank" rel="noopener" title="Stack Overflow">
+                    
+                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Stack Overflow</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://twitter.com/" target="_blank" rel="noopener" title="Twitter">
+                    
+                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Twitter</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://facebook.com/" target="_blank" rel="noopener" title="Facebook">
+                    
+                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Facebook</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://plus.google.com/" target="_blank" rel="noopener" title="Google +">
+                    
+                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Google +</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/profile/" target="_blank" rel="noopener" title="LinkedIn">
+                    
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/mailto"
+                            title="Mail"
+                        >
+                    
+                        <i class="sidebar-button-icon fab fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/all-archives"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
-                    <span class="sidebar-button-desc">Archives</span>
-                </a>
-        </li>
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                            title="RSS"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link st-search-show-outputs"
-                         href="#search"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-search"></i>
-                    <span class="sidebar-button-desc">Search</span>
-                </a>
-        </li>
-        
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="#about"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
-                    <span class="sidebar-button-desc">About</span>
-                </a>
-        </li>
-        
-    </ul>
-    
-        <ul class="sidebar-buttons">
-        
-    </ul>
-    
-        <ul class="sidebar-buttons">
-        
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/atom.xml"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
-                    <span class="sidebar-button-desc">RSS</span>
-                </a>
-        </li>
-        
-    </ul>
-    
+    </div>
 </nav>
 
             
@@ -171,17 +247,18 @@
                         hasCoverMetaIn
                         ">
                 
-<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+<article class="post">
     
     
         <div class="post-header main-content-wrap text-left">
     
-        <h1 class="post-title" itemprop="headline">
+        <h1 class="post-title">
             SSL/TLS: A Primer
         </h1>
     
-    <div class="post-meta">
-    <time itemprop="datePublished" datetime="2017-06-13T11:05:02+10:00">
+    
+        <div class="post-meta">
+    <time datetime="2017-06-13T11:05:02+10:00">
 	
 		    Jun 13, 2017
     	
@@ -189,9 +266,11 @@
     
 </div>
 
-</div>
     
-    <div class="post-content markdown" itemprop="articleBody">
+</div>
+
+    
+    <div class="post-content markdown">
         <div class="main-content-wrap">
             <p>We all use SSL or TLS every day. But how does it work and what infrastructure is involved? For the rest of the article, I will be referencing both SSL and TLS but will be using the blanket term “TLS” to refer to both.</p>
 <a id="more"></a>
@@ -278,64 +357,81 @@
 <p>I’ve found that <a href="https://cipherli.st/" target="_blank" rel="external">https://cipherli.st/</a> is a great resource for server cipher list configuration, and <a href="https://www.ssllabs.com/ssltest/" target="_blank" rel="external">https://www.ssllabs.com/ssltest/</a> is great for testing your site.</p>
 
             
+
         </div>
     </div>
     <div id="post-footer" class="post-footer main-content-wrap">
         
-        <div class="post-actions-wrap">
+        
+            <div class="post-actions-wrap">
     <nav>
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    <a class="post-action-btn btn btn--disabled">
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/07/12/Creating-a-media-management-jail-in-FreeBSD/" data-tooltip="Creating a media management jail in FreeBSD" aria-label="PREVIOUS: Creating a media management jail in FreeBSD">
                 
-                    <i class="fa fa-angle-left"></i>
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
                 </a>
             </li>
             <li class="post-action">
                 
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/" data-tooltip="Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails">
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/" data-tooltip="Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails" aria-label="NEXT: Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                    <i class="fa fa-angle-right"></i>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
                 </a>
             </li>
         </ul>
     </nav>
     <ul class="post-actions post-action-share">
         <li class="post-action hide-lg hide-md hide-sm">
-            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
-                <i class="fa fa-share-alt"></i>
-            </a>
-        </li>
-        <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/">
-                <i class="fa fa-google-plus"></i>
-            </a>
-        </li>
-        <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/">
-                <i class="fa fa-facebook-official"></i>
-            </a>
-        </li>
-        <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/">
-                <i class="fa fa-twitter"></i>
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
         </li>
         
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/" title="Share on Facebook">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/" title="Share on Twitter">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/" title="Share on Google+">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
             
-                <i class="fa fa-list"></i>
+                <i class="fa fa-list" aria-hidden="true"></i>
             </a>
         </li>
     </ul>
 </div>
 
 
+        
         
             
         
@@ -346,7 +442,7 @@
 
                 <footer id="footer" class="main-content-wrap">
     <span class="copyrights">
-        Copyrights &copy; 2017 Jacob Ludriks. All Rights Reserved.
+        Copyrights &copy; 2018 Jacob Ludriks. All Rights Reserved.
     </span>
 </footer>
 
@@ -358,49 +454,63 @@
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    <a class="post-action-btn btn btn--disabled">
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/07/12/Creating-a-media-management-jail-in-FreeBSD/" data-tooltip="Creating a media management jail in FreeBSD" aria-label="PREVIOUS: Creating a media management jail in FreeBSD">
                 
-                    <i class="fa fa-angle-left"></i>
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
                 </a>
             </li>
             <li class="post-action">
                 
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/" data-tooltip="Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails">
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/" data-tooltip="Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails" aria-label="NEXT: Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                    <i class="fa fa-angle-right"></i>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
                 </a>
             </li>
         </ul>
     </nav>
     <ul class="post-actions post-action-share">
         <li class="post-action hide-lg hide-md hide-sm">
-            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
-                <i class="fa fa-share-alt"></i>
-            </a>
-        </li>
-        <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/">
-                <i class="fa fa-google-plus"></i>
-            </a>
-        </li>
-        <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/">
-                <i class="fa fa-facebook-official"></i>
-            </a>
-        </li>
-        <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/">
-                <i class="fa fa-twitter"></i>
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
         </li>
         
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/" title="Share on Facebook">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/" title="Share on Twitter">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/" title="Share on Google+">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
             
-                <i class="fa fa-list"></i>
+                <i class="fa fa-list" aria-hidden="true"></i>
             </a>
         </li>
     </ul>
@@ -409,25 +519,36 @@
 
                 </div>
                 <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
     <ul class="share-options">
-        <li class="share-option">
-            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/">
-                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
-            </a>
-        </li>
-        <li class="share-option">
-            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/">
-                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
-            </a>
-        </li>
-        <li class="share-option">
-            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/">
-                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
-            </a>
-        </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i><span>Share on Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/">
+                    <i class="fa fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2017/06/13/SSL-TLS-A-Primer/">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                </a>
+            </li>
+        
     </ul>
 </div>
-<div id="share-options-mask" class="share-options-mask"></div>
+
             
         </div>
         
@@ -441,36 +562,31 @@
         
             <h4 id="about-card-name">Jacob Ludriks</h4>
         
-            <h5 id="about-card-bio"><p>Nerd</p>
-</h5>
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
         
         
-            <h5 id="about-card-job">
+            <div id="about-card-job">
                 <i class="fa fa-briefcase"></i>
                 <br/>
-                <p>System Administrator</p>
+                <p>author.job</p>
 
-            </h5>
+            </div>
         
-        
-            <h5 id="about-card-location">
-                <i class="fa fa-map-marker"></i>
-                <br/>
-                Australia
-            </h5>
         
     </div>
 </div>
 
         
+        
 <div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-    </body>
-    <!--SCRIPTS-->
-<script src="/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-xzfezjobyekpxrjktw5tz6muvzqfsbmo5n6atk3p5om9ulfptldi3p7cyqd8.min.js"></script>
 <!--SCRIPTS END-->
 
     
 
 
 
+    </body>
 </html>

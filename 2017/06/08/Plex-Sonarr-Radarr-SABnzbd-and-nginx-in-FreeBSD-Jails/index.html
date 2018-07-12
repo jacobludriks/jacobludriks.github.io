@@ -13,17 +13,17 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jacob Ludriks","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"Following on from the previous post about thin jails, we can now procede to install the following applications in to seperate jails:\n\nSonarr\nRadarr\nSABnzbd\nnginx as a reverse proxy for the above applications\nPlex\n\n\nFirst, clone the skeleton snapshot to the thinjails directory for each jail:\n12345zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/sonarrzfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/radarrzfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/sabnzbdzfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/nginxzfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/plex\nNext, create the mount folders for the jails\n12345mkdir -p /usr/local/jails/sonarrmkdir -p /usr/local/jails/radarrmkdir -p /usr/local/jails/sabnzbdmkdir -p /usr/local/jails/nginxmkdir -p /usr/local/jails/plex\nAdd the configurations for the jails in /etc/jail.conf\n1234567891011121314151617181920# Insert at the bottom of jail.conf from previous blog postsonarr &#123;    $ip = 45;&#125;radarr &#123;    $ip = 46;&#125;sabnzbd &#123;    $ip = 47;&#125;nginx &#123;    $ip = 48;&#125;plex &#123;    $ip = 49;&#125;\nCreate a fstab file for each jail at /usr/local/jails/&lt;jailname&gt;.fstab, replacing &lt;jailname&gt; with the jail name of each.\n12/usr/local/jails/templates/base-11.0-RELEASE    /usr/local/jails/&lt;jailname&gt;/  nullfs  ro      0       0/usr/local/jails/thinjails/&lt;jailname&gt; /usr/local/jails/&lt;jailname&gt;/skeleton  nullfs  rw      0       0\nCreate and start jails\n12345jail -c sonarrjail -c radarrjail -c sabnzbdjail -c nginxjail -c plex\nAdd jails to auto-start on boot in /etc/rc.conf\n1jail_list=&quot;plex sonarr radarr nginx sabnzbd&quot;\nSonarrEnter jail, replacing &lt;id&gt; with the ID of the Sonarr jail shown in jls output\n12jlsjexec &lt;id&gt; /bin/sh\nInstall Sonarr, answering yes to installing pkg and the package itself\n1pkg install sonarr\nEnable and start Sonarr\n12sysrc sonarr_enable=YESservice sonarr start\nRadarrEnter jail, replacing &lt;id&gt; with the ID of the Radarr jail shown in jls output\n12jlsjexec &lt;id&gt; /bin/sh\nInstall Radarr, answering yes to installing pkg and the package itself\n1pkg install radarr\nEnable and start Radarr\n12sysrc radarr_enable=YESservice radarr start\nSABnzbdEnter jail, replacing &lt;id&gt; with the ID of the SABnzbd jail shown in jls output\n12jlsjexec &lt;id&gt; /bin/sh\nInstall SABbnzbd, answering “yes” to installing pkg and the package itself\n1pkg install sabnzbdplus\nEnable and start SABbnzbd\n12sysrc sabnzbdplus_enable=YESservice sabnzbdplus start\nPlexEnter jail, replacing &lt;id&gt; with the ID of the Plex jail shown in jls output\n12jlsjexec &lt;id&gt; /bin/sh\nInstall Plex, answering “yes” to installing pkg and the package itself\n1pkg install plexmediaserver\nEnable and start Plex\n12sysrc plexmediaserver_enable=YESservice plexmediaserver start\nNginxEnter jail, replacing &lt;id&gt; with the ID of the nginx jail shown in jls output\n12jlsjexec &lt;id&gt; /bin/sh\nInstall nginx, answering “yes” to installing pkg and the package itself\n1pkg install nginx\nEnable nginx\n1sysrc nginx_enable=YES\nEdit /usr/local/etc/nginx/nginx.conf\n123456789101112131415161718192021222324252627282930313233343536events &#123;    worker_connections  1024;&#125;http &#123;    server &#123;        listen  80;        server_name home.ludriks.com 10.1.1.45;        location /sonarr &#123;            proxy_pass  http://&lt;sonarr_ip here&gt;:8989;            proxy_set_header    X-Real-IP  $remote_addr;            proxy_set_header    Host $host;            proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;            proxy_set_header    X-Forwarded-Proto $scheme;            proxy_redirect off;        &#125;        location /radarr &#123;            proxy_pass  http://&lt;radarr_ip here&gt;:7878;            proxy_set_header    X-Real-IP  $remote_addr;            proxy_set_header    Host $host;            proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;            proxy_set_header    X-Forwarded-Proto $scheme;            proxy_redirect off;        &#125;        location /sabnzbd &#123;            proxy_pass  http://&lt;sabnzbd_ip here&gt;:8080;            proxy_set_header    X-Real-IP  $remote_addr;            proxy_set_header    Host $host;            proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;            proxy_set_header    X-Forwarded-Proto $scheme;            proxy_redirect off;        &#125;        access_log /var/log/nginx/sonarr.your-domain.xyz;    &#125;&#125;\nStart nginx\n1service nginx start\nI will follow up this blog post with another detailing integration with the jails.\n","dateCreated":"2017-06-08T13:58:13+10:00","dateModified":"2017-06-13T15:41:26+10:00","datePublished":"2017-06-08T13:58:13+10:00","description":"Following on from the previous post about thin jails, we can now procede to install the following applications in to seperate jails:\n\nSonarr\nRadarr\nSABnzbd\nnginx as a reverse proxy for the above applications\nPlex\n","headline":"Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/"},"publisher":{"@type":"Organization","name":"Jacob Ludriks","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/"}</script>
     <meta name="description" content="Following on from the previous post about thin jails, we can now procede to install the following applications in to seperate jails:  Sonarr Radarr SABnzbd nginx as a reverse proxy for the above appli">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails">
 <meta property="og:url" content="http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/index.html">
 <meta property="og:site_name" content="Jacob Ludriks">
 <meta property="og:description" content="Following on from the previous post about thin jails, we can now procede to install the following applications in to seperate jails:  Sonarr Radarr SABnzbd nginx as a reverse proxy for the above appli">
-<meta property="og:updated_time" content="2017-06-13T05:41:24.245Z">
+<meta property="og:updated_time" content="2017-06-13T05:41:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails">
 <meta name="twitter:description" content="Following on from the previous post about thin jails, we can now procede to install the following applications in to seperate jails:  Sonarr Radarr SABnzbd nginx as a reverse proxy for the above appli">
-<meta name="twitter:creator" content="@jludriks">
     
     
         
@@ -33,9 +33,10 @@
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link rel="stylesheet" href="/assets/css/style-3frockyt2j28isvdztjchy5nhkz8tjki9ermufc1ckptmvjdftux94m2ahub.min.css">
     <!--STYLES END-->
     
+
     
 </head>
 
@@ -48,9 +49,9 @@
 
 <header id="header" data-behavior="4">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <h1 class="header-title">
+    <div class="header-title">
         <a class="header-title-link" href="/ ">Jacob Ludriks</a>
-    </h1>
+    </div>
     
         
             <a  class="header-right-picture "
@@ -65,104 +66,179 @@
 
 
 <nav id="sidebar" data-behavior="4">
-    
-    
-        <ul class="sidebar-buttons">
+    <div class="sidebar-container">
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/ "
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
-                    <span class="sidebar-button-desc">Home</span>
-                </a>
-        </li>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/all-categories"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
-                    <span class="sidebar-button-desc">Categories</span>
-                </a>
-        </li>
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="Home"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                            title="Categories"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="Tags"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="Archives"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                            title="Search"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="#about"
+                            
+                            title="About"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/all-tags"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
-                    <span class="sidebar-button-desc">Tags</span>
-                </a>
-        </li>
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="http://stackoverflow.com/users" target="_blank" rel="noopener" title="Stack Overflow">
+                    
+                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Stack Overflow</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://twitter.com/" target="_blank" rel="noopener" title="Twitter">
+                    
+                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Twitter</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://facebook.com/" target="_blank" rel="noopener" title="Facebook">
+                    
+                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Facebook</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://plus.google.com/" target="_blank" rel="noopener" title="Google +">
+                    
+                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Google +</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/profile/" target="_blank" rel="noopener" title="LinkedIn">
+                    
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/mailto"
+                            title="Mail"
+                        >
+                    
+                        <i class="sidebar-button-icon fab fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/all-archives"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
-                    <span class="sidebar-button-desc">Archives</span>
-                </a>
-        </li>
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                            title="RSS"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link st-search-show-outputs"
-                         href="#search"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-search"></i>
-                    <span class="sidebar-button-desc">Search</span>
-                </a>
-        </li>
-        
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="#about"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
-                    <span class="sidebar-button-desc">About</span>
-                </a>
-        </li>
-        
-    </ul>
-    
-        <ul class="sidebar-buttons">
-        
-    </ul>
-    
-        <ul class="sidebar-buttons">
-        
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/atom.xml"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
-                    <span class="sidebar-button-desc">RSS</span>
-                </a>
-        </li>
-        
-    </ul>
-    
+    </div>
 </nav>
 
             
@@ -171,17 +247,18 @@
                         hasCoverMetaIn
                         ">
                 
-<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+<article class="post">
     
     
         <div class="post-header main-content-wrap text-left">
     
-        <h1 class="post-title" itemprop="headline">
+        <h1 class="post-title">
             Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails
         </h1>
     
-    <div class="post-meta">
-    <time itemprop="datePublished" datetime="2017-06-08T13:58:13+10:00">
+    
+        <div class="post-meta">
+    <time datetime="2017-06-08T13:58:13+10:00">
 	
 		    Jun 08, 2017
     	
@@ -189,9 +266,11 @@
     
 </div>
 
-</div>
     
-    <div class="post-content markdown" itemprop="articleBody">
+</div>
+
+    
+    <div class="post-content markdown">
         <div class="main-content-wrap">
             <p>Following on from the previous post about thin jails, we can now procede to install the following applications in to seperate jails:</p>
 <ul>
@@ -251,64 +330,81 @@
 <p>I will follow up this blog post with another detailing integration with the jails.</p>
 
             
+
         </div>
     </div>
     <div id="post-footer" class="post-footer main-content-wrap">
         
-        <div class="post-actions-wrap">
+        
+            <div class="post-actions-wrap">
     <nav>
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/13/SSL-TLS-A-Primer/"  data-tooltip="SSL/TLS: A Primer">
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/13/SSL-TLS-A-Primer/" data-tooltip="SSL/TLS: A Primer" aria-label="PREVIOUS: SSL/TLS: A Primer">
                 
-                    <i class="fa fa-angle-left"></i>
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
                 </a>
             </li>
             <li class="post-action">
                 
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/07/FreeBSD-Thin-Jails/" data-tooltip="FreeBSD Thin Jails">
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/07/FreeBSD-Thin-Jails/" data-tooltip="FreeBSD Thin Jails" aria-label="NEXT: FreeBSD Thin Jails">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                    <i class="fa fa-angle-right"></i>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
                 </a>
             </li>
         </ul>
     </nav>
     <ul class="post-actions post-action-share">
         <li class="post-action hide-lg hide-md hide-sm">
-            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
-                <i class="fa fa-share-alt"></i>
-            </a>
-        </li>
-        <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/">
-                <i class="fa fa-google-plus"></i>
-            </a>
-        </li>
-        <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/">
-                <i class="fa fa-facebook-official"></i>
-            </a>
-        </li>
-        <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/">
-                <i class="fa fa-twitter"></i>
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
         </li>
         
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/" title="Share on Facebook">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/" title="Share on Twitter">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/" title="Share on Google+">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
             
-                <i class="fa fa-list"></i>
+                <i class="fa fa-list" aria-hidden="true"></i>
             </a>
         </li>
     </ul>
 </div>
 
 
+        
         
             
         
@@ -319,7 +415,7 @@
 
                 <footer id="footer" class="main-content-wrap">
     <span class="copyrights">
-        Copyrights &copy; 2017 Jacob Ludriks. All Rights Reserved.
+        Copyrights &copy; 2018 Jacob Ludriks. All Rights Reserved.
     </span>
 </footer>
 
@@ -331,49 +427,63 @@
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/13/SSL-TLS-A-Primer/"  data-tooltip="SSL/TLS: A Primer">
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/13/SSL-TLS-A-Primer/" data-tooltip="SSL/TLS: A Primer" aria-label="PREVIOUS: SSL/TLS: A Primer">
                 
-                    <i class="fa fa-angle-left"></i>
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
                 </a>
             </li>
             <li class="post-action">
                 
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/07/FreeBSD-Thin-Jails/" data-tooltip="FreeBSD Thin Jails">
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/07/FreeBSD-Thin-Jails/" data-tooltip="FreeBSD Thin Jails" aria-label="NEXT: FreeBSD Thin Jails">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                    <i class="fa fa-angle-right"></i>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
                 </a>
             </li>
         </ul>
     </nav>
     <ul class="post-actions post-action-share">
         <li class="post-action hide-lg hide-md hide-sm">
-            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
-                <i class="fa fa-share-alt"></i>
-            </a>
-        </li>
-        <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/">
-                <i class="fa fa-google-plus"></i>
-            </a>
-        </li>
-        <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/">
-                <i class="fa fa-facebook-official"></i>
-            </a>
-        </li>
-        <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/">
-                <i class="fa fa-twitter"></i>
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
         </li>
         
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/" title="Share on Facebook">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/" title="Share on Twitter">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/" title="Share on Google+">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
             
-                <i class="fa fa-list"></i>
+                <i class="fa fa-list" aria-hidden="true"></i>
             </a>
         </li>
     </ul>
@@ -382,25 +492,36 @@
 
                 </div>
                 <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
     <ul class="share-options">
-        <li class="share-option">
-            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/">
-                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
-            </a>
-        </li>
-        <li class="share-option">
-            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/">
-                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
-            </a>
-        </li>
-        <li class="share-option">
-            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/">
-                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
-            </a>
-        </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i><span>Share on Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/">
+                    <i class="fa fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                </a>
+            </li>
+        
     </ul>
 </div>
-<div id="share-options-mask" class="share-options-mask"></div>
+
             
         </div>
         
@@ -414,36 +535,31 @@
         
             <h4 id="about-card-name">Jacob Ludriks</h4>
         
-            <h5 id="about-card-bio"><p>Nerd</p>
-</h5>
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
         
         
-            <h5 id="about-card-job">
+            <div id="about-card-job">
                 <i class="fa fa-briefcase"></i>
                 <br/>
-                <p>System Administrator</p>
+                <p>author.job</p>
 
-            </h5>
+            </div>
         
-        
-            <h5 id="about-card-location">
-                <i class="fa fa-map-marker"></i>
-                <br/>
-                Australia
-            </h5>
         
     </div>
 </div>
 
         
+        
 <div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-    </body>
-    <!--SCRIPTS-->
-<script src="/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-xzfezjobyekpxrjktw5tz6muvzqfsbmo5n6atk3p5om9ulfptldi3p7cyqd8.min.js"></script>
 <!--SCRIPTS END-->
 
     
 
 
 
+    </body>
 </html>

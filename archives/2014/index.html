@@ -13,13 +13,13 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
+    <script type="application/ld+json">{}</script>
     <meta property="og:type" content="blog">
 <meta property="og:title" content="Jacob Ludriks">
 <meta property="og:url" content="http://jacob.ludriks.com/archives/2014/index.html">
 <meta property="og:site_name" content="Jacob Ludriks">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jacob Ludriks">
-<meta name="twitter:creator" content="@jludriks">
     
     
         
@@ -29,9 +29,10 @@
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link rel="stylesheet" href="/assets/css/style-3frockyt2j28isvdztjchy5nhkz8tjki9ermufc1ckptmvjdftux94m2ahub.min.css">
     <!--STYLES END-->
     
+
     
 </head>
 
@@ -42,11 +43,11 @@
 
     
 
-<header id="header" data-behavior="2">
+<header id="header" data-behavior="1">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <h1 class="header-title">
+    <div class="header-title">
         <a class="header-title-link" href="/ ">Jacob Ludriks</a>
-    </h1>
+    </div>
     
         
             <a  class="header-right-picture "
@@ -60,123 +61,196 @@
             <!-- Define author's picture -->
 
 
-<nav id="sidebar" data-behavior="2">
-    
-    
-        <ul class="sidebar-buttons">
+<nav id="sidebar" data-behavior="1">
+    <div class="sidebar-container">
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/ "
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
-                    <span class="sidebar-button-desc">Home</span>
-                </a>
-        </li>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/all-categories"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
-                    <span class="sidebar-button-desc">Categories</span>
-                </a>
-        </li>
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="Home"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                            title="Categories"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="Tags"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="Archives"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                            title="Search"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="#about"
+                            
+                            title="About"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/all-tags"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
-                    <span class="sidebar-button-desc">Tags</span>
-                </a>
-        </li>
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="http://stackoverflow.com/users" target="_blank" rel="noopener" title="Stack Overflow">
+                    
+                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Stack Overflow</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://twitter.com/" target="_blank" rel="noopener" title="Twitter">
+                    
+                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Twitter</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://facebook.com/" target="_blank" rel="noopener" title="Facebook">
+                    
+                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Facebook</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://plus.google.com/" target="_blank" rel="noopener" title="Google +">
+                    
+                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Google +</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/profile/" target="_blank" rel="noopener" title="LinkedIn">
+                    
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/mailto"
+                            title="Mail"
+                        >
+                    
+                        <i class="sidebar-button-icon fab fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/all-archives"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
-                    <span class="sidebar-button-desc">Archives</span>
-                </a>
-        </li>
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                            title="RSS"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link st-search-show-outputs"
-                         href="#search"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-search"></i>
-                    <span class="sidebar-button-desc">Search</span>
-                </a>
-        </li>
-        
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="#about"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
-                    <span class="sidebar-button-desc">About</span>
-                </a>
-        </li>
-        
-    </ul>
-    
-        <ul class="sidebar-buttons">
-        
-    </ul>
-    
-        <ul class="sidebar-buttons">
-        
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/atom.xml"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
-                    <span class="sidebar-button-desc">RSS</span>
-                </a>
-        </li>
-        
-    </ul>
-    
+    </div>
 </nav>
 
             
-            <div id="main" data-behavior="2"
+            <div id="main" data-behavior="1"
                  class="
                         hasCoverMetaIn
                         ">
                 
-    
-
-<section class="postShorten-group main-content-wrap">
+    <section class="postShorten-group main-content-wrap">
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2014/11/27/Upgrading-HBA-Firmware-and-Drivers-on-HP-ESXi-Hosts/">
                             Upgrading HBA Firmware and Drivers on HP ESXi Hosts
@@ -184,7 +258,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2014-11-27T22:37:00+11:00">
+    <time datetime="2014-11-27T22:37:00+11:00">
 	
 		    Nov 27, 2014
     	
@@ -194,7 +268,7 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>I’m guilty of only updating firmware and drivers on my devices when problems arise. I’m sure most of us do this. Bad practice! The guide in this post shows how to update a ProLiant system (blade, pedestal or rackmount) with the HP SPP and latest drivers.</p>
 <p><strong>BEFORE YOU DO ANYTHING</strong>: Put the host in maintenance mode and move the virtual machines off! This probably doesn’t need to be said, but hey.</p>
 <p><a href="http://vibsdepot.hp.com/" target="_blank" rel="external">HP VibsDepot</a> is a great resource for the currently supported firmware and driver recipe for ESXi as well as links to the required files. The most current support recipe document is located at <a href="http://vibsdepot.hp.com/hpq/recipes/HP-VMware-Recipe.pdf" target="_blank" rel="external">http://vibsdepot.hp.com/hpq/recipes/HP-VMware-Recipe.pdf</a> (pdf). First things first; you need to get the model of your HBA and which driver it uses. You can do this by connecting to the host with SSH.</p>
@@ -217,6 +291,7 @@
 
                     
                         
+
                     
                     
                         <p>
@@ -232,11 +307,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2014/11/27/Lost-Management-Interface-on-an-ESXi-Host/">
                             Lost Management Interface on an ESXi Host
@@ -244,7 +319,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2014-11-27T22:32:00+11:00">
+    <time datetime="2014-11-27T22:32:00+11:00">
 	
 		    Nov 27, 2014
     	
@@ -254,7 +329,7 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>A hosts management network interface somehow dropped off the network this afternoon. Fortunately I was still able to get in through iLO. It always pays to have an out-of-band interface active!</p>
 <img src="/2014/11/27/Lost-Management-Interface-on-an-ESXi-Host/esxi-no-mgmt.png" alt="esxi-no-mgmt.png" title="">
 <p>From the DCUI screen, press <code>Alt + F1</code>. This will bring up the login screen. Log in as root then type <code>esxcli network ip interface list</code>. You will get an output similar to the one below.</p>
@@ -264,6 +339,7 @@
 
                     
                         
+
                     
                     
                         <p>
@@ -279,11 +355,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2014/11/27/Meeting-Room-Utilization/">
                             Meeting Room Utilization
@@ -291,7 +367,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2014-11-27T22:30:00+11:00">
+    <time datetime="2014-11-27T22:30:00+11:00">
 	
 		    Nov 27, 2014
     	
@@ -301,7 +377,7 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>I had a request from a user to find out the meeting room utilization across our head office, but unfortunately I couldn’t find an easy way to do this with Exchange 2010 cmdlets. Here are some instructions to do so with COM objects, PowerShell and Excel.</p>
 <p>First create a mailbox that will have the meeting room rights assigned to it, then grant the user access to the required mailboxes so that they show in Outlook:</p>
 <p><code>Get-Mailbox meetingroomprefix* | Add-MailboxPermission -AccessRights FullAccess -User temporarymailbox</code></p>
@@ -321,6 +397,7 @@
 <img src="/2014/11/27/Meeting-Room-Utilization/meetingroom.png" alt="meetingroom.png" title="">
                     
                         
+
                     
                     
                         <p>
@@ -336,11 +413,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2014/11/27/Change-SMTP-settings-on-Xerox-machines-with-PowerShell/">
                             Change SMTP settings on Xerox machines with PowerShell
@@ -348,7 +425,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2014-11-27T14:36:00+11:00">
+    <time datetime="2014-11-27T14:36:00+11:00">
 	
 		    Nov 27, 2014
     	
@@ -358,7 +435,7 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>I got really sick of changing SMTP settings on Xerox machines manually, so I made a PowerShell script to make it easier. The script can also pull a list of printers from a print server and work from that.</p>
 <script src="https://gist.github.com/jacobludriks/4bcbcc9cba061f1e09a7.js"></script>
 
@@ -367,6 +444,7 @@
 
                     
                         
+
                     
                     
                         <p>
@@ -382,11 +460,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2014/08/14/Adobe-FTP-is-slow/">
                             Adobe FTP is slow!
@@ -394,7 +472,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2014-08-14T14:41:00+10:00">
+    <time datetime="2014-08-14T14:41:00+10:00">
 	
 		    Aug 14, 2014
     	
@@ -404,11 +482,12 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>Not sure if you have tried to download from adobe FTP site lately, however it is exceedingly slow (23kbps slow!). I have this afternoon, just worked out a small hack that makes it a lot faster… so far it seems to work (for the three adobe reader patches I’ve tried anyway).</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">1. Find the file on ftp://ftp.adobe.com/</div><div class="line">2. Copy the url of the file (including the exe, zip, etc) that you want to download.</div><div class="line">3. Replace the first part of the URL (ftp://ftp.adobe.com/) with http://ardownload.adobe.com/</div><div class="line">E.g. ftp://ftp.adobe.com/pub/adobe/reader/win/11.x/11.0.07/misc/AdbeRdrUpd11007_incr.msp becomes http://ardownload.adobe.com/pub/adobe/reader/win/11.x/11.0.07/misc/AdbeRdrUpd11007_incr.msp </div><div class="line">5. Enjoy the much faster download speeds!</div></pre></td></tr></table></figure>
                     
                         
+
                     
                     
                         <p>
@@ -424,11 +503,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2014/08/14/Citrix-error-number-2320/">
                             Citrix error number 2320
@@ -436,7 +515,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2014-08-14T14:38:00+10:00">
+    <time datetime="2014-08-14T14:38:00+10:00">
 	
 		    Aug 14, 2014
     	
@@ -446,13 +525,14 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>I found a weird error in Citrix the other day.</p>
 <img src="/2014/08/14/Citrix-error-number-2320/citrix_online.png" alt="citrix_online.png" title="">
 <p>The fix:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Citrix\ICA Client\Engine\Lockdown Profiles\All Regions</div><div class="line"></div><div class="line">Change the DWORD value for EnableLockdown from 1 to 0.</div><div class="line"></div><div class="line">Close Registry Editor and try to launch the application again.</div></pre></td></tr></table></figure>
                     
                         
+
                     
                     
                         <p>
@@ -468,11 +548,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2014/07/31/Enable-Disable-IE-on-Server-2008R2/">
                             Enable/Disable IE on Server 2008R2
@@ -480,7 +560,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2014-07-31T14:05:00+10:00">
+    <time datetime="2014-07-31T14:05:00+10:00">
 	
 		    Jul 31, 2014
     	
@@ -490,7 +570,7 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>To install (requires a restart):</p>
 <p><code>dism /online /Enable-Feature /FeatureName:Internet-Explorer-Optional-amd64</code></p>
 <p>To uninstall (doesn’t require a restart):</p>
@@ -498,6 +578,7 @@
 
                     
                         
+
                     
                     
                         <p>
@@ -513,11 +594,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2014/07/24/Sign-PSScript/">
                             Sign-PSScript
@@ -525,7 +606,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2014-07-24T10:28:00+10:00">
+    <time datetime="2014-07-24T10:28:00+10:00">
 	
 		    Jul 24, 2014
     	
@@ -535,7 +616,7 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>Just a quick function to sign PowerShell scripts with a code-signing certificate. Very useful for deploying scripts in a domain to all computers without changing the execution policy.</p>
 <script src="https://gist.github.com/jacobludriks/efc67998d8e058af76e7.js"></script>
 
@@ -543,6 +624,7 @@
 
                     
                         
+
                     
                     
                         <p>
@@ -558,11 +640,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2014/07/23/ERROR-FILE-SYSTEM-LIMITATION-whilst-using-Windows-deduplication-with-Veeam/">
                             ERROR_FILE_SYSTEM_LIMITATION whilst using Windows deduplication with Veeam
@@ -570,7 +652,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2014-07-23T13:12:00+10:00">
+    <time datetime="2014-07-23T13:12:00+10:00">
 	
 		    Jul 23, 2014
     	
@@ -580,7 +662,7 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>This is a possible scenario that can happen with Veeam and Server 2012 deduplication:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">You cannot write to a file anymore and you get the error &quot;ERROR_FILE_SYSTEM_LIMITATION&quot;. There is still plenty of space left on the volume however this file can&apos;t grow. This is a big issue wince you use rollback chains in Veeam.</div></pre></td></tr></table></figure>
 <p>To fix this unfortunately you need to start a whole new chain on a new volume. When formatting the volume, use <code>format drive: /fs:ntfs /v:volumelabel /Q /L</code>. The <code>/Q</code> switch does a quick format, and the <code>/L</code> switch enables large-size file records.</p>
@@ -591,6 +673,7 @@
 
                     
                         
+
                     
                     
                         <p>
@@ -606,11 +689,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2014/07/10/IIS-logging-to-the-ELK-stack/">
                             IIS logging to the ELK stack
@@ -618,7 +701,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2014-07-10T12:39:00+10:00">
+    <time datetime="2014-07-10T12:39:00+10:00">
 	
 		    Jul 10, 2014
     	
@@ -628,7 +711,7 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>Our Exchange 2013 servers had a near-meltdown last week due to no free disk space on the C: drive, which would have been pretty catastrophic if we didn’t have the appropriate monitoring in place. After some investigation, I found that the IIS instances on the boxes had been happily logging away since we implemented them and the log directories had grown to a gigantic 40gb each. Not happy with just deleting them, I figured I would ship them to our logging server and delete them from the servers themselves.</p>
 <p>I have been using the ELK stack (Elasticsearch, Logstash, Kibana) for about a year now and it’s been great. Logs are searchable and if any issues arise we can quickly pinpoint exactly what has been happening over a number of devices over that time, such as switches, wireless access points, firewalls, Windows servers etc.</p>
 <h4 id="Logging-input"><a href="#Logging-input" class="headerlink" title="Logging input"></a>Logging input</h4><p>First, you will need to install a log shipper on the Windows server. I went with <a href="http://nxlog.org/" target="_blank" rel="external">nxlog</a> as it has good support and it seems to be what everybody else uses on Windows. As a bonus, it doesn’t require Java to be installed unlike Logstash. Download the installer from the nxlog website and install it to the machine. After it is installed, open <code>C:\Program Files (x86)\nxlog\conf\nxlog.conf</code> and put the following in:</p>
@@ -646,6 +729,7 @@
 
                     
                         
+
                     
                     
                         <p>
@@ -664,12 +748,12 @@
     <ul class="pagination">
         
         
-        <li class="pagination-next">
+          <li class="pagination-next">
             <a class="btn btn--default btn--small" href="/archives/2014/page/2/">
-                    <span>OLDER POSTS</span>
-                <i class="fa fa-angle-right text-base icon-ml"></i>
+              <span>OLDER POSTS</span>
+              <i class="fa fa-angle-right text-base icon-ml"></i>
             </a>
-        </li>
+          </li>
         
         <li class="pagination-number">page 1 of 3</li>
     </ul>
@@ -681,7 +765,7 @@
 
                 <footer id="footer" class="main-content-wrap">
     <span class="copyrights">
-        Copyrights &copy; 2017 Jacob Ludriks. All Rights Reserved.
+        Copyrights &copy; 2018 Jacob Ludriks. All Rights Reserved.
     </span>
 </footer>
 
@@ -699,34 +783,29 @@
         
             <h4 id="about-card-name">Jacob Ludriks</h4>
         
-            <h5 id="about-card-bio"><p>Nerd</p>
-</h5>
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
         
         
-            <h5 id="about-card-job">
+            <div id="about-card-job">
                 <i class="fa fa-briefcase"></i>
                 <br/>
-                <p>System Administrator</p>
+                <p>author.job</p>
 
-            </h5>
+            </div>
         
-        
-            <h5 id="about-card-location">
-                <i class="fa fa-map-marker"></i>
-                <br/>
-                Australia
-            </h5>
         
     </div>
 </div>
 
         
+        
 <div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-    </body>
-    <!--SCRIPTS-->
-<script src="/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-xzfezjobyekpxrjktw5tz6muvzqfsbmo5n6atk3p5om9ulfptldi3p7cyqd8.min.js"></script>
 <!--SCRIPTS END-->
 
 
 
+    </body>
 </html>

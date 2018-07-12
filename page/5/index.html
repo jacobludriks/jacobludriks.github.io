@@ -13,13 +13,13 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"Website","@id":"http://jacob.ludriks.com","author":{"@type":"Person","name":"Jacob Ludriks","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"name":"Jacob Ludriks","description":null,"url":"http://jacob.ludriks.com"}</script>
     <meta property="og:type" content="blog">
 <meta property="og:title" content="Jacob Ludriks">
 <meta property="og:url" content="http://jacob.ludriks.com/page/5/index.html">
 <meta property="og:site_name" content="Jacob Ludriks">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jacob Ludriks">
-<meta name="twitter:creator" content="@jludriks">
     
     
         
@@ -29,9 +29,10 @@
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link rel="stylesheet" href="/assets/css/style-3frockyt2j28isvdztjchy5nhkz8tjki9ermufc1ckptmvjdftux94m2ahub.min.css">
     <!--STYLES END-->
     
+
     
 </head>
 
@@ -42,11 +43,11 @@
 
     
 
-<header id="header" data-behavior="2">
+<header id="header" data-behavior="1">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <h1 class="header-title">
+    <div class="header-title">
         <a class="header-title-link" href="/ ">Jacob Ludriks</a>
-    </h1>
+    </div>
     
         
             <a  class="header-right-picture "
@@ -60,122 +61,242 @@
             <!-- Define author's picture -->
 
 
-<nav id="sidebar" data-behavior="2">
-    
-    
-        <ul class="sidebar-buttons">
+<nav id="sidebar" data-behavior="1">
+    <div class="sidebar-container">
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/ "
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
-                    <span class="sidebar-button-desc">Home</span>
-                </a>
-        </li>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/all-categories"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
-                    <span class="sidebar-button-desc">Categories</span>
-                </a>
-        </li>
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="Home"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                            title="Categories"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="Tags"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="Archives"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                            title="Search"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="#about"
+                            
+                            title="About"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/all-tags"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
-                    <span class="sidebar-button-desc">Tags</span>
-                </a>
-        </li>
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="http://stackoverflow.com/users" target="_blank" rel="noopener" title="Stack Overflow">
+                    
+                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Stack Overflow</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://twitter.com/" target="_blank" rel="noopener" title="Twitter">
+                    
+                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Twitter</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://facebook.com/" target="_blank" rel="noopener" title="Facebook">
+                    
+                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Facebook</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://plus.google.com/" target="_blank" rel="noopener" title="Google +">
+                    
+                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Google +</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/profile/" target="_blank" rel="noopener" title="LinkedIn">
+                    
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/mailto"
+                            title="Mail"
+                        >
+                    
+                        <i class="sidebar-button-icon fab fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/all-archives"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
-                    <span class="sidebar-button-desc">Archives</span>
-                </a>
-        </li>
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                            title="RSS"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link st-search-show-outputs"
-                         href="#search"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-search"></i>
-                    <span class="sidebar-button-desc">Search</span>
-                </a>
-        </li>
-        
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="#about"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
-                    <span class="sidebar-button-desc">About</span>
-                </a>
-        </li>
-        
-    </ul>
-    
-        <ul class="sidebar-buttons">
-        
-    </ul>
-    
-        <ul class="sidebar-buttons">
-        
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/atom.xml"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
-                    <span class="sidebar-button-desc">RSS</span>
-                </a>
-        </li>
-        
-    </ul>
-    
+    </div>
 </nav>
 
             
-            <div id="main" data-behavior="2"
+            <div id="main" data-behavior="1"
                  class="
                         hasCoverMetaIn
                         ">
-                
-
-<section class="postShorten-group main-content-wrap">
+                <section class="postShorten-group main-content-wrap">
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
+                    
+                        <a class="link-unstyled" href="/2014/05/21/Downloading-from-YouTube-using-Powershell/">
+                            Downloading from YouTube using Powershell
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2014-05-21T13:32:00+10:00">
+	
+		    May 21, 2014
+    	
+    </time>
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p><strong>EDIT:</strong> As of 12/05/2016 this no longer works. Please use youtube-dl.exe as an alternative.</p>
+<p>Sometimes when I’m travelling I don’t have internet access and I want to take videos with me. Here is a script to download videos from Youtube using Powershell.</p>
+<script src="https://gist.github.com/jacobludriks/d1804f4e906b266251cd.js"></script>
+
+<p>Run the script with <code>.\youtube.ps1 -video https://www.youtube.com/watch?v=videolink</code>. It will ask which quality you want to download in first and then download it to the current directory.</p>
+
+                    
+                        
+
+                    
+                    
+                        <p>
+                            <a href="/2014/05/21/Downloading-from-YouTube-using-Powershell/#post-footer" class="postShorten-excerpt_link link">
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2014/05/12/Member-count-of-distribution-lists/">
                             Member count of distribution lists
@@ -183,7 +304,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2014-05-12T14:03:00+10:00">
+    <time datetime="2014-05-12T14:03:00+10:00">
 	
 		    May 12, 2014
     	
@@ -193,7 +314,7 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>I am looking at enabling certain features of mailing lists depending on how many users there are. The following script generates this report with group recursion.</p>
 <script src="https://gist.github.com/jacobludriks/ceb99cdfaf6bb427d3d6.js"></script>
 
@@ -201,6 +322,7 @@
 
                     
                         
+
                     
                     
                         <p>
@@ -216,11 +338,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2014/05/12/Disabling-calendar-and-tasks-archiving-in-Exchange-2013/">
                             Disabling calendar and tasks archiving in Exchange 2013
@@ -228,7 +350,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2014-05-12T11:49:00+10:00">
+    <time datetime="2014-05-12T11:49:00+10:00">
 	
 		    May 12, 2014
     	
@@ -238,12 +360,13 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>In our Exchange 2013 environment we have a few users who have tasks that can occur once every 5-10 years. Unfortunately this doesn’t sit well with our retention policies and they get moved down to the archive mailbox. To disable them from getting archived, create a DWORD Value in <code>HKLM\SYSTEM\CurrentControlSet\Services\MSExchangeMailboxAssistants\Parameters</code> called <code>ELCAssistantCalendarTaskRetentionEnabled</code> and make sure it is set to <code>0</code>.</p>
 <p>Restart the <code>MSExchangeMailboxAssistants</code> service after making this change.</p>
 
                     
                         
+
                     
                     
                         <p>
@@ -259,11 +382,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2014/05/06/Synology-update-URLs/">
                             Synology update URLs
@@ -271,7 +394,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2014-05-06T15:09:00+10:00">
+    <time datetime="2014-05-06T15:09:00+10:00">
 	
 		    May 06, 2014
     	
@@ -281,7 +404,7 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>If you have a restrictive firewall, Synology devices need two URLs allowed outbound to update:</p>
 <ul>
 <li><code>download.synology.com</code></li>
@@ -291,6 +414,7 @@
 
                     
                         
+
                     
                     
                         <p>
@@ -306,11 +430,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2014/05/05/Setting-WMI-permissions-for-PRTG/">
                             Setting WMI permissions for PRTG
@@ -318,7 +442,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2014-05-05T13:32:00+10:00">
+    <time datetime="2014-05-05T13:32:00+10:00">
 	
 		    May 05, 2014
     	
@@ -328,7 +452,7 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>Setting permissions for PRTG to monitor WMI on systems is a bit of a chore. The script below sets the appropriate permissions for a lot of the WMI sensors in PRTG.</p>
 <script src="https://gist.github.com/jacobludriks/2fa223ac279e0472df47.js"></script>
 
@@ -338,6 +462,7 @@
 
                     
                         
+
                     
                     
                         <p>
@@ -353,11 +478,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2014/05/05/Manipulating-SDDL-s-through-PowerShell/">
                             Manipulating SDDL&#39;s through PowerShell
@@ -365,7 +490,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2014-05-05T12:43:00+10:00">
+    <time datetime="2014-05-05T12:43:00+10:00">
 	
 		    May 05, 2014
     	
@@ -375,7 +500,7 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>I manage security for service accounts through access with least privilege. Monitoring with PRTG however means that most of the WMI sensors need local Administrator access, which I’m not too happy about. One such situation is if you need to access the state of running services. To get around this, use the script below.</p>
 <script src="https://gist.github.com/jacobludriks/6306afa2ad7949912d4f.js"></script>
 
@@ -387,6 +512,7 @@
 
                     
                         
+
                     
                     
                         <p>
@@ -402,11 +528,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2014/04/28/TokenMungingException-in-Exchange-OWA/">
                             TokenMungingException in Exchange OWA
@@ -414,7 +540,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2014-04-28T13:48:00+10:00">
+    <time datetime="2014-04-28T13:48:00+10:00">
 	
 		    Apr 28, 2014
     	
@@ -424,7 +550,7 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>I’ve been busily rolling out Exchange 2013 SP1 at work and I’ve finally gotten to the stage where I can start migrating mailboxes over. Lo and behold, the fourth mailbox moved over had a strange issue whilst trying to access OWA:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">something went wrong</div><div class="line"></div><div class="line">Sorry, we can&apos;t get that information right now. Please try again later. If the problem persists, contact your helpdesk.</div><div class="line"></div><div class="line">X-OWA-Error: Microsoft.Exchange.Security.Authentication.TokenMungingException</div><div class="line">X-OWA-Version: 15.0.847.32</div><div class="line">X-FEServer: MAIL2013-1</div><div class="line">X-BEServer: Mail2013-2</div><div class="line">Date: 28/04/2014 11:35:42 AM</div></pre></td></tr></table></figure>
 <p>It turns out that some users had a “LinkedMasterAccount” attribute set to “NT AUTHORITY\SELF” that didn’t need to be. The script to check all users with this attribute set:</p>
@@ -435,6 +561,7 @@
 
                     
                         
+
                     
                     
                         <p>
@@ -450,11 +577,11 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
+                <h1 class="postShorten-title">
                     
                         <a class="link-unstyled" href="/2014/04/24/elasticsearch-trim/">
                             elasticsearch-trim
@@ -462,7 +589,7 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2014-04-24T15:47:00+10:00">
+    <time datetime="2014-04-24T15:47:00+10:00">
 	
 		    Apr 24, 2014
     	
@@ -472,13 +599,14 @@
 
             </div>
             
-                <div class="postShorten-content" itemprop="articleBody">
+                <div class="postShorten-content">
                     <p>I got sick of having to trim my Logstash indices in Elasticsearch manually, so I created a PowerShell script and set it as a scheduled task. By default it keeps the last 60 days.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">#Replace with the URL of your Elasticsearch instance</div><div class="line">$url = &quot;http://elasticsearch:9200/&quot;</div><div class="line">#Replace with how many days you want to keep, minus one (below means 60)</div><div class="line">$i = 59</div><div class="line">$request = (Invoke-WebRequest -Uri $url/_aliases).content | ConvertFrom-Json</div><div class="line">$indices = $request | Get-Member | where &#123;$_.name -like &quot;logstash*&quot;&#125; | select name | sort name -Descending</div><div class="line">$count = $indices.count</div><div class="line">do &#123;</div><div class="line">    $var = $indices[$i].name</div><div class="line">    Invoke-WebRequest -Uri $url/$var/ -Method Delete</div><div class="line">    $i++</div><div class="line">&#125;</div><div class="line">until ($i -eq $count)</div></pre></td></tr></table></figure>
 <p>Works well, but it doesn’t send a report or anything that it has been done.</p>
 
                     
                         
+
                     
                     
                         <p>
@@ -496,14 +624,12 @@
     <div class="pagination-bar">
     <ul class="pagination">
         
-        <li class="pagination-prev">
-            
-                <a class="btn btn--default btn--small" href="/page/4/">
-            
-                <i class="fa fa-angle-left text-base icon-mr"></i>
-                    <span>NEWER POSTS</span>
+          <li class="pagination-prev">
+            <a class="btn btn--default btn--small" href="/page/4/">
+              <i class="fa fa-angle-left text-base icon-mr"></i>
+              <span>NEWER POSTS</span>
             </a>
-        </li>
+          </li>
         
         
         <li class="pagination-number">page 5 of 5</li>
@@ -515,7 +641,7 @@
 
                 <footer id="footer" class="main-content-wrap">
     <span class="copyrights">
-        Copyrights &copy; 2017 Jacob Ludriks. All Rights Reserved.
+        Copyrights &copy; 2018 Jacob Ludriks. All Rights Reserved.
     </span>
 </footer>
 
@@ -533,34 +659,29 @@
         
             <h4 id="about-card-name">Jacob Ludriks</h4>
         
-            <h5 id="about-card-bio"><p>Nerd</p>
-</h5>
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
         
         
-            <h5 id="about-card-job">
+            <div id="about-card-job">
                 <i class="fa fa-briefcase"></i>
                 <br/>
-                <p>System Administrator</p>
+                <p>author.job</p>
 
-            </h5>
+            </div>
         
-        
-            <h5 id="about-card-location">
-                <i class="fa fa-map-marker"></i>
-                <br/>
-                Australia
-            </h5>
         
     </div>
 </div>
 
         
+        
 <div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-    </body>
-    <!--SCRIPTS-->
-<script src="/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-xzfezjobyekpxrjktw5tz6muvzqfsbmo5n6atk3p5om9ulfptldi3p7cyqd8.min.js"></script>
 <!--SCRIPTS END-->
 
 
 
+    </body>
 </html>

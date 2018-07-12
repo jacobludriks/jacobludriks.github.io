@@ -13,6 +13,7 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jacob Ludriks","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"Recently I built up a new storage server running FreeBSD. Initially I was going to go with FreeNAS like my old storage server, however the FreeNAS project is in a bit of flux at the moment and I thought this would be a good way to learn about the inner workings of FreeBSD. Part of this is segregating the applications running on the server in to “jails”. They are a form of OS-level virtualization, where each jail has its own files, processes and user accounts.\n\nI was tempted to run a jail management tool such as ezjail, iocage or qjail, however configuring manually through jail.conf and the jail command seems to be quite easy once you wrap your head around it. This guide walks through building a base jail template that can easily be added as a layer to new jails. This approach is great as you only need to update one layer when OS-level updates get released.\nFirst, enable jails in your OS.\n1sysrc jail_enable=YES\nCreate a dataset for the jails and thinjails\n12zfs create -o mountpoint=/usr/local/jails zroot/jailszfs create zroot/jails/thinjails\nThen, create another dataset for the 11.0-RELEASE files\n1zfs create -p zroot/jails/releases/11.0-RELEASE\nDownload and extract all required binaries from a FreeBSD mirror. I chose Optus Australia as that is my closest/fastest mirror.\n123456fetch ftp://ftp4.au.freebsd.org/pub/FreeBSD/releases/amd64/amd64/11.0-RELEASE/base.txz -o /tmp/base.txzfetch ftp://ftp4.au.freebsd.org/pub/FreeBSD/releases/amd64/amd64/11.0-RELEASE/lib32.txz -o /tmp/lib32.txzfetch ftp://ftp4.au.freebsd.org/pub/FreeBSD/releases/amd64/amd64/11.0-RELEASE/ports.txz -o /tmp/ports.txztar -xvf /tmp/base.txz -C /usr/local/jails/releases/11.0-RELEASEtar -xvf /tmp/lib32.txz -C /usr/local/jails/releases/11.0-RELEASEtar -xvf /tmp/ports.txz -C /usr/local/jails/releases/11.0-RELEASE\nUpdate to latest patch level (p10 at the release of this blog post)\n1env UNAME_r=11.0-RELEASE freebsd-update -b /usr/local/jails/releases/11.0-RELEASE fetch install\nVerify nothing was damaged in transit (this is more paranoia than anything…)\n1env UNAME_r=11.0-RELEASE freebsd-update -b /usr/local/jails/releases/11.0-RELEASE IDS\nAdd local timezone and DNS servers to files\n12cp /etc/resolv.conf /usr/local/jails/releases/11.0-RELEASE/etc/resolv.confcp /etc/localtime /usr/local/jails/releases/11.0-RELEASE/etc/localtime\nSnapshot the release. Since mine is patch level 10, I chose the name p10\n1zfs snapshot zroot/jails/releases/11.0-RELEASE@p10\nClone the 11.0-RELEASE snapshot to a new base jail. This will be the first layer in future jails.\n12zfs create zroot/jails/templateszfs clone zroot/jails/releases/11.0-RELEASE@p10 zroot/jails/templates/base-11.0-RELEASE\nCreate a skeleton dataset that will be used for jail-specific files\n1zfs create -p zroot/jails/templates/skeleton-11.0-RELEASE\nCreate folders in skeleton dataset\n123mkdir -p /usr/local/jails/templates/skeleton-11.0-RELEASE/usr/ports/distfilesmkdir -p /usr/local/jails/templates/skeleton-11.0-RELEASE/homemkdir -p /usr/local/jails/templates/skeleton-11.0-RELEASE/portsbuild\nMove folders from the base jail layer to the skeleton jail layer. These are jail-specific directories.\n12345mv /usr/local/jails/templates/base-11.0-RELEASE/etc /usr/local/jails/templates/skeleton-11.0-RELEASE/etcmv /usr/local/jails/templates/base-11.0-RELEASE/usr/local /usr/local/jails/templates/skeleton-11.0-RELEASE/usr/localmv /usr/local/jails/templates/base-11.0-RELEASE/tmp /usr/local/jails/templates/skeleton-11.0-RELEASE/tmpmv /usr/local/jails/templates/base-11.0-RELEASE/var /usr/local/jails/templates/skeleton-11.0-RELEASE/varmv /usr/local/jails/templates/base-11.0-RELEASE/root /usr/local/jails/templates/skeleton-11.0-RELEASE/root\nFor some reason /var/empty still remained when I moved the folders, so I had to remove it manually.\n12chflags 0 /usr/local/jails/templates/base-11.0-RELEASE/var/emptyrm -r /usr/local/jails/templates/base-11.0-RELEASE/var\nSymlink the directories to the skeleton layer. Make sure you are in /usr/local/jails/templates/base-11.0-RELEASE/ folder before running the commands, as the paths are all relative.\n123456789cd /usr/local/jails/templates/base-11.0-RELEASEmkdir skeletonln -s skeleton/etc etcln -s skeleton/home homeln -s skeleton/root rootln -s ../skeleton/usr/local usr/localln -s ../../skeleton/usr/ports/distfiles usr/ports/distfilesln -s skeleton/tmp tmpln -s skeleton/var var\nUpdate the ports make configuration to build in the non-default directory\n1echo &quot;WRKDIRPREFIX?=  /skeleton/portbuild&quot; &gt;&gt; /usr/local/jails/templates/skeleton-11.0-RELEASE/etc/make.conf\nSnapshot the skeleton so we can clone it in each jail\n1zfs snapshot zroot/jails/templates/skeleton-11.0-RELEASE@skeleton\nCreate /etc/jail.conf with the below text. I have added comments to explain each section.\n12345678910111213141516171819202122232425# The interface that the jails will interface with on the hostinterface = &quot;igb0&quot;;# The name of each jail. $name is a placeholder. In the example below, $name would be jail1host.hostname = &quot;$name.domain.local&quot;;# The path to the jail filespath = &quot;/usr/local/jails/$name&quot;;# The IP address of the jail. In the example below, it would be 10.1.1.40ip4.addr = 10.1.1.$ip;# The fstab file for the jail. This resolves to jail1.fstab in the example.mount.fstab = &quot;/usr/local/jails/$name.fstab&quot;;# Common functions for all jailsexec.start = &quot;/bin/sh /etc/rc&quot;;exec.stop = &quot;/bin/sh /etc/rc.shutdown&quot;;exec.clean;mount.devfs;# jail1 specific configurationjail1 &#123;        $ip = 40;&#125;\nDone! We now have the components to create many thin jails. Now we will create our first thin jail off this template.\nCreating a thin jailFirst, clone the skeleton files for the new jail, and then set the hostname\n12zfs clone zroot/jails/templates/skeleton-11.0-RELEASE@skeleton zroot/jails/thinjails/jail1echo hostname=\\&quot;jail1\\&quot; &gt; /usr/local/jails/thinjails/jail1/etc/rc.conf\nCreate folder where the layers for the jail will be mounted\n1mkdir -p /usr/local/jails/jail1\nCreate fstab at /usr/local/jails/jail1.fstab . The first layer is the base, mounted as read-only. The next is the skeleton we cloned, mounted as read-write.\n12/usr/local/jails/templates/base-11.0-RELEASE    /usr/local/jails/jail1/  nullfs  ro      0       0/usr/local/jails/thinjails/jail1 /usr/local/jails/jail1/skeleton  nullfs  rw      0       0\nCreate and start jail “jail1”\n1jail -c jail1\nAdd jail to auto-start on boot in /etc/rc.conf\n1jail_list=&quot;jail1&quot;\nFor each new jail, just follow the process:\n\nAdd config to /etc/jail.conf\nClone skeleton to /usr/local/jails/thinjails/&lt;jailname&gt;\nWrite hostname to /etc/rc.conf in new jail files\nCreate folder /usr/local/jails/&lt;jailname&gt; for new jail\nCreate fstab /usr/local/jails/&lt;jailname&gt;.fstab and populate with layer information\nCreate and start with jail -c jailname\n\nWhenever we want to update all jails at once, shut down the jails and run:\n12env UNAME_r=11.0-RELEASE freebsd-update -b /usr/local/jails/templates/base-11.0-RELEASE fetch installportsnap -p /usr/local/jails/templates/base-11.0-RELEASE/usr/ports auto\nThis will update the base to the latest patch level, and update to the latest ports tree.\n","dateCreated":"2017-06-07T11:01:40+10:00","dateModified":"2017-06-13T15:41:34+10:00","datePublished":"2017-06-07T11:01:40+10:00","description":"Recently I built up a new storage server running FreeBSD. Initially I was going to go with FreeNAS like my old storage server, however the FreeNAS project is in a bit of flux at the moment and I thought this would be a good way to learn about the inner workings of FreeBSD. Part of this is segregating the applications running on the server in to “jails”. They are a form of OS-level virtualization, where each jail has its own files, processes and user accounts.","headline":"FreeBSD Thin Jails","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/"},"publisher":{"@type":"Organization","name":"Jacob Ludriks","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/","keywords":"freebsd"}</script>
     <meta name="description" content="Recently I built up a new storage server running FreeBSD. Initially I was going to go with FreeNAS like my old storage server, however the FreeNAS project is in a bit of flux at the moment and I thoug">
 <meta name="keywords" content="freebsd">
 <meta property="og:type" content="blog">
@@ -20,11 +21,10 @@
 <meta property="og:url" content="http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/index.html">
 <meta property="og:site_name" content="Jacob Ludriks">
 <meta property="og:description" content="Recently I built up a new storage server running FreeBSD. Initially I was going to go with FreeNAS like my old storage server, however the FreeNAS project is in a bit of flux at the moment and I thoug">
-<meta property="og:updated_time" content="2017-06-13T05:41:33.773Z">
+<meta property="og:updated_time" content="2017-06-13T05:41:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="FreeBSD Thin Jails">
 <meta name="twitter:description" content="Recently I built up a new storage server running FreeBSD. Initially I was going to go with FreeNAS like my old storage server, however the FreeNAS project is in a bit of flux at the moment and I thoug">
-<meta name="twitter:creator" content="@jludriks">
     
     
         
@@ -34,9 +34,10 @@
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link rel="stylesheet" href="/assets/css/style-3frockyt2j28isvdztjchy5nhkz8tjki9ermufc1ckptmvjdftux94m2ahub.min.css">
     <!--STYLES END-->
     
+
     
 </head>
 
@@ -49,9 +50,9 @@
 
 <header id="header" data-behavior="4">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <h1 class="header-title">
+    <div class="header-title">
         <a class="header-title-link" href="/ ">Jacob Ludriks</a>
-    </h1>
+    </div>
     
         
             <a  class="header-right-picture "
@@ -66,104 +67,179 @@
 
 
 <nav id="sidebar" data-behavior="4">
-    
-    
-        <ul class="sidebar-buttons">
+    <div class="sidebar-container">
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/ "
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
-                    <span class="sidebar-button-desc">Home</span>
-                </a>
-        </li>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/all-categories"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
-                    <span class="sidebar-button-desc">Categories</span>
-                </a>
-        </li>
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="Home"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                            title="Categories"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="Tags"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="Archives"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                            title="Search"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="#about"
+                            
+                            title="About"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/all-tags"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
-                    <span class="sidebar-button-desc">Tags</span>
-                </a>
-        </li>
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="http://stackoverflow.com/users" target="_blank" rel="noopener" title="Stack Overflow">
+                    
+                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Stack Overflow</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://twitter.com/" target="_blank" rel="noopener" title="Twitter">
+                    
+                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Twitter</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://facebook.com/" target="_blank" rel="noopener" title="Facebook">
+                    
+                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Facebook</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://plus.google.com/" target="_blank" rel="noopener" title="Google +">
+                    
+                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Google +</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/profile/" target="_blank" rel="noopener" title="LinkedIn">
+                    
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/mailto"
+                            title="Mail"
+                        >
+                    
+                        <i class="sidebar-button-icon fab fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/all-archives"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
-                    <span class="sidebar-button-desc">Archives</span>
-                </a>
-        </li>
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                            title="RSS"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
         
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link st-search-show-outputs"
-                         href="#search"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-search"></i>
-                    <span class="sidebar-button-desc">Search</span>
-                </a>
-        </li>
-        
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="#about"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
-                    <span class="sidebar-button-desc">About</span>
-                </a>
-        </li>
-        
-    </ul>
-    
-        <ul class="sidebar-buttons">
-        
-    </ul>
-    
-        <ul class="sidebar-buttons">
-        
-            <li class="sidebar-button">
-                
-                    <a  class="sidebar-button-link "
-                         href="/atom.xml"
-                        
-                    >
-                
-                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
-                    <span class="sidebar-button-desc">RSS</span>
-                </a>
-        </li>
-        
-    </ul>
-    
+    </div>
 </nav>
 
             
@@ -172,17 +248,18 @@
                         hasCoverMetaIn
                         ">
                 
-<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+<article class="post">
     
     
         <div class="post-header main-content-wrap text-left">
     
-        <h1 class="post-title" itemprop="headline">
+        <h1 class="post-title">
             FreeBSD Thin Jails
         </h1>
     
-    <div class="post-meta">
-    <time itemprop="datePublished" datetime="2017-06-07T11:01:40+10:00">
+    
+        <div class="post-meta">
+    <time datetime="2017-06-07T11:01:40+10:00">
 	
 		    Jun 07, 2017
     	
@@ -190,9 +267,11 @@
     
 </div>
 
-</div>
     
-    <div class="post-content markdown" itemprop="articleBody">
+</div>
+
+    
+    <div class="post-content markdown">
         <div class="main-content-wrap">
             <p>Recently I built up a new storage server running FreeBSD. Initially I was going to go with FreeNAS like my old storage server, however the FreeNAS project is in a bit of flux at the moment and I thought this would be a good way to learn about the inner workings of FreeBSD. Part of this is segregating the applications running on the server in to “jails”. They are a form of OS-level virtualization, where each jail has its own files, processes and user accounts.</p>
 <a id="more"></a>
@@ -256,6 +335,7 @@
 <p>This will update the base to the latest patch level, and update to the latest ports tree.</p>
 
             
+
         </div>
     </div>
     <div id="post-footer" class="post-footer main-content-wrap">
@@ -267,60 +347,76 @@
 
             </div>
         
-        <div class="post-actions-wrap">
+        
+            <div class="post-actions-wrap">
     <nav>
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/"  data-tooltip="Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails">
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/" data-tooltip="Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails" aria-label="PREVIOUS: Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails">
                 
-                    <i class="fa fa-angle-left"></i>
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
                 </a>
             </li>
             <li class="post-action">
                 
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/05/12/Foglight-SSL-Certificates/" data-tooltip="Foglight SSL Certificates">
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/05/12/Foglight-SSL-Certificates/" data-tooltip="Foglight SSL Certificates" aria-label="NEXT: Foglight SSL Certificates">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                    <i class="fa fa-angle-right"></i>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
                 </a>
             </li>
         </ul>
     </nav>
     <ul class="post-actions post-action-share">
         <li class="post-action hide-lg hide-md hide-sm">
-            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
-                <i class="fa fa-share-alt"></i>
-            </a>
-        </li>
-        <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/">
-                <i class="fa fa-google-plus"></i>
-            </a>
-        </li>
-        <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/">
-                <i class="fa fa-facebook-official"></i>
-            </a>
-        </li>
-        <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/">
-                <i class="fa fa-twitter"></i>
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
         </li>
         
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/" title="Share on Facebook">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/" title="Share on Twitter">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/" title="Share on Google+">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
             
-                <i class="fa fa-list"></i>
+                <i class="fa fa-list" aria-hidden="true"></i>
             </a>
         </li>
     </ul>
 </div>
 
 
+        
         
             
         
@@ -331,7 +427,7 @@
 
                 <footer id="footer" class="main-content-wrap">
     <span class="copyrights">
-        Copyrights &copy; 2017 Jacob Ludriks. All Rights Reserved.
+        Copyrights &copy; 2018 Jacob Ludriks. All Rights Reserved.
     </span>
 </footer>
 
@@ -343,49 +439,63 @@
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/"  data-tooltip="Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails">
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/08/Plex-Sonarr-Radarr-SABnzbd-and-nginx-in-FreeBSD-Jails/" data-tooltip="Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails" aria-label="PREVIOUS: Plex, Sonarr, Radarr, SABnzbd and nginx in FreeBSD Jails">
                 
-                    <i class="fa fa-angle-left"></i>
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
                 </a>
             </li>
             <li class="post-action">
                 
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/05/12/Foglight-SSL-Certificates/" data-tooltip="Foglight SSL Certificates">
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/05/12/Foglight-SSL-Certificates/" data-tooltip="Foglight SSL Certificates" aria-label="NEXT: Foglight SSL Certificates">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                    <i class="fa fa-angle-right"></i>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
                 </a>
             </li>
         </ul>
     </nav>
     <ul class="post-actions post-action-share">
         <li class="post-action hide-lg hide-md hide-sm">
-            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
-                <i class="fa fa-share-alt"></i>
-            </a>
-        </li>
-        <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/">
-                <i class="fa fa-google-plus"></i>
-            </a>
-        </li>
-        <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/">
-                <i class="fa fa-facebook-official"></i>
-            </a>
-        </li>
-        <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/">
-                <i class="fa fa-twitter"></i>
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
         </li>
         
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/" title="Share on Facebook">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/" title="Share on Twitter">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/" title="Share on Google+">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
             
-                <i class="fa fa-list"></i>
+                <i class="fa fa-list" aria-hidden="true"></i>
             </a>
         </li>
     </ul>
@@ -394,25 +504,36 @@
 
                 </div>
                 <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
     <ul class="share-options">
-        <li class="share-option">
-            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/">
-                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
-            </a>
-        </li>
-        <li class="share-option">
-            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/">
-                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
-            </a>
-        </li>
-        <li class="share-option">
-            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/">
-                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
-            </a>
-        </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i><span>Share on Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/">
+                    <i class="fa fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://jacob.ludriks.com/2017/06/07/FreeBSD-Thin-Jails/">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                </a>
+            </li>
+        
     </ul>
 </div>
-<div id="share-options-mask" class="share-options-mask"></div>
+
             
         </div>
         
@@ -426,36 +547,31 @@
         
             <h4 id="about-card-name">Jacob Ludriks</h4>
         
-            <h5 id="about-card-bio"><p>Nerd</p>
-</h5>
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
         
         
-            <h5 id="about-card-job">
+            <div id="about-card-job">
                 <i class="fa fa-briefcase"></i>
                 <br/>
-                <p>System Administrator</p>
+                <p>author.job</p>
 
-            </h5>
+            </div>
         
-        
-            <h5 id="about-card-location">
-                <i class="fa fa-map-marker"></i>
-                <br/>
-                Australia
-            </h5>
         
     </div>
 </div>
 
         
+        
 <div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-    </body>
-    <!--SCRIPTS-->
-<script src="/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-xzfezjobyekpxrjktw5tz6muvzqfsbmo5n6atk3p5om9ulfptldi3p7cyqd8.min.js"></script>
 <!--SCRIPTS END-->
 
     
 
 
 
+    </body>
 </html>
