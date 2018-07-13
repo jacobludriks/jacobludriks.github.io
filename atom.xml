@@ -571,9 +571,9 @@
     
       <category term="powershell" scheme="http://jacob.ludriks.com/tags/powershell/"/>
     
-      <category term="ftp" scheme="http://jacob.ludriks.com/tags/ftp/"/>
-    
       <category term="windows" scheme="http://jacob.ludriks.com/tags/windows/"/>
+    
+      <category term="ftp" scheme="http://jacob.ludriks.com/tags/ftp/"/>
     
   </entry>
   
